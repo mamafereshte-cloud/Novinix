@@ -1,0 +1,5 @@
+database.sql
+.env
+Thumbs.db
+.DS_Store
+*.log

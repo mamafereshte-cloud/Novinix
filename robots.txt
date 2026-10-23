@@ -1,3 +1,8 @@
+<<<<<<< HEAD
 User-agent: *
 Allow: /
+=======
+User-agent: *
+Allow: /
+>>>>>>> afd312a40b01d5c9c46b84ac5592eb97a2967e0c
 Sitemap: https://novinix.ir/sitemap.xml

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>آموزش ساخت ربات تلگرام با هوش مصنوعی | نوینیکس</title>
+    <meta name="description" content="آموزش گام‌به‌گام ساخت ربات تلگرام با هوش مصنوعی با استفاده از Python، OpenAI API و Telebot" />
+    <link rel="icon" href="../../assets/images/logo.ico" />
+
+    <!-- ===== CSS فایل‌ها ===== -->
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/blog.css" />
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+
+    <main>
+        <div class="post-container">
+            <a href="../pages/blog.html" class="post-back">← بازگشت به وبلاگ</a>
+
+            <span class="post-category">🤖 هوش مصنوعی</span>
+            <h1 class="post-title">آموزش ساخت ربات تلگرام با هوش مصنوعی (گام‌به‌گام)</h1>
+
+            <div class="post-author">
+                <span class="avatar">👤</span>
+                <div class="info">
+                    <div class="name">تیم توسعه نوینیکس</div>
+                    <div class="date">📅 ۲۰۲۶-۰۹-۰۵ • ⏱️ ۱۵ دقیقه مطالعه • 👁️ ۶,۲۰۰ بازدید</div>
+                </div>
+            </div>
+
+            <div class="post-image">
+                <span style="font-size:5rem;opacity:0.3;">🤖</span>
+            </div>
+
+            <div class="post-content">
+                <p>
+                    ربات‌های تلگرام یکی از محبوب‌ترین روش‌های تعامل با کاربران هستند. با ترکیب تلگرام و هوش مصنوعی، می‌توانید ربات‌های هوشمندی بسازید که به سوالات پاسخ دهند، محتوا تولید کنند و حتی تصاویر بسازند. در این آموزش، <strong>ساخت یک ربات تلگرام با هوش مصنوعی</strong> را با استفاده از Python، OpenAI API و Telebot یاد می‌گیرید.
+                </p>
+
+                <div class="highlight-box">
+                    <p><strong>📌 پیش‌نیازها:</strong></p>
+                    <ul>
+                        <li>آشنایی مقدماتی با Python</li>
+                        <li>یک حساب کاربری در OpenAI (برای دریافت API Key)</li>
+                        <li>یک اکانت تلگرام و توکن ربات</li>
+                    </ul>
+                </div>
+
+                <h2>مرحله ۱: ایجاد ربات در تلگرام</h2>
+                <p>ابتدا باید یک ربات در تلگرام بسازید و توکن آن را دریافت کنید:</p>
+                <ol>
+                    <li>ربات <strong>@BotFather</strong> را در تلگرام پیدا کنید.</li>
+                    <li>دستور <code>/newbot</code> را ارسال کنید.</li>
+                    <li>یک نام برای ربات انتخاب کنید.</li>
+                    <li>یک شناسه (Username) که به <code>_bot</code> ختم شود انتخاب کنید.</li>
+                    <li>توکن ربات را کپی کنید.</li>
+                </ol>
+
+                <h2>مرحله ۲: دریافت API Key از OpenAI</h2>
+                <p>برای استفاده از هوش مصنوعی، به کلید API از OpenAI نیاز دارید:</p>
+                <ol>
+                    <li>وارد <a href="https://platform.openai.com/" target="_blank" style="color:#00ffcc;">platform.openai.com</a> شوید.</li>
+                    <li>به بخش API Keys بروید.</li>
+                    <li>یک کلید جدید بسازید و آن را کپی کنید.</li>
+                </ol>
+                <div class="warning-box">
+                    <p><strong>⚠️ توجه:</strong> کلید API خود را در کد ذخیره کنید و هرگز آن را به اشتراک نگذارید.</p>
+                </div>
+
+                <h2>مرحله ۳: نصب کتابخانه‌های مورد نیاز</h2>
+                <p>با استفاده از pip، کتابخانه‌های زیر را نصب کنید:</p>
+                <div class="code-block">pip install pytelegrambotapi openai python-dotenv</div>
+
+                <h2>مرحله ۴: کد ربات</h2>
+                <p>کد زیر را در یک فایل <code>bot.py</code> قرار دهید:</p>
+                <div class="code-block">
+import telebot
+import openai
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# تنظیم توکن‌ها
+TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
+bot = telebot.TeleBot(TELEGRAM_TOKEN)
+openai.api_key = OPENAI_API_KEY
+
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, "👋 سلام! من یک ربات هوشمند هستم. هر سوالی داری از من بپرس!")
+
+@bot.message_handler(func=lambda message: True)
+def handle_message(message):
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "تو یک دستیار هوشمند و مفید هستی."},
+                {"role": "user", "content": message.text}
+            ],
+            max_tokens=500
+        )
+        reply = response.choices[0].message.content
+        bot.reply_to(message, reply)
+    except Exception as e:
+        bot.reply_to(message, f"❌ خطایی رخ داد: {str(e)}")
+
+if __name__ == "__main__":
+    bot.infinity_polling()
+                </div>
+
+                <h2>مرحله ۵: اجرای ربات</h2>
+                <p>برای اجرای ربات، فایل را در ترمینال اجرا کنید:</p>
+                <div class="code-block">python bot.py</div>
+                <p>حالا ربات شما فعال است و می‌توانید در تلگرام با آن چت کنید!</p>
+
+                <h2>مرحله ۶: انتشار ربات</h2>
+                <p>برای اینکه ربات همیشه فعال باشد، می‌توانید آن را روی یک سرور (مانند Heroku، Railway یا یک VPS) میزبانی کنید.</p>
+
+                <div class="highlight-box">
+                    <p><strong>💡 ایده‌های پیشرفته:</strong></p>
+                    <ul>
+                        <li>افزودن قابلیت تولید تصویر با DALL-E</li>
+                        <li>پشتیبانی از چندین کاربر همزمان</li>
+                        <li>ذخیره تاریخچه مکالمات</li>
+                        <li>افزودن دکمه‌های شیشه‌ای (Inline Keyboard)</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box">
+                    <p><strong>📌 جمع‌بندی:</strong> با این آموزش، شما یک ربات تلگرام هوشمند ساخته‌اید که می‌تواند به سوالات کاربران پاسخ دهد. با کمی خلاقیت، می‌توانید قابلیت‌های بیشتری به آن اضافه کنید.</p>
+                </div>
+            </div>
+
+            <div class="post-tags">
+                <span class="tag">#ربات_تلگرام</span>
+                <span class="tag">#هوش_مصنوعی</span>
+                <span class="tag">#Python</span>
+                <span class="tag">#OpenAI</span>
+                <span class="tag">#Telegram</span>
+            </div>
+
+            <div class="post-actions">
+                <button onclick="likePost(this)">❤️ پسندیدن</button>
+                <button onclick="sharePost()">🔗 اشتراک‌گذاری</button>
+                <button onclick="savePost()">⭐ ذخیره</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+    <script src="like-share-save.js"></script>
+
+</body>
+</html>

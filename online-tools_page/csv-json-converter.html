@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تبدیل CSV به JSON و برعکس | ابزار تبدیل فرمت داده Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای تبدیل CSV به JSON و JSON به CSV. نمایش پیش‌نمایش جدولی و دانلود فایل." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/csv-json-converter" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .csv-options {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin: 12px 0 8px;
+        }
+        .csv-options label {
+            font-size: 0.85rem;
+            color: #a0b4c8;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .csv-options select {
+            padding: 6px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8f5f0;
+            font-family: inherit;
+            font-size: 0.85rem;
+        }
+        .csv-options select:focus {
+            border-color: #00ffcc;
+            outline: none;
+        }
+        .csv-options input[type="file"] {
+            padding: 4px;
+            cursor: pointer;
+            background: transparent;
+            color: #a0b4c8;
+            border: none;
+        }
+        .csv-options input[type="file"]::file-selector-button {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(0, 255, 204, 0.15);
+            color: #00ffcc;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .csv-options input[type="file"]::file-selector-button:hover {
+            background: rgba(0, 255, 204, 0.25);
+            transform: translateY(-1px);
+        }
+        .csv-preview-table {
+            display: none;
+            margin-top: 16px;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .csv-preview-table.visible {
+            display: block;
+        }
+        .csv-preview-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .csv-preview-table th {
+            background: rgba(255, 255, 255, 0.04);
+            color: #a0b4c8;
+            font-weight: 600;
+            padding: 10px 14px;
+            text-align: right;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        .csv-preview-table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: #e8f5f0;
+        }
+        .csv-preview-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+        .file-info .fname {
+            color: #00ffcc;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .file-info .fsize {
+            color: #a0b4c8;
+            font-size: 0.8rem;
+        }
+        .file-info .fremove {
+            color: #f87171;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+        .file-info .fremove:hover {
+            color: #ef4444;
+            transform: scale(1.1);
+        }
+        .tool-textarea {
+            min-height: 180px;
+        }
+        .tool-textarea.output {
+            min-height: 150px;
+        }
+        .act-btn-download {
+            background: linear-gradient(135deg, #6c2eb7, #8e44ad);
+            color: white;
+        }
+        .act-btn-download:hover {
+            box-shadow: 0 4px 16px rgba(108, 46, 183, 0.3);
+        }
+        .act-btn-upload {
+            background: rgba(52, 152, 219, 0.15);
+            color: #5fcde6;
+            border: 1px solid rgba(52, 152, 219, 0.15);
+        }
+        .act-btn-upload:hover {
+            background: rgba(52, 152, 219, 0.25);
+        }
+        @media (max-width: 640px) {
+            .csv-options {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">📊</span>
+                <h2>تبدیل CSV ↔ JSON</h2>
+                <span class="badge">داده &bull; جدول &bull; فایل</span>
+            </div>
+
+            <div class="tool-tabs">
+                <button class="tab-btn active" data-tab="csv-to-json">CSV → JSON</button>
+                <button class="tab-btn" data-tab="json-to-csv">JSON → CSV</button>
+            </div>
+
+            <!-- CSV → JSON -->
+            <div class="tool-section active" id="csv-to-json">
+                <div class="csv-options">
+                    <label>محدودکننده:
+                        <select id="csvDelimiter">
+                            <option value=",">کاما (،)</option>
+                            <option value=";">نقطه‌ویرگول (؛)</option>
+                            <option value="&#9;">تب (Tab)</option>
+                            <option value="|">خط عمودی (|)</option>
+                        </select>
+                    </label>
+                    <label>ردیف اول هدر:
+                        <select id="csvHeader">
+                            <option value="true">بله</option>
+                            <option value="false">خیر</option>
+                        </select>
+                    </label>
+                    <label>📂 آپلود فایل CSV:
+                        <input type="file" id="csvFileInput" accept=".csv,.tsv,.txt" />
+                    </label>
+                </div>
+                <div class="file-info" id="csvFileInfo" style="display:none;">
+                    <span class="fname" id="csvFileName">فایل.csv</span>
+                    <span class="fsize" id="csvFileSize">۰ KB</span>
+                    <span class="fremove" id="csvFileRemove">✕ حذف فایل</span>
+                </div>
+                <textarea class="tool-textarea" id="csvInput" placeholder="داده CSV را اینجا وارد کنید... (ستون‌ها با کاما جدا می‌شوند)&#10;نام,سن,شهر,شغل&#10;احمد,28,قم,برنامه‌نویس&#10;سارا,32,اصفهان,طراح&#10;علی,24,شیراز,مدیر"></textarea>
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="copyCsvResult">📋 کپی JSON</button>
+                    <button class="act-btn act-btn-download" id="downloadCsvResult">📥 دانلود JSON</button>
+                    <button class="act-btn act-btn-clear" id="clearCsvBtn">🗑️ پاک کردن</button>
+                </div>
+                <div class="tool-status" id="csvStatus"></div>
+                <textarea class="tool-textarea output" id="jsonOutput" placeholder="نتیجه JSON در اینجا نمایش داده می‌شود..." readonly style="min-height:150px;margin-top:12px;"></textarea>
+                <div class="csv-preview-table" id="csvPreview">
+                    <table><thead id="csvTableHead"></thead><tbody id="csvTableBody"></tbody></table>
+                </div>
+            </div>
+
+            <!-- JSON → CSV -->
+            <div class="tool-section" id="json-to-csv">
+                <div class="csv-options">
+                    <label>📂 آپلود فایل JSON:
+                        <input type="file" id="jsonFileInput" accept=".json" />
+                    </label>
+                </div>
+                <div class="file-info" id="jsonFileInfo" style="display:none;">
+                    <span class="fname" id="jsonFileName">فایل.json</span>
+                    <span class="fsize" id="jsonFileSize">۰ KB</span>
+                    <span class="fremove" id="jsonFileRemove">✕ حذف فایل</span>
+                </div>
+                <textarea class="tool-textarea" id="jsonInput" placeholder="داده JSON را اینجا وارد کنید...&#10;[&#10;  {&quot;نام&quot;: &quot;احمد&quot;, &quot;سن&quot;: 28, &quot;شهر&quot;: &quot;قم&quot;},&#10;  {&quot;نام&quot;: &quot;سارا&quot;, &quot;سن&quot;: 32, &quot;شهر&quot;: &quot;اصفهان&quot;}&#10;]"></textarea>
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="copyJsonResult">📋 کپی CSV</button>
+                    <button class="act-btn act-btn-download" id="downloadJsonResult">📥 دانلود CSV</button>
+                    <button class="act-btn act-btn-clear" id="clearJsonBtn">🗑️ پاک کردن</button>
+                </div>
+                <div class="tool-status" id="jsonStatus"></div>
+                <textarea class="tool-textarea output" id="csvOutput" placeholder="نتیجه CSV در اینجا نمایش داده می‌شود..." readonly style="min-height:150px;margin-top:12px;"></textarea>
+            </div>
+        </div>
+    </main>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            // DOM Refs
+            const csvInput = document.getElementById('csvInput');
+            const jsonOutput = document.getElementById('jsonOutput');
+            const csvDelimiter = document.getElementById('csvDelimiter');
+            const csvHeader = document.getElementById('csvHeader');
+            const csvStatus = document.getElementById('csvStatus');
+            const csvPreview = document.getElementById('csvPreview');
+            const csvTableHead = document.getElementById('csvTableHead');
+            const csvTableBody = document.getElementById('csvTableBody');
+            const csvFileInput = document.getElementById('csvFileInput');
+            const csvFileInfo = document.getElementById('csvFileInfo');
+            const csvFileName = document.getElementById('csvFileName');
+            const csvFileSize = document.getElementById('csvFileSize');
+            const csvFileRemove = document.getElementById('csvFileRemove');
+            const copyCsvResult = document.getElementById('copyCsvResult');
+            const downloadCsvResult = document.getElementById('downloadCsvResult');
+            const clearCsvBtn = document.getElementById('clearCsvBtn');
+
+            const jsonInput = document.getElementById('jsonInput');
+            const csvOutput = document.getElementById('csvOutput');
+            const jsonStatus = document.getElementById('jsonStatus');
+            const jsonFileInput = document.getElementById('jsonFileInput');
+            const jsonFileInfo = document.getElementById('jsonFileInfo');
+            const jsonFileName = document.getElementById('jsonFileName');
+            const jsonFileSize = document.getElementById('jsonFileSize');
+            const jsonFileRemove = document.getElementById('jsonFileRemove');
+            const copyJsonResult = document.getElementById('copyJsonResult');
+            const downloadJsonResult = document.getElementById('downloadJsonResult');
+            const clearJsonBtn = document.getElementById('clearJsonBtn');
+
+            const tabBtns = document.querySelectorAll('.tab-btn');
+
+            // Tabs
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    document.querySelectorAll('.tool-section').forEach(s => s.classList.remove('active'));
+                    document.getElementById(this.dataset.tab).classList.add('active');
+                });
+            });
+
+            // Helpers
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' B';
+                if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+                return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+            }
+
+            function showStatus(elId, message, type) {
+                const el = document.getElementById(elId);
+                el.textContent = message;
+                el.className = `tool-status visible ${type}`;
+                setTimeout(() => { el.className = 'tool-status'; }, 5000);
+            }
+
+            function showFileInfo(container, nameEl, sizeEl, file) {
+                nameEl.textContent = file.name;
+                sizeEl.textContent = formatFileSize(file.size);
+                container.style.display = 'flex';
+            }
+
+            // File upload - CSV
+            csvFileInput.addEventListener('change', function(e) {
+                const file = this.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    csvInput.value = event.target.result;
+                    showFileInfo(csvFileInfo, csvFileName, csvFileSize, file);
+                    showStatus('csvStatus', `📂 فایل "${file.name}" با موفقیت بارگذاری شد.`, 'success');
+                    csvToJson();
+                };
+                reader.onerror = function() { showStatus('csvStatus', '❌ خطا در خواندن فایل.', 'error'); };
+                reader.readAsText(file, 'UTF-8');
+            });
+            csvFileRemove.addEventListener('click', function() { csvFileInput.value = '';
+                csvFileInfo.style.display = 'none'; });
+
+            // File upload - JSON
+            jsonFileInput.addEventListener('change', function(e) {
+                const file = this.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    jsonInput.value = event.target.result;
+                    showFileInfo(jsonFileInfo, jsonFileName, jsonFileSize, file);
+                    showStatus('jsonStatus', `📂 فایل "${file.name}" با موفقیت بارگذاری شد.`, 'success');
+                    jsonToCsv();
+                };
+                reader.onerror = function() { showStatus('jsonStatus', '❌ خطا در خواندن فایل.', 'error'); };
+                reader.readAsText(file, 'UTF-8');
+            });
+            jsonFileRemove.addEventListener('click', function() { jsonFileInput.value = '';
+                jsonFileInfo.style.display = 'none'; });
+
+            // CSV to JSON
+            function csvToJson() {
+                const csv = csvInput.value;
+                if (!csv.trim()) { showStatus('csvStatus', '⚠️ لطفاً داده CSV را وارد کنید یا فایل آپلود کنید.', 'error'); return; }
+                try {
+                    const delimiter = csvDelimiter.value || ',';
+                    const hasHeader = csvHeader.value === 'true';
+                    const lines = csv.split('\n').filter(line => line.trim());
+                    if (lines.length === 0) { showStatus('csvStatus', '⚠️ داده CSV معتبر نیست.', 'error'); return; }
+                    let headers, dataLines;
+                    if (hasHeader) {
+                        headers = lines[0].split(delimiter).map(h => h.trim());
+                        dataLines = lines.slice(1);
+                    } else {
+                        const firstLine = lines[0].split(delimiter).map(h => h.trim());
+                        headers = firstLine.map((_, i) => `column_${i + 1}`);
+                        dataLines = lines;
+                    }
+                    const result = [];
+                    dataLines.forEach(line => {
+                        const values = line.split(delimiter).map(v => v.trim());
+                        const obj = {};
+                        headers.forEach((h, i) => { obj[h] = values[i] || ''; });
+                        result.push(obj);
+                    });
+                    const json = JSON.stringify(result, null, 2);
+                    jsonOutput.value = json;
+                    // Preview table
+                    csvPreview.classList.add('visible');
+                    csvTableHead.innerHTML = `<tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>`;
+                    const rows = dataLines.slice(0, 50).map(line => {
+                        const values = line.split(delimiter).map(v => v.trim());
+                        return `<tr>${values.map(v => `<td>${v}</td>`).join('')}</tr>`;
+                    });
+                    csvTableBody.innerHTML = rows.join('');
+                    if (dataLines.length > 50) {
+                        csvTableBody.innerHTML +=
+                            `<tr><td colspan="${headers.length}" style="text-align:center;color:#a0b4c8;padding:12px;">... و ${dataLines.length - 50} ردیف دیگر</td></tr>`;
+                    }
+                    showStatus('csvStatus', `✅ تبدیل با موفقیت انجام شد. (${result.length} ردیف)`, 'success');
+                } catch (err) {
+                    showStatus('csvStatus', '❌ خطا در تبدیل: ' + err.message, 'error');
+                }
+            }
+
+            // JSON to CSV
+            function jsonToCsv() {
+                const json = jsonInput.value;
+                if (!json.trim()) { showStatus('jsonStatus', '⚠️ لطفاً داده JSON را وارد کنید یا فایل آپلود کنید.', 'error'); return; }
+                try {
+                    const data = JSON.parse(json);
+                    if (!Array.isArray(data) || data.length === 0) {
+                        showStatus('jsonStatus', '⚠️ JSON باید یک آرایه از اشیاء باشد.', 'error');
+                        return;
+                    }
+                    const headers = Object.keys(data[0]);
+                    let csv = headers.join(',') + '\n';
+                    data.forEach(row => {
+                        const values = headers.map(h => {
+                            let val = row[h] !== undefined ? row[h] : '';
+                            if (typeof val === 'string' && (val.includes(',') || val.includes('"') || val
+                                    .includes('\n'))) {
+                                val = `"${val.replace(/"/g, '""')}"`;
+                            }
+                            return val;
+                        });
+                        csv += values.join(',') + '\n';
+                    });
+                    csvOutput.value = csv;
+                    showStatus('jsonStatus', `✅ تبدیل با موفقیت انجام شد. (${data.length} ردیف)`, 'success');
+                } catch (err) {
+                    showStatus('jsonStatus', '❌ خطا در تبدیل: ' + err.message, 'error');
+                }
+            }
+
+            // Copy & Download
+            function copyToClipboard(text, btn) {
+                if (!text) { alert('متن برای کپی وجود ندارد.'); return; }
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text)
+                        .then(() => { btn.textContent = '✅ کپی شد';
+                            btn.classList.add('copied');
+                            setTimeout(() => { btn.textContent = btn.dataset.original || btn.textContent;
+                                btn.classList.remove('copied'); }, 2000); })
+                        .catch(() => fallbackCopy(text, btn));
+                } else { fallbackCopy(text, btn); }
+            }
+
+            function fallbackCopy(text, btn) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try { document.execCommand('copy');
+                    btn.textContent = '✅ کپی شد';
+                    setTimeout(() => { btn.textContent = btn.dataset.original || btn.textContent; }, 2000); } catch (_) { alert(
+                        'کپی نشد.'); }
+                document.body.removeChild(textarea);
+            }
+
+            function downloadFile(content, filename, type) {
+                const blob = new Blob([content], { type: type + ';charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            }
+
+            // Events - CSV to JSON
+            copyCsvResult.addEventListener('click', function() { copyToClipboard(jsonOutput.value, this); });
+            downloadCsvResult.addEventListener('click', function() {
+                if (jsonOutput.value) downloadFile(jsonOutput.value, 'data.json', 'application/json');
+            });
+            clearCsvBtn.addEventListener('click', function() {
+                csvInput.value = '';
+                jsonOutput.value = '';
+                csvPreview.classList.remove('visible');
+                csvTableHead.innerHTML = '';
+                csvTableBody.innerHTML = '';
+                csvFileInput.value = '';
+                csvFileInfo.style.display = 'none';
+                showStatus('csvStatus', '🗑️ پاک شد.', 'info');
+            });
+
+            // Events - JSON to CSV
+            copyJsonResult.addEventListener('click', function() { copyToClipboard(csvOutput.value, this); });
+            downloadJsonResult.addEventListener('click', function() {
+                if (csvOutput.value) downloadFile(csvOutput.value, 'data.csv', 'text/csv');
+            });
+            clearJsonBtn.addEventListener('click', function() {
+                jsonInput.value = '';
+                csvOutput.value = '';
+                jsonFileInput.value = '';
+                jsonFileInfo.style.display = 'none';
+                showStatus('jsonStatus', '🗑️ پاک شد.', 'info');
+            });
+
+            // Keyboard shortcuts
+            csvInput.addEventListener('keydown', (e) => { if (e.ctrlKey && e.key === 'Enter') { e.preventDefault();
+                    csvToJson(); } });
+            jsonInput.addEventListener('keydown', (e) => { if (e.ctrlKey && e.key === 'Enter') { e.preventDefault();
+                    jsonToCsv(); } });
+
+            console.log('📊 CSV ↔ JSON Converter loaded!');
+        })();
+    </script>
+</body>
+</html>

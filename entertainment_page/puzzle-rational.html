@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<script src="../auth/auth.js"></script>
+<script src="../auth/header.js"></script>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>معماهای منطقی | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0c29;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e8f5f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER - SAME AS OTHER PAGES ===== */
+        header {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #00ffcc;
+            text-shadow: 0 0 30px rgba(0, 255, 204, 0.15);
+        }
+        .logo h1 span {
+            color: #a0b4c8;
+            font-weight: 300;
+            font-size: 0.7rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 3px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav ul li a {
+            color: #a0b4c8;
+            text-decoration: none;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            font-weight: 500;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.08);
+            color: #00ffcc;
+        }
+
+        nav ul li a.active {
+            background: rgba(0, 255, 204, 0.12);
+            border-color: rgba(0, 255, 204, 0.2);
+            color: #00ffcc;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .btn-login {
+            background: rgba(255, 255, 255, 0.06);
+            color: #a0b4c8;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 4px 14px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #00ffcc;
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            padding: 4px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 15px rgba(0, 255, 204, 0.15);
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 255, 204, 0.25);
+        }
+
+        /* ===== MAIN ===== */
+        main {
+            flex: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            width: 100%;
+        }
+
+        /* ===== HERO ===== */
+        .puzzle-hero {
+            background: linear-gradient(135deg, #1a1a2e, #2d1b69, #6c2eb7);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(108, 46, 183, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .puzzle-hero::before {
+            content: '🧩';
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.05;
+            right: -30px;
+            bottom: -30px;
+            transform: rotate(10deg);
+        }
+
+        .puzzle-hero h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .puzzle-hero h2 span {
+            color: #ffd93d;
+        }
+
+        .puzzle-hero p {
+            opacity: 0.85;
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== STATS BAR ===== */
+        .puzzle-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffd93d;
+            display: block;
+        }
+
+        .stat-item .label {
+            font-size: 0.8rem;
+            color: #a0b4c8;
+        }
+
+        /* ===== FILTER ===== */
+        .puzzle-filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .filter-tag {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #a0b4c8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            font-weight: 500;
+        }
+
+        .filter-tag:hover {
+            border-color: #00ffcc;
+            transform: translateY(-2px);
+            color: #00ffcc;
+        }
+
+        .filter-tag.active {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            border-color: #00ffcc;
+        }
+
+        /* ===== PUZZLE GRID ===== */
+        .puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 10px;
+        }
+
+        .puzzle-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 25px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .puzzle-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffd93d;
+            box-shadow: 0 12px 40px rgba(255, 217, 61, 0.08);
+        }
+
+        .puzzle-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .puzzle-card .icon {
+            font-size: 2.2rem;
+            line-height: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .puzzle-card:hover .icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .puzzle-card .difficulty {
+            display: inline-block;
+            font-size: 0.6rem;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .difficulty.easy {
+            background: rgba(52, 211, 153, 0.2);
+            color: #34d399;
+        }
+
+        .difficulty.medium {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        .difficulty.hard {
+            background: rgba(244, 63, 94, 0.2);
+            color: #fb7185;
+        }
+
+        .difficulty.expert {
+            background: rgba(139, 92, 246, 0.2);
+            color: #a78bfa;
+        }
+
+        .puzzle-card .badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            font-size: 0.55rem;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+
+        .badge.new {
+            background: #00ffcc;
+            color: #0f0c29;
+        }
+
+        .badge.popular {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .badge.hot {
+            background: #e67e22;
+            color: white;
+        }
+
+        .badge.solved {
+            background: #34d399;
+            color: #0f0c29;
+        }
+
+        .puzzle-card h3 {
+            color: #e8f5f0;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .puzzle-card .puzzle-text {
+            color: #c8d6e5;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            flex: 1;
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border-right: 3px solid rgba(255, 217, 61, 0.2);
+        }
+
+        .puzzle-card .answer-section {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 12px;
+        }
+
+        .puzzle-card .answer-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .puzzle-card .answer-input-group input {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8f5f0;
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .puzzle-card .answer-input-group input:focus {
+            outline: none;
+            border-color: #00ffcc;
+            box-shadow: 0 0 0 3px rgba(0, 255, 204, 0.1);
+        }
+
+        .puzzle-card .answer-input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .puzzle-card .answer-input-group input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .puzzle-card .answer-input-group .btn-check {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .puzzle-card .answer-input-group .btn-check:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(0, 255, 204, 0.2);
+        }
+
+        .puzzle-card .answer-input-group .btn-check:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .puzzle-card .answer-feedback {
+            font-size: 0.85rem;
+            min-height: 24px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .answer-feedback.correct {
+            color: #34d399;
+        }
+
+        .answer-feedback.wrong {
+            color: #fb7185;
+        }
+
+        .puzzle-card .puzzle-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7rem;
+            color: rgba(160, 180, 200, 0.5);
+            margin-top: 4px;
+        }
+
+        .puzzle-card .puzzle-meta .hint-btn {
+            background: none;
+            border: none;
+            color: rgba(160, 180, 200, 0.5);
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            text-decoration: underline dotted;
+        }
+
+        .puzzle-card .puzzle-meta .hint-btn:hover {
+            color: #ffd93d;
+        }
+
+        .puzzle-card .hint-text {
+            font-size: 0.8rem;
+            color: #ffd93d;
+            padding: 8px 12px;
+            background: rgba(255, 217, 61, 0.05);
+            border-radius: 8px;
+            margin-top: 6px;
+            display: none;
+            border-right: 2px solid rgba(255, 217, 61, 0.3);
+        }
+
+        .puzzle-card .hint-text.visible {
+            display: block;
+        }
+
+        /* ===== NO RESULTS ===== */
+        .no-results {
+            text-align: center;
+            padding: 50px 20px;
+            color: #a0b4c8;
+            display: none;
+        }
+
+        .no-results .big-icon {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .no-results h3 {
+            color: #e8f5f0;
+            margin-bottom: 5px;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            color: rgba(160, 180, 200, 0.4);
+            font-size: 0.8rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 8px 12px;
+            }
+            .logo h1 {
+                text-align: center;
+                font-size: 1rem;
+            }
+            nav ul {
+                justify-content: center;
+            }
+            nav ul li a {
+                font-size: 0.6rem;
+                padding: 3px 8px;
+            }
+            .auth-buttons {
+                justify-content: center;
+            }
+            .btn-login, .btn-register {
+                font-size: 0.6rem;
+                padding: 3px 10px;
+            }
+            .puzzle-hero {
+                padding: 25px 20px;
+            }
+            .puzzle-hero h2 {
+                font-size: 1.5rem;
+            }
+            .puzzle-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .puzzle-card {
+                padding: 18px;
+            }
+            .puzzle-stats {
+                gap: 15px;
+                padding: 12px 15px;
+            }
+            .stat-item .number {
+                font-size: 1.2rem;
+            }
+            .filter-tag {
+                font-size: 0.75rem;
+                padding: 6px 14px;
+            }
+            .puzzle-card .answer-input-group {
+                flex-direction: column;
+            }
+            .puzzle-card .answer-input-group .btn-check {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .puzzle-hero h2 {
+                font-size: 1.3rem;
+            }
+            .puzzle-hero p {
+                font-size: 0.9rem;
+            }
+            .puzzle-card {
+                padding: 14px;
+            }
+            .puzzle-card h3 {
+                font-size: 0.95rem;
+            }
+            .puzzle-card .puzzle-text {
+                font-size: 0.8rem;
+                padding: 10px 12px;
+            }
+            .puzzle-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .puzzle-card .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>نوینیکس <span>Novinix</span></h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../main.html">خانه</a></li>
+                <li><a href="../pages/online-tools.html">ابزارها</a></li>
+                <li><a href="../pages/calculator.html">ماشین‌حساب</a></li>
+                <li><a href="../pages/games.html">بازی‌ها</a></li>
+                                <li><a href="../pages/education.html">آموزش ها</a></li>
+                <li><a href="../pages/blog.html">وبلاگ</a></li>
+                <li><a href="../pages/entertainment.html" class="active">سرگرمی</a></li>
+                <li><a href="../pages/general-info.html">اطلاعات عمومی</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <a href="../auth/login.html" class="btn-login">ورود</a>
+            <a href="../auth/register.html" class="btn-register">ثبت نام</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="puzzle-hero">
+            <h2>🧩 معماهای <span>منطقی</span></h2>
+            <p>مغز خود را به چالش بکشید! معماهای منطقی و هوش برای تقویت تفکر</p>
+            <p style="font-size:0.85rem; margin-top:8px; opacity:0.7;">حتما برای معماهای عددی از کیبورد انگلیسی استفاده کنید...</p>
+        </div>
+
+        <div class="puzzle-stats">
+            <div class="stat-item">
+                <span class="number" id="totalPuzzles">۱۲</span>
+                <span class="label">مجموع معماها</span>
+            </div>
+            <div class="stat-item">
+                <span class="number" id="solvedPuzzles">۰</span>
+                <span class="label">حل شده</span>
+            </div>
+            <div class="stat-item">
+                <span class="number" id="scoreDisplay">۰</span>
+                <span class="label">⭐ امتیاز</span>
+            </div>
+        </div>
+
+        <div class="puzzle-filters">
+            <span class="filter-tag active" data-filter="all" onclick="filterPuzzles('all', this)">همه</span>
+            <span class="filter-tag" data-filter="logic" onclick="filterPuzzles('logic', this)">🧠 منطقی</span>
+            <span class="filter-tag" data-filter="riddle" onclick="filterPuzzles('riddle', this)">🤔 چیستان</span>
+            <span class="filter-tag" data-filter="solved" onclick="filterPuzzles('solved', this)">✅ حل شده</span>
+        </div>
+
+        <div class="puzzle-grid" id="puzzleGrid"></div>
+
+        <div class="no-results" id="noResults">
+            <span class="big-icon">🔍</span>
+            <h3>نتیجه‌ای یافت نشد</h3>
+            <p>معمای مورد نظر را با فیلتر دیگری جستجو کنید</p>
+        </div>
+    </main>
+
+<script src="../assets/js/footer.js"></script>
+
+    <script>
+        // داده‌های معماها (همانند فایل اصلی)
+        const puzzlesData = [
+
+            {id:1, icon:'', title:'اجیل خوشمزه', category:'riddle', difficulty:'easy', 
+            text:'چه اجیلی طعم ملایم و کره ای داره و توی شکلات هم استفاده میشه؟', 
+            answer:'فندق', hint:'', solved:false, badge:'new', answerType:'text'},
+
+            {id:2, icon:'🤠', title:'پادشاهان', category:'riddle', difficulty:'easy', 
+            text:'سرپوش مخصوص پادشاهان', 
+            answer:'تاج', hint:'', solved:false, badge:'new', answerType:'text'},
+
+            {id:3, icon:'🕊', title:'نماد صلح', category:'riddle', difficulty:'easy', 
+            text:'پرنده نماد صلح و دوستی که در اشعاد فارسی به کاررفته است.', 
+            answer:'کبوتر', hint:'به شکلک سوال یک نگاهی بکن😅', solved:false, badge:'new', answerType:'text'},
+
+            {id:4, icon:'', title:'', category:'riddle', difficulty:'medium', 
+            text:'هم اسم یک دختر است هم از اسمان پایین میریزد', 
+            answer:'باران', hint:'بعد از پایین ریختنش رنگین کمان تشکیل میشه', solved:false, badge:'new', answerType:'text'},
+
+            {id:5, icon:'', title:'', category:'riddle', difficulty:'medium', 
+            text:'غذای سنتی ایران که با گوشت بره و بلغور گندم پخته میشود', 
+            answer:'حلیم', hint:'۴ حرفه', solved:false, badge:'new', answerType:'text'},
+
+            {id:6, icon:'', title:'رفیق خاک انداز', category:'riddle', difficulty:'easy', 
+            text:'من خاک انداز هستم اسم رفیقمو میدونی؟', 
+            answer:'جارو', hint:'باهاش زمین رو تمیز میکنی', solved:false, badge:'new', answerType:'text'},
+
+            {id:7, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'سنگ را در یک بازی خاص شکست میدهد', 
+            answer:'کاغذ', hint:'', solved:false, badge:'new', answerType:'text'},
+
+            {id:8, icon:'', title:'', category:'riddle', difficulty:'medium', 
+            text:'نوعی فرش ایرانی که به نقش های ظریف و رنگ های ملایمش شهرت دارد و ارزشمند است.', 
+            answer:'ابریشم', hint:'', solved:false, badge:'new', answerType:'text'},
+            
+            {id:9, icon:'', title:'', category:'riddle', difficulty:'medium', 
+            text:'بزرگ ترین دریاچه جهان', 
+            answer:'خزر', hint:'', solved:false, badge:'new', answerType:'text'},
+
+            {id:10, icon:'', title:'', category:'riddle', difficulty:'medium', 
+            text:'محل اتصال دو استخوان', 
+            answer:'مفصل', hint:'', solved:false, badge:'new', answerType:'text'},
+
+            {id:11, icon:'🍰', title:'نوعی شیرینی سنتی', category:'riddle', difficulty:'hard', 
+            text:'نوعی شیرینی سنتی که به شکل لوزی برش داده میشود و با پودر قند تزئین میشود', 
+            answer:'باقلوا', hint:'اولش با عه!', solved:false, badge:'new', answerType:'text'},
+
+            {id:12, icon:'', title:'', category:'riddle', difficulty:'hard', 
+            text:'شهری که به خانه بادگیرهای فراوان معروف است', 
+            answer:'یزد', hint:'', solved:false, badge:'new', answerType:'text'},
+
+            {id:13, icon:'', title:'', category:'riddle', difficulty:'medium', 
+            text:'تلخ و خوشبو که بعضی افراد صبح ها مینوشند', 
+            answer:'قهوه', hint:'', solved:false, badge:'new', answerType:'text'},
+
+            {id:14, icon:'', title:'بره تو آب خیس نمیشه!', category:'riddle', difficulty:'hard', 
+            text:'در آب میافتم اما خیس نمیشوم', 
+            answer:'سایه', hint:'بیشتر اوغات دوشادوش تو راه میره', solved:false, badge:'new', answerType:'text'},
+
+            {id:15, icon:'', title:'داره منقرض میشه😢', category:'riddle', difficulty:'easy', 
+            text:'حیوانی در حال انقراض که روی دماغ خود شاخ دارد', 
+            answer:'کرگدن', hint:'بیشتر اوغات دوشادوش تو راه میره', solved:false, badge:'new', answerType:'text'},
+        
+            
+            {id:16, icon:'', title:'بره تو آب خیس نمیشه!', category:'riddle', difficulty:'easy', 
+            text:'کشور اروپایی مخترع پیتزا', 
+            answer:'ایتالیا', hint:'', solved:false, badge:'new', answerType:'text'},
+
+            {id:17, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'برسر عروس و داماد میریزند', 
+            answer:'شاباش', hint:'', solved:false, badge:'new', answerType:'text'},
+
+            {id:18, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'نظر خواهی از دیگران', 
+            answer:'مشورت', hint:'', solved:false, badge:'new', answerType:'text'},
+            
+            {id:19, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'شهری که به کاشی کاری هایش معروف است', 
+            answer:'اصفهان', hint:'لقبش نصب جهانه!', solved:false, badge:'new', answerType:'text'},
+
+            {id:20, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'شیرین و آبدار است توی تابسستان میخوریم', 
+            answer:'هندوانه', hint:'دانه های سیاه داره', solved:false, badge:'new', answerType:'text'},
+
+            {id:21, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'چوب خوشبوی هندی', 
+            answer:'عود', hint:'', solved:false, badge:'new', answerType:'text'},
+
+            {id:22, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'تو رادیو و دریا مشترکه', 
+            answer:'موج', hint:'', solved:false, badge:'new', answerType:'text'},
+
+            {id:23, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'بقایای اجسام سوخته', 
+            answer:'خاکستر', hint:'با یک ی یک رنگ میشود', solved:false, badge:'new', answerType:'text'},
+
+            {id:24, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'عضوی در بدن که تا بیست برابر خود بزرگ میشود', 
+            answer:'معده', hint:'', solved:false, badge:'new', answerType:'text'},
+
+            {id:25, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'سخنی که آهسته میگویند تا بقیه نشنوند', 
+            answer:'درگوشی', hint:'🚪+📱', solved:false, badge:'new', answerType:'text'},
+
+            {id:26, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'آشی که در سنت ایرانی پس از سه روز برای مسافر پخته میشود', 
+            answer:'پشتپا', hint:'', solved:false, badge:'new', answerType:'text'},
+
+            {id:27, icon:'💤', title:'', category:'riddle', difficulty:'easy', 
+            text:'خواب سبک و کوتاه', 
+            answer:'چرت', hint:'', solved:false, badge:'new', answerType:'text'},
+
+            {id:27, icon:'🚶🏻‍♂️', title:'راه برو بدین اینکه جلو بری...', category:'riddle', difficulty:'easy', 
+            text:'با چه چیزی میتوان کیلومتر ها راه رفت بدون اینکه حتی 1 متر جابه جاشد رفت؟', 
+            answer:'تردمیل', hint:'یک ابزار الکتریکی است', solved:false, badge:'new', answerType:'text'},
+
+            {id:29, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'شیئی سبک و کوتاه که در انبار کاه یافت میشود', 
+            answer:'سوزن', hint:'.... را در انبار کاه پیدا کردن', solved:false, badge:'new', answerType:'text'},
+
+            {id:30, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'حیوانی که علاقه زیادی به عسل دارد', 
+            answer:'خرس', hint:'توی قطب شمال هم زندگی میکنه', solved:false, badge:'new', answerType:'text'},
+
+            {id:31, icon:'🏜', title:'گیاهی کویری', category:'riddle', difficulty:'easy', 
+            text:'گیاهی که در بیابان میروید', 
+            answer:'کاکتوس', hint:'اگه جرئت داری بهش دست بزن😁', solved:false, badge:'new', answerType:'text'},
+            
+            {id:32, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'جسمی برای تمیز کردن بین دندان ها', 
+            answer:'خلال دندان', hint:'.... + 🦷', solved:false, badge:'new', answerType:'text'},
+
+            
+            {id:33, icon:'', title:'', category:'riddle', difficulty:'hard', 
+            text:'از چوب ساخته شده ولی اره نمیشه', 
+            answer:'خاک اره', hint:'', solved:false, badge:'new', answerType:'text'},
+
+            {id:34, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'گیاهان برای رسیدن به بلوغ به آن عنصر نیاز دارند', 
+            answer:'فسفر', hint:'در جدول تناوبی عنصر 15 ام است', solved:false, badge:'new', answerType:'text'},
+            
+            {id:35, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'میوه سبزی و دراز که در نمک بماند ترشی میشود', 
+            answer:'خیار', hint:'....شور', solved:false, badge:'new', answerType:'text'},
+
+            {id:36, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'احساسی که بعد از گزیده شدن به شما دست میدهد', 
+            answer:'خارش', hint:'', solved:false, badge:'new', answerType:'text'},
+            
+            {id:37, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'کشوری با لقب سرزمین آفتاب', 
+            answer:'ژاپن', hint:'', solved:false, badge:'new', answerType:'text'},
+                        
+            {id:38, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'نوعی هنر ساخته شده با نواختن ساز ها', 
+            answer:'موسیقی', hint:'', solved:false, badge:'new', answerType:'text'},
+      
+            {id:39, icon:'', title:'', category:'riddle', difficulty:'easy', 
+            text:'', 
+            answer:'', hint:'', solved:false, badge:'new', answerType:'text'},
+            
+        ];
+
+        let solvedPuzzles = [];
+        let totalScore = 0;
+
+        function loadState() {
+            try {
+                const saved = localStorage.getItem('novinix_puzzle_state');
+                if (saved) {
+                    const state = JSON.parse(saved);
+                    solvedPuzzles = state.solvedPuzzles || [];
+                    totalScore = state.totalScore || 0;
+                    puzzlesData.forEach(p => {
+                        p.solved = solvedPuzzles.includes(p.id);
+                    });
+                }
+            } catch(e) {}
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem('novinix_puzzle_state', JSON.stringify({
+                    solvedPuzzles: solvedPuzzles,
+                    totalScore: totalScore
+                }));
+            } catch(e) {}
+        }
+
+        function persianToEnglishNumber(str) {
+            const map = {'۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9'};
+            return str.replace(/[۰-۹]/g, m => map[m] || m);
+        }
+
+        function normalizeAnswer(input, answerType) {
+            let normalized = input.replace(/\s+/g, ' ').trim();
+            if (answerType === 'number') normalized = persianToEnglishNumber(normalized);
+            if (answerType === 'text') normalized = normalized.replace(/\s+/g, '');
+            return normalized.toLowerCase();
+        }
+
+        function updateStats() {
+            const total = puzzlesData.length;
+            const solved = puzzlesData.filter(p => p.solved).length;
+            document.getElementById('totalPuzzles').textContent = total;
+            document.getElementById('solvedPuzzles').textContent = solved;
+            document.getElementById('scoreDisplay').textContent = totalScore;
+        }
+
+        function renderPuzzles(filter = 'all') {
+            const grid = document.getElementById('puzzleGrid');
+            const noResults = document.getElementById('noResults');
+
+            let filtered = puzzlesData;
+            if (filter === 'solved') filtered = puzzlesData.filter(p => p.solved);
+            else if (filter !== 'all') filtered = puzzlesData.filter(p => p.category === filter);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+            noResults.style.display = 'none';
+
+            let html = '';
+            filtered.forEach((puzzle, index) => {
+                const badgeHtml = puzzle.badge ? `<span class="badge ${puzzle.badge}">${puzzle.badge === 'hot' ? '🔥 داغ' : puzzle.badge === 'new' ? 'جدید' : puzzle.badge === 'popular' ? 'محبوب' : ''}</span>` : '';
+                const solvedBadge = puzzle.solved ? `<span class="badge solved">✅ حل شده</span>` : '';
+                const difficultyMap = { 'easy': 'آسان', 'medium': 'متوسط', 'hard': 'سخت', 'expert': 'حرفه‌ای' };
+
+                html += `
+                    <div class="puzzle-card" data-id="${puzzle.id}" data-category="${puzzle.category}" style="animation-delay: ${(index * 0.03)}s">
+                        ${badgeHtml}${solvedBadge}
+                        <div class="card-header">
+                            <span class="icon">${puzzle.icon}</span>
+                            <span class="difficulty ${puzzle.difficulty}">${difficultyMap[puzzle.difficulty] || puzzle.difficulty}</span>
+                        </div>
+                        <h3>${puzzle.title}</h3>
+                        <div class="puzzle-text">${puzzle.text}</div>
+                        <div class="answer-section">
+                            <div class="answer-input-group">
+                                <input type="text" placeholder="پاسخ خود را وارد کنید..." ${puzzle.solved ? 'disabled' : ''}>
+                                <button class="btn-check" ${puzzle.solved ? 'disabled' : ''} onclick="checkAnswer(${puzzle.id}, this)">${puzzle.solved ? '✅ حل شده' : 'بررسی'}</button>
+                            </div>
+                            <div class="answer-feedback" id="feedback-${puzzle.id}">${puzzle.solved ? '✅ پاسخ صحیح!' : ''}</div>
+                            <div class="puzzle-meta">
+                                <span>#${puzzle.id}</span>
+                                <button class="hint-btn" onclick="toggleHint(${puzzle.id})">💡 راهنمایی</button>
+                            </div>
+                            <div class="hint-text" id="hint-${puzzle.id}">${puzzle.hint}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+            updateStats();
+        }
+
+        function checkAnswer(id, button) {
+            const card = button.closest('.puzzle-card');
+            const input = card.querySelector('.answer-input-group input');
+            const feedback = document.getElementById(`feedback-${id}`);
+            const puzzle = puzzlesData.find(p => p.id === id);
+            if (!puzzle || puzzle.solved) return;
+
+            const userAnswer = input.value.trim();
+            if (!userAnswer) {
+                feedback.className = 'answer-feedback wrong';
+                feedback.textContent = '⚠️ لطفاً پاسخ خود را وارد کنید.';
+                return;
+            }
+
+            const normalizedUser = normalizeAnswer(userAnswer, puzzle.answerType);
+            const normalizedAnswer = normalizeAnswer(puzzle.answer, puzzle.answerType);
+
+            const scoreMap = { 'easy': 10, 'medium': 20, 'hard': 35, 'expert': 50 };
+            const earnedScore = scoreMap[puzzle.difficulty] || 10;
+
+            if (normalizedUser === normalizedAnswer) {
+                puzzle.solved = true;
+                solvedPuzzles.push(puzzle.id);
+                totalScore += earnedScore;
+
+                feedback.className = 'answer-feedback correct';
+                feedback.textContent = `✅ پاسخ صحیح! ⭐ +${earnedScore} امتیاز`;
+                input.disabled = true;
+                button.disabled = true;
+                button.textContent = '✅ حل شده';
+
+                saveState();
+                updateStats();
+
+                const allSolved = puzzlesData.every(p => p.solved);
+                if (allSolved) {
+                    setTimeout(() => alert('🎉 تبریک! همه معماها را حل کردید! شما یک نابغه هستید! 🧠'), 500);
+                }
+            } else {
+                feedback.className = 'answer-feedback wrong';
+                feedback.textContent = '❌ پاسخ اشتباه است. دوباره تلاش کنید!';
+                const wrongCount = parseInt(card.dataset.wrongCount || '0') + 1;
+                card.dataset.wrongCount = wrongCount;
+                if (wrongCount >= 2) {
+                    document.getElementById(`hint-${id}`).classList.add('visible');
+                    feedback.textContent = '💡 از راهنمایی استفاده کنید!';
+                }
+            }
+        }
+
+        function toggleHint(id) {
+            document.getElementById(`hint-${id}`).classList.toggle('visible');
+        }
+
+        function filterPuzzles(filter, element) {
+            document.querySelectorAll('.filter-tag').forEach(tag => tag.classList.remove('active'));
+            if (element) element.classList.add('active');
+            renderPuzzles(filter);
+        }
+
+        loadState();
+        renderPuzzles('all');
+    </script>
+<script src="../assets/js/seo.js"></script>
+</body>
+</html>

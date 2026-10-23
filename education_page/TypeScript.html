@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>آموزش TypeScript | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+    <link rel="stylesheet" href="../assets/css/education.css" />
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar"></aside>
+        <main class="main-content" id="mainContent"></main>
+    </div>
+
+    <script>
+        // ================================================================
+        // 🟦 TypeScript Course Data
+        // ================================================================
+
+        var lessons = [{
+            id: 'ts-intro',
+            title: 'معرفی TypeScript',
+            section: 'مقدمات',
+            order: 1,
+            badge: null,
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">🟦 آموزش TypeScript / <span>مقدمات</span></div>
+                        <h1>معرفی <span>TypeScript</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۰ دقیقه</span>
+                            <span>📊 سطح: مبتدی</span>
+                            <span>⭐ ۴.۸ (۱,۱۰۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>TypeScript چیست؟</h2>
+                        <p>
+                            <strong>TypeScript</strong> یک زبان آموزش ها متن‌باز است که
+                            توسط <strong>Microsoft</strong> ساخته شده است. TypeScript در واقع
+                            <strong>جاوااسکریپت با تایپ‌های ایستا (Static Typing)</strong> است
+                            که به کد شما ساختار و امنیت بیشتری می‌دهد.
+                        </p>
+
+                        <div class="note-box">
+                            <strong>💡 نکته:</strong>
+                            <p>کدهای TypeScript در نهایت به جاوااسکریپت <strong>کامپایل</strong>
+                            می‌شوند و در هر محیطی که جاوااسکریپت اجرا شود، قابل اجرا هستند.</p>
+                        </div>
+
+                        <h3>مزایای TypeScript</h3>
+                        <ul>
+                            <li>🛡️ <strong>تایپ‌گذاری قوی</strong> – کاهش خطاهای زمان اجرا</li>
+                            <li>📝 <strong>مستندسازی خودکار</strong> – کد خودمستند</li>
+                            <li>🔧 <strong>ابزارهای پیشرفته</strong> – تکمیل خودکار و refactoring</li>
+                            <li>📦 <strong>سازگاری با جاوااسکریپت</strong> – تمام کدهای JS در TS معتبر است</li>
+                            <li>🏗️ <strong>پروژه‌های بزرگ</strong> – مدیریت بهتر کد در تیم‌های بزرگ</li>
+                        </ul>
+
+                        <h3>اولین برنامه TypeScript</h3>
+                        <p>یک برنامه ساده که پیام "Hello, World!" را چاپ می‌کند:</p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="ts">TypeScript</span>
+                                <span class="tab" data-tab="js">JavaScript</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="ts">
+                                    <pre><span class="comment">// First TypeScript program</span>
+<span class="keyword">function</span> <span class="function">greet</span>(name: <span class="type">string</span>): <span class="type">string</span> {
+    <span class="keyword">return</span> <span class="string">"Hello, "</span> + name + <span class="string">"!"</span>;
+}
+
+<span class="keyword">const</span> message: <span class="type">string</span> = <span class="function">greet</span>(<span class="string">"World"</span>);
+console.<span class="function">log</span>(message);
+
+<span class="comment">// Type inference</span>
+<span class="keyword">let</span> age = <span class="number">25</span>; <span class="comment">// TypeScript infers 'number'</span>
+console.<span class="function">log</span>(<span class="string">"Age: "</span> + age);</pre>
+                                </div>
+                                <div class="code-panel" data-panel="js">
+                                    <pre><span class="comment">// Compiled JavaScript</span>
+<span class="keyword">function</span> <span class="function">greet</span>(name) {
+    <span class="keyword">return</span> <span class="string">"Hello, "</span> + name + <span class="string">"!"</span>;
+}
+
+<span class="keyword">var</span> message = <span class="function">greet</span>(<span class="string">"World"</span>);
+console.<span class="function">log</span>(message);
+
+<span class="keyword">var</span> age = <span class="number">25</span>;
+console.<span class="function">log</span>(<span class="string">"Age: "</span> + age);</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'ts-types',
+            title: 'انواع داده در TypeScript',
+            section: 'مقدمات',
+            order: 2,
+            badge: null,
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">🟦 آموزش TypeScript / <span>مقدمات</span></div>
+                        <h1>انواع داده در <span>TypeScript</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۵ دقیقه</span>
+                            <span>📊 سطح: مبتدی</span>
+                            <span>⭐ ۴.۷ (۹۵۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>انواع پایه در TypeScript</h2>
+                        <p>
+                            TypeScript انواع داده‌های جاوااسکریپت را پشتیبانی می‌کند و
+                            چندین نوع جدید نیز اضافه کرده است.
+                        </p>
+
+                        <h3>انواع اصلی</h3>
+                        <ul>
+                            <li><strong>string</strong> – رشته‌های متنی</li>
+                            <li><strong>number</strong> – اعداد (صحیح و اعشاری)</li>
+                            <li><strong>boolean</strong> – true یا false</li>
+                            <li><strong>array</strong> – آرایه‌ها (مثل number[])</li>
+                            <li><strong>tuple</strong> – تاپل (آرایه با انواع مشخص)</li>
+                            <li><strong>enum</strong> – مجموعه ثابت‌ها</li>
+                            <li><strong>any</strong> – هر نوع داده (فرار از تایپ)</li>
+                            <li><strong>void</strong> – بدون مقدار بازگشتی</li>
+                            <li><strong>null</strong> و <strong>undefined</strong></li>
+                            <li><strong>never</strong> – هرگز اتفاق نمی‌افتد</li>
+                            <li><strong>unknown</strong> – نوع ناشناخته (ایمن‌تر از any)</li>
+                        </ul>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="ts">TypeScript</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="ts">
+                                    <pre><span class="comment">// Basic types</span>
+<span class="keyword">let</span> name: <span class="type">string</span> = <span class="string">"Ali"</span>;
+<span class="keyword">let</span> age: <span class="type">number</span> = <span class="number">25</span>;
+<span class="keyword">let</span> isStudent: <span class="type">boolean</span> = <span class="keyword">true</span>;
+
+<span class="comment">// Array</span>
+<span class="keyword">let</span> skills: <span class="type">string</span>[] = [<span class="string">"TypeScript"</span>, <span class="string">"JavaScript"</span>];
+<span class="keyword">let</span> numbers: <span class="type">number</span>[] = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+
+<span class="comment">// Tuple</span>
+<span class="keyword">let</span> user: [<span class="type">string</span>, <span class="type">number</span>] = [<span class="string">"Ali"</span>, <span class="number">25</span>];
+
+<span class="comment">// Enum</span>
+<span class="keyword">enum</span> Color {
+    Red,
+    Green,
+    Blue
+}
+<span class="keyword">let</span> favoriteColor: Color = Color.Blue;
+
+console.<span class="function">log</span>(<span class="string">"Name: "</span> + name);
+console.<span class="function">log</span>(<span class="string">"Skills: "</span> + skills);
+console.<span class="function">log</span>(<span class="string">"User: "</span> + user);
+console.<span class="function">log</span>(<span class="string">"Color: "</span> + favoriteColor);</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'ts-interfaces',
+            title: 'Interfaces و Types',
+            section: 'پیشرفته',
+            order: 1,
+            badge: 'hot',
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">🟦 آموزش TypeScript / <span>پیشرفته</span></div>
+                        <h1>Interfaces و <span>Types</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۳۰ دقیقه</span>
+                            <span>📊 سطح: متوسط</span>
+                            <span>⭐ ۴.۹ (۸۰۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>Interfaces</h2>
+                        <p>
+                            <strong>Interfaces</strong> در TypeScript برای تعریف ساختار اشیاء
+                            استفاده می‌شوند. آنها به شما اجازه می‌دهند که شکل (shape) داده‌ها را
+                            مشخص کنید.
+                        </p>
+
+                        <h2>Type Aliases</h2>
+                        <p>
+                            <strong>Type Aliases</strong> به شما اجازه می‌دهند نام جدیدی
+                            برای یک نوع ایجاد کنید. آنها می‌توانند برای انواع ساده یا پیچیده
+                            استفاده شوند.
+                        </p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="ts">TypeScript</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="ts">
+                                    <pre><span class="comment">// Interface definition</span>
+<span class="keyword">interface</span> <span class="interface">User</span> {
+    id: <span class="type">number</span>;
+    name: <span class="type">string</span>;
+    email: <span class="type">string</span>;
+    age?: <span class="type">number</span>; <span class="comment">// optional</span>
+    readonly createdAt: <span class="type">Date</span>; <span class="comment">// readonly</span>
+}
+
+<span class="comment">// Type alias</span>
+<span class="keyword">type</span> <span class="interface">UserRole</span> = <span class="string">"admin"</span> | <span class="string">"user"</span> | <span class="string">"guest"</span>;
+
+<span class="comment">// Using interface</span>
+<span class="keyword">function</span> <span class="function">createUser</span>(user: <span class="type">User</span>, role: <span class="type">UserRole</span>): <span class="type">void</span> {
+    console.<span class="function">log</span>(<span class="string">"User created:"</span>, user.name);
+    console.<span class="function">log</span>(<span class="string">"Role:"</span>, role);
+}
+
+<span class="keyword">const</span> newUser: <span class="type">User</span> = {
+    id: <span class="number">1</span>,
+    name: <span class="string">"Ali"</span>,
+    email: <span class="string">"ali@example.com"</span>,
+    age: <span class="number">25</span>,
+    createdAt: <span class="keyword">new</span> Date()
+};
+
+<span class="function">createUser</span>(newUser, <span class="string">"admin"</span>);
+
+<span class="comment">// Interface extension</span>
+<span class="keyword">interface</span> <span class="interface">AdminUser</span> <span class="keyword">extends</span> <span class="interface">User</span> {
+    permissions: <span class="type">string</span>[];
+}
+
+<span class="keyword">const</span> admin: <span class="type">AdminUser</span> = {
+    id: <span class="number">2</span>,
+    name: <span class="string">"Admin"</span>,
+    email: <span class="string">"admin@example.com"</span>,
+    createdAt: <span class="keyword">new</span> Date(),
+    permissions: [<span class="string">"read"</span>, <span class="string">"write"</span>, <span class="string">"delete"</span>]
+};
+
+console.<span class="function">log</span>(<span class="string">"Admin:"</span>, admin);</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'ts-generics',
+            title: 'Generics و Utility Types',
+            section: 'پیشرفته',
+            order: 2,
+            badge: 'new',
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">🟦 آموزش TypeScript / <span>پیشرفته</span></div>
+                        <h1>Generics و <span>Utility Types</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۳۵ دقیقه</span>
+                            <span>📊 سطح: پیشرفته</span>
+                            <span>⭐ ۴.۸ (۷۲۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>Generics</h2>
+                        <p>
+                            <strong>Generics</strong> به شما اجازه می‌دهند کدهای قابل استفاده
+                            مجدد بنویسید که با انواع مختلف داده کار کنند. Generics یکی از
+                            قدرتمندترین ویژگی‌های TypeScript است.
+                        </p>
+
+                        <h2>Utility Types</h2>
+                        <p>
+                            TypeScript چندین <strong>Utility Type</strong> داخلی دارد که
+                            به شما در کار با انواع کمک می‌کنند:
+                        </p>
+
+                        <ul>
+                            <li><strong>Partial&lt;T&gt;</strong> – همه ویژگی‌ها اختیاری می‌شوند</li>
+                            <li><strong>Required&lt;T&gt;</strong> – همه ویژگی‌ها اجباری می‌شوند</li>
+                            <li><strong>Readonly&lt;T&gt;</strong> – همه ویژگی‌ها فقط خواندنی می‌شوند</li>
+                            <li><strong>Record&lt;K, T&gt;</strong> – ساخت یک نوع با کلیدهای مشخص</li>
+                            <li><strong>Pick&lt;T, K&gt;</strong> – انتخاب ویژگی‌های خاص</li>
+                            <li><strong>Omit&lt;T, K&gt;</strong> – حذف ویژگی‌های خاص</li>
+                        </ul>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="ts">TypeScript</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="ts">
+                                    <pre><span class="comment">// Generic function</span>
+<span class="keyword">function</span> <span class="function">identity</span>&lt;T&gt;(value: T): T {
+    <span class="keyword">return</span> value;
+}
+
+<span class="keyword">const</span> numberValue = <span class="function">identity</span>&lt;<span class="type">number</span>&gt;(<span class="number">42</span>);
+<span class="keyword">const</span> stringValue = <span class="function">identity</span>&lt;<span class="type">string</span>&gt;(<span class="string">"Hello"</span>);
+
+console.<span class="function">log</span>(numberValue);
+console.<span class="function">log</span>(stringValue);
+
+<span class="comment">// Generic interface</span>
+<span class="keyword">interface</span> <span class="interface">Box</span>&lt;T&gt; {
+    value: T;
+    getValue(): T;
+}
+
+<span class="keyword">class</span> <span class="class">StringBox</span> <span class="keyword">implements</span> <span class="interface">Box</span>&lt;<span class="type">string</span>&gt; {
+    <span class="function">constructor</span>(<span class="keyword">public</span> value: <span class="type">string</span>) {}
+    getValue(): <span class="type">string</span> {
+        <span class="keyword">return</span> <span class="keyword">this</span>.value;
+    }
+}
+
+<span class="keyword">const</span> box = <span class="keyword">new</span> <span class="class">StringBox</span>(<span class="string">"TypeScript"</span>);
+console.<span class="function">log</span>(box.<span class="function">getValue</span>());
+
+<span class="comment">// Utility Types</span>
+<span class="keyword">interface</span> <span class="interface">User</span> {
+    id: <span class="type">number</span>;
+    name: <span class="type">string</span>;
+    email: <span class="type">string</span>;
+    age: <span class="type">number</span>;
+}
+
+<span class="comment">// Partial - all properties optional</span>
+<span class="keyword">type</span> <span class="interface">PartialUser</span> = <span class="type">Partial</span>&lt;User&gt;;
+<span class="keyword">const</span> partialUser: <span class="type">PartialUser</span> = { name: <span class="string">"Ali"</span> };
+
+<span class="comment">// Pick - select specific properties</span>
+<span class="keyword">type</span> <span class="interface">UserSummary</span> = <span class="type">Pick</span>&lt;User, <span class="string">"id"</span> | <span class="string">"name"</span>&gt;;
+<span class="keyword">const</span> summary: <span class="type">UserSummary</span> = { id: <span class="number">1</span>, name: <span class="string">"Ali"</span> };
+
+console.<span class="function">log</span>(<span class="string">"Partial User:"</span>, partialUser);
+console.<span class="function">log</span>(<span class="string">"Summary:"</span>, summary);</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }];
+
+        // ================================================================
+        // 🔧 Core Functions
+        // ================================================================
+
+        var currentLessonId = 'ts-intro';
+
+        function renderSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var sections = {};
+
+            for (var i = 0; i < lessons.length; i++) {
+                var lesson = lessons[i];
+                if (!sections[lesson.section]) {
+                    sections[lesson.section] = [];
+                }
+                sections[lesson.section].push(lesson);
+            }
+
+            var html = '';
+            var sectionNames = Object.keys(sections);
+            for (var s = 0; s < sectionNames.length; s++) {
+                var sectionName = sectionNames[s];
+                var items = sections[sectionName];
+                html += '<div class="sidebar-section">';
+                html += '<div class="section-title">' + sectionName + '</div>';
+                html += '<ul>';
+                items.sort(function(a, b) { return a.order - b.order; });
+                for (var j = 0; j < items.length; j++) {
+                    var item = items[j];
+                    var badge = item.badge ? '<span class="badge ' + item.badge + '">' + item.badge + '</span>' : '';
+                    var activeClass = (item.id === currentLessonId) ? 'active-link' : '';
+                    html += '<li><a href="#" data-id="' + item.id + '" class="' + activeClass + '">' + item.title + ' ' + badge + '</a></li>';
+                }
+                html += '</ul></div>';
+            }
+
+            sidebar.innerHTML = html;
+
+            sidebar.querySelectorAll('a[data-id]').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var id = this.dataset.id;
+                    loadLesson(id);
+                    sidebar.querySelectorAll('a[data-id]').forEach(function(l) {
+                        l.classList.remove('active-link');
+                    });
+                    this.classList.add('active-link');
+                });
+            });
+        }
+
+        function loadLesson(id) {
+            var lesson = null;
+            for (var i = 0; i < lessons.length; i++) {
+                if (lessons[i].id === id) {
+                    lesson = lessons[i];
+                    break;
+                }
+            }
+            if (!lesson) return;
+
+            currentLessonId = id;
+            document.getElementById('mainContent').innerHTML = lesson.content;
+
+            initTabs();
+            renderSidebar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function initTabs() {
+            document.querySelectorAll('.code-container').forEach(function(container) {
+                var tabs = container.querySelectorAll('.tab');
+                var panels = container.querySelectorAll('.code-panel');
+
+                tabs.forEach(function(tab) {
+                    tab.addEventListener('click', function() {
+                        var tabName = this.dataset.tab;
+                        tabs.forEach(function(t) {
+                            t.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        panels.forEach(function(p) {
+                            p.classList.remove('active');
+                        });
+                        var target = container.querySelector('.code-panel[data-panel="' + tabName + '"]');
+                        if (target) target.classList.add('active');
+                    });
+                });
+            });
+        }
+
+        // ================================================================
+        // 📋 Copy Code
+        // ================================================================
+
+        function copyCode(btn) {
+            var container = btn.closest('.code-body');
+            var activePanel = container.querySelector('.code-panel.active');
+            var pre = activePanel ? activePanel.querySelector('pre') : container.querySelector('pre');
+            if (!pre) return;
+
+            var text = pre.textContent;
+            navigator.clipboard.writeText(text).then(function() {
+                btn.textContent = '✅ Copied';
+                btn.classList.add('copied');
+                setTimeout(function() {
+                    btn.textContent = '📋 Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(function() {
+                var range = document.createRange();
+                range.selectNode(pre);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                document.execCommand('copy');
+                btn.textContent = '✅ Copied';
+                setTimeout(function() { btn.textContent = '📋 Copy'; }, 2000);
+            });
+        }
+
+        // ================================================================
+        // 🚀 Initial Load
+        // ================================================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = `
+                <div class="ts-hero">
+                    <div class="hero-icon">🟦</div>
+                    <h2>🟦 آموزش جامع <span>TypeScript</span></h2>
+                    <p>یادگیری TypeScript از مقدماتی تا پیشرفته با مثال‌های عملی</p>
+                    <div class="hero-meta">
+                        <span>📚 ۴ فصل</span>
+                        <span>⏱️ ۲۸ ساعت</span>
+                        <span>⭐ ۴.۸ از ۵</span>
+                        <span>👨‍🎓 ۱,۱۰۰ دانشجو</span>
+                    </div>
+                </div>
+                <div style="text-align:center; padding:20px; color:#6b7a8a;">
+                    <p style="font-size:1.1rem;">📚 یک درس را از سایدبار سمت راست انتخاب کنید</p>
+                    <p style="font-size:0.85rem; margin-top:5px;">دروس: مقدمات (۲ درس) | پیشرفته (۲ درس)</p>
+                </div>
+            `;
+
+            renderSidebar();
+            setTimeout(function() {
+                loadLesson('ts-intro');
+            }, 100);
+        });
+
+        console.log('🟦 TypeScript learning system ready!');
+    </script>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../auth/header.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/user-panel.js"></script>
+    <script src="../assets/js/settings.js"></script>
+    <script src="../assets/js/seo.js"></script>
+</body>
+</html>

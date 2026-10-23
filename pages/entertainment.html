@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>سرگرمی | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+
+    <!-- ===== CSS فایل‌های جداگانه ===== -->
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+
+    <style>
+        /* ===== استایل‌های اختصاصی سرگرمی ===== */
+        .entertainment-hero {
+            background: linear-gradient(135deg, #1a1a2e, #2d1b69, #6c2eb7);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(108, 46, 183, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .entertainment-hero::after {
+            content: '✨';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0.05;
+            bottom: -20px;
+            left: -20px;
+            transform: rotate(-15deg);
+        }
+
+        .entertainment-hero h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .entertainment-hero h2 span {
+            color: #ff6b9d;
+        }
+
+        .entertainment-hero p {
+            opacity: 0.8;
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .entertainment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .fun-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 25px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .fun-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: #6c2eb7;
+            box-shadow: 0 12px 40px rgba(108, 46, 183, 0.12);
+        }
+
+        .fun-card .icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .fun-card h3 {
+            color: #e8f5f0;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+
+        .fun-card p {
+            color: #a0b4c8;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .fun-card .btn-fun {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 25px;
+            background: linear-gradient(135deg, #6c2eb7, #8e44ad);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .fun-card .btn-fun:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(108, 46, 183, 0.3);
+        }
+
+        .fun-card .tag {
+            display: inline-block;
+            font-size: 0.6rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .tag.music { background: #ffeaa7; color: #6c2eb7; }
+        .tag.video { background: #74b9ff; color: #2d1b69; }
+        .tag.game { background: #55efc4; color: #00b894; }
+        .tag.fact { background: #fd79a8; color: #6c2eb7; }
+
+        .entertainment-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .feature-fun {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .feature-fun .icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .feature-fun h4 {
+            color: #e8f5f0;
+            font-size: 0.9rem;
+        }
+
+        .feature-fun p {
+            color: #a0b4c8;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .entertainment-hero h2 { font-size: 1.5rem; }
+            .entertainment-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .entertainment-grid { grid-template-columns: 1fr; }
+            .entertainment-features { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER توسط header.js ساخته می‌شود ===== -->
+
+    <main>
+        <div class="entertainment-hero">
+            <h2>🎬 سرگرمی <span>نوینیکس</span></h2>
+            <p>ویدئو، موسیقی، بازی‌های فکری و تفریحات جذاب</p>
+        </div>
+
+        <div class="entertainment-grid">
+            <div class="fun-card">
+                <span class="icon">🎵</span>
+                <h3>موسیقی روز</h3>
+                <span class="tag music">🎵 موسیقی</span>
+                <p>جدیدترین آهنگ‌های پاپ و الکترونیک</p>
+                <a href="../entertainment_page/music.html" class="btn-fun">گوش دادن</a>
+            </div>
+
+            <div class="fun-card">
+                <span class="icon">🎬</span>
+                <h3>فیلم و سریال</h3>
+                <span class="tag video">🎬 ویدئو</span>
+                <p>معرفی و نقد فیلم‌های جدید</p>
+                <a href="../entertainment_page/film.html" class="btn-fun">مشاهده</a>
+            </div>
+
+            <div class="fun-card">
+                <span class="icon">🧩</span>
+                <h3>بازی فکری</h3>
+                <span class="tag game">🧩 بازی</span>
+                <p>معماها، جدول و سوالات چالش‌برانگیز</p>
+                <a href="../entertainment_page/brain-games.html" class="btn-fun">شروع بازی</a>
+            </div>
+
+            <div class="fun-card">
+                <span class="icon">🎮</span>
+                <h3>بازی‌های آنلاین</h3>
+                <span class="tag game">🎮 بازی</span>
+                <p>بازی‌های ساده و سرگرم‌کننده</p>
+                <a href="games.html" class="btn-fun">بازی کنید</a>
+            </div>
+        </div>
+
+        <div class="entertainment-features">
+            <div class="feature-fun">
+                <span class="icon">🎯</span>
+                <h4>سرگرمی هدفمند</h4>
+                <p>تفریح با یادگیری</p>
+            </div>
+            <div class="feature-fun">
+                <span class="icon">🔄</span>
+                <h4>به‌روزرسانی مداوم</h4>
+                <p>محتوای تازه هر روز</p>
+            </div>
+            <div class="feature-fun">
+                <span class="icon">🎨</span>
+                <h4>تنوع بالا</h4>
+                <p>برای هر سلیقه‌ای</p>
+            </div>
+            <div class="feature-fun">
+                <span class="icon">📱</span>
+                <h4>دسترسی آسان</h4>
+                <p>در هر زمان و مکان</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===== FOOTER توسط footer.js ساخته می‌شود ===== -->
+
+    <!-- ===== اسکریپت‌ها ===== -->
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+</body>
+</html>

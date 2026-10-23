@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ماشین‌حساب مهندسی پیشرفته</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+
+    <!-- ===== CSS فایل‌های جداگانه ===== -->
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0c29;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        }
+
+        /* ===== MAIN CALCULATOR ===== */
+        .calculator-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 20px 30px 20px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .calculator-wrapper {
+            width: 100%;
+            max-width: 650px;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 24px 28px 28px 28px;
+            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.2s ease;
+        }
+
+        /* ===== DISPLAY ===== */
+        .display-area {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 18px;
+            padding: 14px 22px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(0, 255, 204, 0.12);
+            box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.4);
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-end;
+            position: relative;
+            direction: ltr;
+        }
+
+        .display-top {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2px;
+            direction: ltr;
+        }
+
+        .memory-indicator {
+            color: #00ffcc;
+            font-size: 11px;
+            font-weight: 400;
+            opacity: 0.5;
+            letter-spacing: 0.5px;
+        }
+
+        .angle-indicator {
+            color: #fbbf24;
+            font-size: 10px;
+            font-weight: 600;
+            opacity: 0.6;
+            letter-spacing: 0.5px;
+        }
+
+        #calcDisplay {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #e8f5f0;
+            font-size: 38px;
+            font-weight: 300;
+            text-align: right;
+            font-family: 'Segoe UI', monospace;
+            padding: 4px 0;
+            direction: ltr;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 30px rgba(0, 255, 204, 0.05);
+            transition: font-size 0.2s ease;
+        }
+
+        #calcDisplay::placeholder {
+            color: rgba(255, 255, 255, 0.12);
+            font-size: 22px;
+        }
+
+        /* ===== BUTTON GRID ===== */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            direction: ltr;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            padding: 16px 0;
+            color: #cbd5e1;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            font-family: 'Segoe UI', monospace;
+            letter-spacing: 0.3px;
+            min-height: 56px;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        .btn:active {
+            transform: scale(0.93);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .btn-operator {
+            background: rgba(0, 180, 219, 0.15);
+            color: #5fcde6;
+            border-color: rgba(0, 180, 219, 0.15);
+        }
+
+        .btn-operator:hover {
+            background: rgba(0, 180, 219, 0.25);
+            border-color: rgba(0, 180, 219, 0.2);
+        }
+
+        .btn-equals {
+            background: linear-gradient(135deg, #00b4db, #0083b0);
+            color: white;
+            border: none;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(0, 180, 219, 0.3);
+        }
+
+        .btn-equals:hover {
+            background: linear-gradient(135deg, #1cc9f0, #0095c5);
+            box-shadow: 0 6px 30px rgba(0, 180, 219, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-equals:active {
+            background: linear-gradient(135deg, #0083b0, #006a8a);
+            transform: scale(0.93);
+        }
+
+        .btn-clear {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border-color: rgba(239, 68, 68, 0.15);
+        }
+
+        .btn-clear:hover {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-memory {
+            background: rgba(139, 92, 246, 0.12);
+            color: #a78bfa;
+            border-color: rgba(139, 92, 246, 0.1);
+            font-size: 13px;
+        }
+
+        .btn-memory:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.15);
+        }
+
+        .btn-function {
+            background: rgba(251, 191, 36, 0.08);
+            color: #fbbf24;
+            border-color: rgba(251, 191, 36, 0.08);
+            font-size: 14px;
+        }
+
+        .btn-function:hover {
+            background: rgba(251, 191, 36, 0.15);
+            border-color: rgba(251, 191, 36, 0.12);
+        }
+
+        .btn-special {
+            background: rgba(52, 211, 153, 0.08);
+            color: #34d399;
+            border-color: rgba(52, 211, 153, 0.08);
+            font-size: 14px;
+        }
+
+        .btn-special:hover {
+            background: rgba(52, 211, 153, 0.15);
+            border-color: rgba(52, 211, 153, 0.12);
+        }
+
+        .btn-span-2 {
+            grid-column: span 2;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 650px) {
+            .calculator-wrapper {
+                padding: 18px 16px 20px 16px;
+                border-radius: 20px;
+            }
+            .button-grid {
+                gap: 8px;
+            }
+            .btn {
+                padding: 12px 0;
+                font-size: 15px;
+                min-height: 48px;
+                border-radius: 12px;
+            }
+            #calcDisplay {
+                font-size: 30px;
+            }
+            .display-area {
+                min-height: 75px;
+                padding: 10px 16px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .button-grid {
+                gap: 6px;
+            }
+            .btn {
+                padding: 10px 0;
+                font-size: 13px;
+                min-height: 42px;
+                border-radius: 10px;
+            }
+            #calcDisplay {
+                font-size: 24px;
+            }
+            .calculator-wrapper {
+                padding: 12px 10px 14px 10px;
+                border-radius: 16px;
+            }
+            .display-area {
+                min-height: 65px;
+                padding: 8px 12px;
+            }
+            .btn-memory,
+            .btn-function,
+            .btn-special {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .button-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 4px;
+            }
+            .btn {
+                padding: 8px 0;
+                font-size: 11px;
+                min-height: 36px;
+                border-radius: 8px;
+            }
+            #calcDisplay {
+                font-size: 20px;
+            }
+            .btn-memory,
+            .btn-function,
+            .btn-special {
+                font-size: 9px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER توسط header.js ساخته می‌شود ===== -->
+
+    <!-- ===== CALCULATOR ===== -->
+    <div class="calculator-container">
+        <div class="calculator-wrapper">
+            <!-- Display -->
+            <div class="display-area">
+                <div class="display-top">
+                    <span class="memory-indicator" id="memoryStatus">M1: 0</span>
+                    <span class="angle-indicator" id="angleMode">DEG</span>
+                </div>
+                <input type="text" id="calcDisplay" placeholder="0" readonly />
+            </div>
+
+            <!-- Buttons Grid -->
+            <div class="button-grid">
+                <!-- Row 1: Memory & Special -->
+                <button class="btn btn-memory" data-action="mem1">M1</button>
+                <button class="btn btn-memory" data-action="mem2">M2</button>
+                <button class="btn btn-memory" data-action="mem3">M3</button>
+                <button class="btn btn-memory" data-action="memAdd">M+</button>
+                <button class="btn btn-memory" data-action="memRecall">MR</button>
+
+                <!-- Row 2 -->
+                <button class="btn btn-memory" data-action="memClear">MC</button>
+                <button class="btn btn-clear" data-action="clear">C</button>
+                <button class="btn btn-clear" data-action="backspace">⌫</button>
+                <button class="btn btn-special" data-action="angleToggle">DEG/RAD</button>
+                <button class="btn btn-function" data-action="percent">%</button>
+
+                <!-- Row 3: Trig -->
+                <button class="btn btn-function" data-action="sin">sin</button>
+                <button class="btn btn-function" data-action="cos">cos</button>
+                <button class="btn btn-function" data-action="tan">tan</button>
+                <button class="btn btn-operator" data-action="÷">÷</button>
+                <button class="btn btn-operator" data-action="×">×</button>
+
+                <!-- Row 4: Advanced -->
+                <button class="btn btn-function" data-action="sqrt">√</button>
+                <button class="btn btn-function" data-action="square">x²</button>
+                <button class="btn btn-function" data-action="cube">x³</button>
+                <button class="btn btn-operator" data-action="-">−</button>
+                <button class="btn btn-operator" data-action="+">+</button>
+
+                <!-- Row 5: More functions -->
+                <button class="btn btn-special" data-action="log">log</button>
+                <button class="btn btn-special" data-action="ln">ln</button>
+                <button class="btn btn-special" data-action="factorial">x!</button>
+                <button class="btn btn-special" data-action="pi">π</button>
+                <button class="btn btn-special" data-action="euler">e</button>
+
+                <!-- Row 6: Numbers -->
+                <button class="btn" data-action="7">7</button>
+                <button class="btn" data-action="8">8</button>
+                <button class="btn" data-action="9">9</button>
+                <button class="btn btn-equals" data-action="equals">=</button>
+                <button class="btn btn-function" data-action="negate">±</button>
+
+                <!-- Row 7 -->
+                <button class="btn" data-action="4">4</button>
+                <button class="btn" data-action="5">5</button>
+                <button class="btn" data-action="6">6</button>
+                <button class="btn btn-special" data-action="exp">e^x</button>
+                <button class="btn btn-special" data-action="pow10">10^x</button>
+
+                <!-- Row 8 -->
+                <button class="btn" data-action="1">1</button>
+                <button class="btn" data-action="2">2</button>
+                <button class="btn" data-action="3">3</button>
+                <button class="btn btn-special" data-action="inverse">1/x</button>
+                <button class="btn btn-special" data-action="abs">|x|</button>
+
+                <!-- Row 9 -->
+                <button class="btn btn-span-2" data-action="0">0</button>
+                <button class="btn" data-action=".">.</button>
+                <button class="btn btn-special" data-action="floor">⌊x⌋</button>
+                <button class="btn btn-special" data-action="ceil">⌈x⌉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER توسط footer.js ساخته می‌شود ===== -->
+
+    <!-- ===== اسکریپت‌ها ===== -->
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            "use strict";
+
+            const display = document.getElementById('calcDisplay');
+            const memoryStatus = document.getElementById('memoryStatus');
+            const angleModeEl = document.getElementById('angleMode');
+
+            let currentInput = '0';
+            let memory = { M1: 0, M2: 0, M3: 0 };
+            let activeMemory = 'M1';
+            let justEvaluated = false;
+            let angleMode = 'DEG';
+
+            function updateDisplay(value) {
+                if (value === undefined || value === null) value = currentInput;
+                if (typeof value === 'number') {
+                    if (!Number.isInteger(value) && value.toString().length > 14) {
+                        value = value.toPrecision(12);
+                    }
+                    value = String(value);
+                }
+                display.value = value;
+                currentInput = value;
+            }
+
+            function updateMemoryStatus() {
+                memoryStatus.textContent = activeMemory + ': ' + memory[activeMemory];
+            }
+
+            function getCurrentNumber() {
+                return parseFloat(currentInput) || 0;
+            }
+
+            function setCurrentNumber(val) {
+                if (typeof val === 'number') {
+                    if (Number.isInteger(val)) {
+                        currentInput = String(val);
+                    } else {
+                        currentInput = String(val);
+                    }
+                } else {
+                    currentInput = val;
+                }
+                display.value = currentInput;
+            }
+
+            function showError(msg) {
+                display.value = msg || 'خطا';
+                currentInput = '0';
+                setTimeout(function() {
+                    updateDisplay('0');
+                }, 1500);
+            }
+
+            function evaluateExpression(expr) {
+                try {
+                    var sanitized = expr.replace(/[^0-9+\-*/().% ]/g, '');
+                    var result = Function('"use strict"; return (' + sanitized + ')')();
+                    return result;
+                } catch (_) {
+                    return null;
+                }
+            }
+
+            function toRadians(deg) {
+                return deg * (Math.PI / 180);
+            }
+
+            function handleAction(action, value) {
+                if (justEvaluated && /^[0-9.]$/.test(value)) {
+                    currentInput = '0';
+                    justEvaluated = false;
+                }
+
+                if (/^[0-9.]$/.test(value)) {
+                    if (value === '.' && currentInput.includes('.')) return;
+                    if (currentInput === '0' && value !== '.') {
+                        currentInput = value;
+                    } else {
+                        currentInput += value;
+                    }
+                    updateDisplay();
+                    justEvaluated = false;
+                    return;
+                }
+
+                if (['+', '-', '×', '÷'].includes(action)) {
+                    var opMap = { '+': '+', '-': '-', '×': '*', '÷': '/' };
+                    var lastChar = currentInput.slice(-1);
+                    if (['+', '-', '*', '/'].includes(lastChar)) {
+                        currentInput = currentInput.slice(0, -1) + opMap[action];
+                    } else {
+                        currentInput += opMap[action];
+                    }
+                    updateDisplay();
+                    justEvaluated = false;
+                    return;
+                }
+
+                var num = getCurrentNumber();
+
+                switch (action) {
+                    case 'equals': {
+                        var result = evaluateExpression(currentInput);
+                        if (result === null || !isFinite(result)) {
+                            showError('خطا');
+                        } else {
+                            if (Number.isInteger(result)) {
+                                setCurrentNumber(result);
+                            } else {
+                                setCurrentNumber(result);
+                            }
+                            justEvaluated = true;
+                        }
+                        break;
+                    }
+
+                    case 'clear':
+                        currentInput = '0';
+                        updateDisplay();
+                        justEvaluated = false;
+                        break;
+
+                    case 'backspace':
+                        if (currentInput.length > 1 && currentInput !== '0') {
+                            currentInput = currentInput.slice(0, -1);
+                        } else {
+                            currentInput = '0';
+                        }
+                        updateDisplay();
+                        justEvaluated = false;
+                        break;
+
+                    case 'negate':
+                        if (currentInput !== '0') {
+                            if (currentInput.startsWith('-')) {
+                                currentInput = currentInput.slice(1);
+                            } else {
+                                currentInput = '-' + currentInput;
+                            }
+                            updateDisplay();
+                        }
+                        justEvaluated = false;
+                        break;
+
+                    case 'percent':
+                        setCurrentNumber(num / 100);
+                        justEvaluated = false;
+                        break;
+
+                    case 'sqrt':
+                        if (num < 0) { showError('عدد منفی'); break; }
+                        setCurrentNumber(Math.sqrt(num));
+                        justEvaluated = true;
+                        break;
+
+                    case 'square':
+                        setCurrentNumber(num * num);
+                        justEvaluated = true;
+                        break;
+
+                    case 'cube':
+                        setCurrentNumber(num * num * num);
+                        justEvaluated = true;
+                        break;
+
+                    case 'factorial': {
+                        if (num < 0 || !Number.isInteger(num)) {
+                            showError('عدد صحیح مثبت');
+                            break;
+                        }
+                        if (num > 170) { showError('عدد بزرگ'); break; }
+                        var fact = 1;
+                        for (var i = 2; i <= num; i++) fact *= i;
+                        setCurrentNumber(fact);
+                        justEvaluated = true;
+                        break;
+                    }
+
+                    case 'pi':
+                        if (currentInput === '0' || justEvaluated) {
+                            setCurrentNumber(Math.PI);
+                        } else {
+                            currentInput += Math.PI;
+                            updateDisplay();
+                        }
+                        justEvaluated = false;
+                        break;
+
+                    case 'euler':
+                        if (currentInput === '0' || justEvaluated) {
+                            setCurrentNumber(Math.E);
+                        } else {
+                            currentInput += Math.E;
+                            updateDisplay();
+                        }
+                        justEvaluated = false;
+                        break;
+
+                    case 'sin': {
+                        var val = angleMode === 'DEG' ? toRadians(num) : num;
+                        setCurrentNumber(Math.sin(val));
+                        justEvaluated = true;
+                        break;
+                    }
+                    case 'cos': {
+                        var val = angleMode === 'DEG' ? toRadians(num) : num;
+                        setCurrentNumber(Math.cos(val));
+                        justEvaluated = true;
+                        break;
+                    }
+                    case 'tan': {
+                        var val = angleMode === 'DEG' ? toRadians(num) : num;
+                        setCurrentNumber(Math.tan(val));
+                        justEvaluated = true;
+                        break;
+                    }
+
+                    case 'log':
+                        if (num <= 0) { showError('عدد مثبت'); break; }
+                        setCurrentNumber(Math.log10(num));
+                        justEvaluated = true;
+                        break;
+
+                    case 'ln':
+                        if (num <= 0) { showError('عدد مثبت'); break; }
+                        setCurrentNumber(Math.log(num));
+                        justEvaluated = true;
+                        break;
+
+                    case 'exp':
+                        setCurrentNumber(Math.exp(num));
+                        justEvaluated = true;
+                        break;
+
+                    case 'pow10':
+                        setCurrentNumber(Math.pow(10, num));
+                        justEvaluated = true;
+                        break;
+
+                    case 'inverse':
+                        if (num === 0) { showError('تقسیم بر صفر'); break; }
+                        setCurrentNumber(1 / num);
+                        justEvaluated = true;
+                        break;
+
+                    case 'abs':
+                        setCurrentNumber(Math.abs(num));
+                        justEvaluated = true;
+                        break;
+
+                    case 'floor':
+                        setCurrentNumber(Math.floor(num));
+                        justEvaluated = true;
+                        break;
+
+                    case 'ceil':
+                        setCurrentNumber(Math.ceil(num));
+                        justEvaluated = true;
+                        break;
+
+                    case 'angleToggle':
+                        angleMode = angleMode === 'DEG' ? 'RAD' : 'DEG';
+                        angleModeEl.textContent = angleMode;
+                        break;
+
+                    case 'mem1':
+                        activeMemory = 'M1';
+                        updateMemoryStatus();
+                        break;
+                    case 'mem2':
+                        activeMemory = 'M2';
+                        updateMemoryStatus();
+                        break;
+                    case 'mem3':
+                        activeMemory = 'M3';
+                        updateMemoryStatus();
+                        break;
+
+                    case 'memAdd':
+                        memory[activeMemory] = num;
+                        updateMemoryStatus();
+                        break;
+
+                    case 'memRecall':
+                        setCurrentNumber(memory[activeMemory]);
+                        justEvaluated = true;
+                        break;
+
+                    case 'memClear':
+                        memory[activeMemory] = 0;
+                        updateMemoryStatus();
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            // ===== EVENT LISTENERS =====
+            document.querySelectorAll('.btn').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    var action = this.dataset.action;
+                    var value = this.textContent.trim();
+
+                    if (/^[0-9.]$/.test(value)) {
+                        handleAction('digit', value);
+                        return;
+                    }
+
+                    if (action) {
+                        handleAction(action, value);
+                    } else {
+                        if (/^[0-9.]$/.test(value)) {
+                            handleAction('digit', value);
+                        } else if (['+', '-', '×', '÷'].includes(value)) {
+                            handleAction(value, value);
+                        }
+                    }
+                });
+            });
+
+            // ===== KEYBOARD SUPPORT =====
+            document.addEventListener('keydown', function(e) {
+                var key = e.key;
+
+                if (key >= '0' && key <= '9') {
+                    e.preventDefault();
+                    handleAction('digit', key);
+                    return;
+                }
+
+                if (key === '.') {
+                    e.preventDefault();
+                    handleAction('digit', '.');
+                    return;
+                }
+
+                if (key === '+') {
+                    e.preventDefault();
+                    handleAction('+', '+');
+                    return;
+                }
+                if (key === '-') {
+                    e.preventDefault();
+                    handleAction('-', '-');
+                    return;
+                }
+                if (key === '*') {
+                    e.preventDefault();
+                    handleAction('×', '×');
+                    return;
+                }
+                if (key === '/') {
+                    e.preventDefault();
+                    handleAction('÷', '÷');
+                    return;
+                }
+
+                if (key === 'Enter' || key === '=') {
+                    e.preventDefault();
+                    handleAction('equals', '=');
+                    return;
+                }
+
+                if (key === 'Backspace') {
+                    e.preventDefault();
+                    handleAction('backspace', '⌫');
+                    return;
+                }
+
+                if (key === 'Escape' || key === 'c' || key === 'C') {
+                    e.preventDefault();
+                    handleAction('clear', 'C');
+                    return;
+                }
+
+                if (key === '%') {
+                    e.preventDefault();
+                    handleAction('percent', '%');
+                    return;
+                }
+            });
+
+            // ===== INIT =====
+            updateDisplay('0');
+            updateMemoryStatus();
+            angleModeEl.textContent = angleMode;
+
+            console.log('🧮 ماشین‌حساب مهندسی پیشرفته آماده است!');
+        })();
+    </script>
+</body>
+</html>

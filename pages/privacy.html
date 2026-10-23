@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>حریم خصوصی | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+
+    <!-- ===== CSS فایل‌های جداگانه ===== -->
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+
+    <style>
+        /* ===== استایل‌های اختصاصی حریم خصوصی ===== */
+        .page-hero {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 35px;
+        }
+
+        .page-hero h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .page-hero p {
+            color: #a0b4c8;
+            font-size: 1rem;
+        }
+
+        .page-hero .icon-big {
+            font-size: 3.5rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .content-section h3 {
+            color: #00ffcc;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-section p {
+            color: #a0b4c8;
+            line-height: 1.9;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .content-section ul li {
+            color: #a0b4c8;
+            padding: 8px 0 8px 30px;
+            position: relative;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .content-section ul li:last-child {
+            border-bottom: none;
+        }
+
+        .content-section ul li::before {
+            content: '🔒';
+            position: absolute;
+            right: 0;
+            top: 8px;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: rgba(160, 180, 200, 0.4);
+            font-size: 0.8rem;
+            margin-top: 20px;
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        @media (max-width: 768px) {
+            .page-hero h2 { font-size: 1.6rem; }
+            .content-section { padding: 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .page-hero h2 { font-size: 1.3rem; }
+            .page-hero .icon-big { font-size: 2.5rem; }
+            .content-section ul li { font-size: 0.85rem; padding-right: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER توسط header.js ساخته می‌شود ===== -->
+
+    <main>
+        <div class="page-hero">
+            <span class="icon-big">🔒</span>
+            <h2>حریم خصوصی</h2>
+            <p>چگونه از اطلاعات شما محافظت می‌کنیم</p>
+        </div>
+
+        <div class="content-section">
+            <h3>جمع‌آوری اطلاعات</h3>
+            <p>
+                در نوینیکس، حریم خصوصی شما برای ما بسیار مهم است. ما فقط اطلاعاتی را جمع‌آوری می‌کنیم که 
+                برای ارائه خدمات بهتر به شما ضروری هستند.
+            </p>
+            <ul>
+                <li>اطلاعات ثبت‌نام (نام، ایمیل)</li>
+                <li>تنظیمات کاربری (تم، اندازه فونت، زبان)</li>
+                <li>تاریخچه استفاده از ابزارها (برای بهبود تجربه)</li>
+                <li>کوکی‌های ضروری برای عملکرد سایت</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h3>نحوه محافظت</h3>
+            <p>
+                ما از جدیدترین روش‌های امنیتی برای محافظت از اطلاعات شما استفاده می‌کنیم:
+            </p>
+            <ul>
+                <li>رمزنگاری اطلاعات با پروتکل HTTPS</li>
+                <li>ذخیره‌سازی امن در سرورهای محافظت‌شده</li>
+                <li>عدم اشتراک‌گذاری اطلاعات با شخص ثالث</li>
+                <li>به‌روزرسانی منظم سیستم‌های امنیتی</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h3>⚖️ حقوق شما</h3>
+            <p>شما به عنوان کاربر نوینیکس حقوق زیر را دارید:</p>
+            <ul>
+                <li>دسترسی به اطلاعات ذخیره‌شده خود</li>
+                <li>ویرایش یا حذف اطلاعات شخصی</li>
+                <li>لغو عضویت در خبرنامه</li>
+                <li>درخواست حذف کامل حساب کاربری</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h3>🍪 کوکی‌ها (Cookies)</h3>
+            <p>
+                از کوکی‌ها برای بهبود تجربه کاربری و ذخیره تنظیمات استفاده می‌کنیم. 
+                شما می‌توانید در هر زمان کوکی‌ها را از مرورگر خود حذف کنید.
+            </p>
+        </div>
+
+        <div class="last-updated">
+            آخرین به‌روزرسانی: ۱۴۰۵/۰۶/۰۱
+        </div>
+    </main>
+
+    <!-- ===== FOOTER توسط footer.js ساخته می‌شود ===== -->
+
+    <!-- ===== اسکریپت‌ها ===== -->
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+</body>
+</html>

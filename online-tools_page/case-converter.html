@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<script src="../auth/auth.js"></script>
+<script src="../auth/header.js"></script>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تبدیل حروف آنلاین | ابزار تغییر حالت حروف Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای تبدیل حروف به حالت‌های مختلف: UPPER, lower, Title Case, camelCase, PascalCase, snake_case, kebab-case" />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/case-converter" />
+    <link rel="icon" href="../assets/images/logo.ico">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0c29;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e8f5f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            position: sticky; top:0; z-index:100;
+        }
+        .header-left { display:flex; align-items:center; gap:15px; flex-wrap:wrap; }
+        .logo h1 { font-size:1.2rem; font-weight:700; color:#00ffcc; text-shadow:0 0 30px rgba(0,255,204,0.15); }
+        nav ul { display:flex; list-style:none; gap:5px; flex-wrap:wrap; }
+        nav ul li a { color:#a0b4c8; text-decoration:none; padding:5px 12px; border-radius:30px; font-size:0.75rem; transition:all 0.3s ease; border:1px solid transparent; font-weight:500; }
+        nav ul li a:hover { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08); color:#00ffcc; }
+        nav ul li a.active { background:rgba(0,255,204,0.12); border-color:rgba(0,255,204,0.2); color:#00ffcc; }
+        .auth-buttons { display:flex; gap:8px; align-items:center; }
+        .btn-login { background:rgba(255,255,255,0.06); color:#a0b4c8; border:1px solid rgba(255,255,255,0.08); padding:6px 16px; border-radius:30px; text-decoration:none; font-size:0.78rem; font-weight:500; transition:all 0.3s ease; }
+        .btn-login:hover { background:rgba(255,255,255,0.1); color:#00ffcc; border-color:rgba(0,255,204,0.2); }
+        .btn-register { background:linear-gradient(135deg, #00ffcc, #00b4db); color:#0f0c29; padding:6px 18px; border-radius:30px; text-decoration:none; font-size:0.78rem; font-weight:600; transition:all 0.3s ease; box-shadow:0 2px 15px rgba(0,255,204,0.15); }
+        .btn-register:hover { transform:translateY(-2px); box-shadow:0 6px 25px rgba(0,255,204,0.25); }
+        main { flex:1; max-width:850px; margin:0 auto; padding:30px 20px; width:100%; }
+        footer { text-align:center; padding:20px; border-top:1px solid rgba(255,255,255,0.04); color:rgba(160,180,200,0.4); font-size:0.8rem; }
+
+        .case-wrapper {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 35px 30px;
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 25px 50px -8px rgba(0,0,0,0.6);
+        }
+        .case-wrapper .tool-header { display:flex; align-items:center; gap:12px; margin-bottom:25px; flex-wrap:wrap; }
+        .case-wrapper .tool-header .icon { font-size:2.4rem; }
+        .case-wrapper .tool-header h2 { font-size:1.4rem; color:#e8f5f0; margin:0; }
+        .case-wrapper .tool-header .badge { background:rgba(0,255,204,0.12); color:#00ffcc; font-size:0.65rem; padding:2px 14px; border-radius:20px; font-weight:600; border:1px solid rgba(0,255,204,0.15); margin-right:auto; }
+
+        .case-textarea {
+            width:100%; min-height:150px; padding:14px 16px; border:2px solid rgba(255,255,255,0.08);
+            border-radius:12px; font-size:0.95rem; font-family:inherit; background:rgba(255,255,255,0.04);
+            color:#e8f5f0; transition:all 0.25s ease; resize:vertical; box-sizing:border-box; line-height:1.8;
+        }
+        .case-textarea:focus { border-color:#00ffcc; outline:none; box-shadow:0 0 0 4px rgba(0,255,204,0.1); background:rgba(255,255,255,0.06); }
+        .case-textarea::placeholder { color:rgba(255,255,255,0.15); }
+
+        .case-buttons { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin:16px 0; }
+        .case-buttons .cb-btn {
+            padding:10px 16px; border:1px solid rgba(255,255,255,0.08); border-radius:10px;
+            background:rgba(255,255,255,0.03); color:#a0b4c8; font-size:0.82rem; font-weight:500;
+            cursor:pointer; transition:all 0.25s ease; font-family:inherit; text-align:center;
+        }
+        .case-buttons .cb-btn:hover { border-color:#00ffcc; color:#00ffcc; transform:translateY(-2px); }
+        .case-buttons .cb-btn:active { transform:scale(0.94); }
+        .case-buttons .cb-btn .example { display:block; font-size:0.65rem; color:rgba(160,180,200,0.3); margin-top:2px; font-family:'Courier New',monospace; direction:ltr; }
+        .case-buttons .cb-btn.active { background:rgba(0,255,204,0.12); color:#00ffcc; border-color:rgba(0,255,204,0.2); }
+        .case-buttons .cb-btn.active .example { color:rgba(0,255,204,0.4); }
+
+        .case-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+        .case-actions .ca-btn {
+            padding:10px 24px; border:none; border-radius:10px; font-size:0.9rem; font-weight:600;
+            cursor:pointer; transition:all 0.25s ease; font-family:inherit; display:flex; align-items:center; gap:8px;
+        }
+        .case-actions .ca-btn:hover { transform:translateY(-2px); }
+        .ca-btn-copy { background:rgba(255,255,255,0.06); color:#a0b4c8; border:1px solid rgba(255,255,255,0.08); }
+        .ca-btn-copy:hover { background:rgba(255,255,255,0.1); color:#00ffcc; }
+        .ca-btn-copy.copied { background:rgba(0,255,204,0.12); color:#00ffcc; }
+        .ca-btn-clear { background:rgba(239,68,68,0.15); color:#f87171; border:1px solid rgba(239,68,68,0.15); }
+        .ca-btn-clear:hover { background:rgba(239,68,68,0.25); }
+        .ca-btn-download { background:linear-gradient(135deg, #00ffcc, #00b4db); color:#0f0c29; }
+        .ca-btn-download:hover { box-shadow:0 4px 16px rgba(0,255,204,0.3); }
+
+        .case-stats { display:flex; gap:16px; flex-wrap:wrap; padding:10px 16px; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid rgba(255,255,255,0.05); margin-top:12px; font-size:0.82rem; color:#a0b4c8; }
+        .case-stats .stat-value { font-weight:600; color:#e8f5f0; }
+
+        @media (max-width:640px) {
+            header { padding:10px 16px; flex-direction:column; align-items:stretch; }
+            .header-left { justify-content:center; }
+            .logo h1 { font-size:1rem; text-align:center; }
+            nav ul { justify-content:center; }
+            nav ul li a { font-size:0.6rem; padding:3px 8px; }
+            .auth-buttons { justify-content:center; }
+            .case-wrapper { padding:20px 14px; }
+            .case-buttons { grid-template-columns:repeat(2,1fr); }
+            .case-actions { flex-direction:column; }
+            .case-actions .ca-btn { width:100%; justify-content:center; }
+            .case-wrapper .tool-header .badge { margin-right:0; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <div class="logo"><h1>🛠️ نوینیکس <span style="color:#a0b4c8;font-weight:300;font-size:0.8rem;">Novinix</span></h1></div>
+            <nav>
+                <ul>
+                    <li><a href="../main.html">خانه</a></li>
+                    <li><a href="../pages/online-tools.html" class="active">ابزارها</a></li>
+                    <li><a href="../pages/calculator.html">ماشین‌حساب</a></li>
+                    <li><a href="../pages/games.html">بازی‌ها</a></li>
+                                    <li><a href="../pages/education.html">آموزش ها</a></li>
+                <li><a href="../pages/blog.html">وبلاگ</a></li>
+                    <li><a href="../pages/entertainment.html">سرگرمی</a></li>
+<li><a href="../pages/general-info.html">اطلاعات عمومی</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="auth-buttons">
+            <a href="../auth/login.html" class="btn-login">ورود</a>
+            <a href="../auth/register.html" class="btn-register">ثبت نام</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="case-wrapper">
+            <div class="tool-header">
+                <span class="icon">🔡</span>
+                <h2>تبدیل حروف</h2>
+                <span class="badge">۸ حالت مختلف</span>
+            </div>
+
+            <textarea class="case-textarea" id="caseInput" placeholder="متن خود را اینجا وارد کنید...">Hello! This is a sample text for testing letter conversion.</textarea>
+
+            <div class="case-buttons">
+                <button class="cb-btn" data-case="upper">UPPER<span class="example">متن نمونه</span></button>
+                <button class="cb-btn" data-case="lower">lower<span class="example">متن نمونه</span></button>
+                <button class="cb-btn" data-case="title">Title Case<span class="example">متن نمونه</span></button>
+                <button class="cb-btn" data-case="sentence">Sentence case<span class="example">متن نمونه</span></button>
+                <button class="cb-btn" data-case="camel">camelCase<span class="example">متن نمونه</span></button>
+                <button class="cb-btn" data-case="pascal">PascalCase<span class="example">متن نمونه</span></button>
+                <button class="cb-btn" data-case="snake">snake_case<span class="example">متن نمونه</span></button>
+                <button class="cb-btn" data-case="kebab">kebab-case<span class="example">متن نمونه</span></button>
+            </div>
+
+            <div class="case-stats">
+                <span>📊 کاراکترها: <span class="stat-value" id="charCount">۰</span></span>
+                <span>📊 کلمات: <span class="stat-value" id="wordCount">۰</span></span>
+                <span>📊 خطوط: <span class="stat-value" id="lineCount">۰</span></span>
+            </div>
+
+            <div class="case-actions">
+                <button class="ca-btn ca-btn-copy" id="copyCaseBtn">📋 کپی</button>
+                <button class="ca-btn ca-btn-download" id="downloadCaseBtn">📥 دانلود</button>
+                <button class="ca-btn ca-btn-clear" id="clearCaseBtn">🗑️ پاک کردن</button>
+            </div>
+        </div>
+    </main>
+
+    <footer><p>&copy; 2026 نوینیکس - Novinix | تمامی حقوق محفوظ است</p></footer>
+
+    <script>
+        (function() {
+            const input = document.getElementById('caseInput');
+            const charCount = document.getElementById('charCount');
+            const wordCount = document.getElementById('wordCount');
+            const lineCount = document.getElementById('lineCount');
+
+            function convertCase(type) {
+                const text = input.value;
+                if (!text) return;
+
+                let result = '';
+                switch(type) {
+                    case 'upper': result = text.toUpperCase(); break;
+                    case 'lower': result = text.toLowerCase(); break;
+                    case 'title': result = text.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()); break;
+                    case 'sentence': result = text.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, c => c.toUpperCase()); break;
+                    case 'camel': result = text.replace(/[^a-zA-Z0-9]+(.)/g, (m, c) => c.toUpperCase()).replace(/^[A-Z]/, c => c.toLowerCase()); break;
+                    case 'pascal': result = text.replace(/[^a-zA-Z0-9]+(.)/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toUpperCase()); break;
+                    case 'snake': result = text.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_|_$/g, ''); break;
+                    case 'kebab': result = text.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, ''); break;
+                    default: result = text;
+                }
+                input.value = result;
+                updateStats();
+            }
+
+            function updateStats() {
+                const text = input.value;
+                charCount.textContent = text.length;
+                wordCount.textContent = text.trim() ? text.trim().split(/\s+/).length : 0;
+                lineCount.textContent = text ? text.split('\n').length : 0;
+            }
+
+            document.querySelectorAll('.cb-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.cb-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    convertCase(this.dataset.case);
+                });
+            });
+
+            document.getElementById('copyCaseBtn').addEventListener('click', function() {
+                const text = input.value;
+                if (!text) return;
+                navigator.clipboard.writeText(text).then(() => {
+                    const orig = this.textContent;
+                    this.textContent = '✅ کپی شد!';
+                    this.classList.add('copied');
+                    setTimeout(() => { this.textContent = orig; this.classList.remove('copied'); }, 1500);
+                });
+            });
+
+            document.getElementById('downloadCaseBtn').addEventListener('click', function() {
+                const text = input.value;
+                if (!text) return;
+                const blob = new Blob([text], {type: 'text/plain'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'converted-text.txt';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+
+            document.getElementById('clearCaseBtn').addEventListener('click', function() {
+                input.value = '';
+                updateStats();
+            });
+
+            input.addEventListener('input', updateStats);
+            updateStats();
+
+            // Activate first button
+            document.querySelector('.cb-btn').classList.add('active');
+        })();
+    </script>
+<script src="../assets/js/seo.js"></script>
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>کدگذاری کننده و رمزگشایی کننده Base64 آنلاین | ابزار کدگذاری Base64 Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای کدگذاری و کدگشایی Base64 برای متن و فایل." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/base64-encoder" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+</head>
+<body>
+
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">📦</span>
+                <h2>کدگذاری کننده / رمزگشایی کننده Base64</h2>
+                <span class="badge">متن &bull; فایل &bull; UTF-8</span>
+            </div>
+
+            <div class="tool-tabs">
+                <button class="tab-btn active" data-tab="text">📝 متن</button>
+                <button class="tab-btn" data-tab="file">📂 فایل</button>
+            </div>
+
+            <!-- تب متن -->
+            <div class="tool-section active" id="tabText">
+                <div class="toolbar">
+                    <button class="tb-btn primary" id="encodeBtn">🔐 کدگذاری</button>
+                    <button class="tb-btn primary" id="decodeBtn">🔓 رمزگشایی</button>
+                    <button class="tb-btn" id="swapBtn">🔄 تعویض</button>
+                    <span class="tb-divider"></span>
+                    <button class="tb-btn danger" id="clearBtn">🗑️ پاک</button>
+                </div>
+
+                <div class="two-col-layout">
+                    <div>
+                        <div class="panel-header">
+                            <span>📥 ورودی</span>
+                            <span class="panel-stats"><span id="inputStats">۰ کاراکتر</span></span>
+                        </div>
+                        <textarea class="tool-textarea" id="inputText" placeholder="متن یا کد Base64 را وارد کنید...">سلام! این یک متن نمونه برای تست Base64 است.</textarea>
+                    </div>
+                    <div>
+                        <div class="panel-header">
+                            <span>📤 خروجی</span>
+                            <span class="panel-stats"><span id="outputStats">۰ کاراکتر</span></span>
+                        </div>
+                        <textarea class="tool-textarea output" id="outputText" placeholder="نتیجه در اینجا نمایش داده می‌شود..." readonly></textarea>
+                    </div>
+                </div>
+
+                <div class="tool-stats">
+                    <span>📊 ورودی: <span class="stat-value" id="inputLen">۰</span> کاراکتر</span>
+                    <span>📊 خروجی: <span class="stat-value changed" id="outputLen">۰</span> کاراکتر</span>
+                </div>
+
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="copyOutputBtn">📋 کپی خروجی</button>
+                    <button class="act-btn act-btn-download" id="downloadBtn">📥 دانلود</button>
+                </div>
+            </div>
+
+            <!-- تب فایل -->
+            <div class="tool-section" id="tabFile">
+                <div class="drop-zone" id="fileDropZone">
+                    <span class="dz-icon">📂</span>
+                    <span class="dz-text">برای آپلود فایل <strong>کلیک کنید</strong> یا فایل را <strong>بکشید</strong> و رها کنید</span>
+                    <span class="dz-hint">حداکثر حجم: ۵۰ مگابایت</span>
+                    <input type="file" id="fileInput" />
+                </div>
+
+                <div class="file-info" id="fileInfo" style="display:none;">
+                    <span class="fi-icon">📄</span>
+                    <span class="fi-name" id="fileName">file.txt</span>
+                    <span class="fi-size" id="fileSize">۰ KB</span>
+                    <span class="fi-remove" id="removeFileBtn">✕ حذف فایل</span>
+                </div>
+
+                <div class="toolbar">
+                    <button class="tb-btn primary" id="encodeFileBtn">🔐 کدگذاری فایل → Base64</button>
+                    <button class="tb-btn primary" id="decodeFileBtn">🔓 رمزگشایی Base64 → فایل</button>
+                    <span class="tb-divider"></span>
+                    <button class="tb-btn danger" id="clearFileBtn">🗑️ پاک</button>
+                </div>
+
+                <div>
+                    <div class="panel-header"><span>📤 خروجی Base64</span></div>
+                    <textarea class="tool-textarea output" id="fileOutput" placeholder="کد Base64 حاصل از فایل در اینجا نمایش داده می‌شود..." readonly style="min-height:150px;"></textarea>
+                </div>
+
+                <div class="tool-stats">
+                    <span>📊 حجم فایل: <span class="stat-value" id="fileSizeDisplay">—</span></span>
+                    <span>📊 طول Base64: <span class="stat-value changed" id="fileBase64Len">۰</span> کاراکتر</span>
+                    <span>📊 نسبت: <span class="stat-value" id="fileRatio">—</span></span>
+                </div>
+
+                <div class="tool-status" id="fileStatus"></div>
+
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="copyFileOutput">📋 کپی Base64</button>
+                    <button class="act-btn act-btn-download" id="downloadFileBtn" disabled>📥 دانلود فایل رمزگشایی شده</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // DOM Refs - Text Section
+            const inputText = document.getElementById('inputText');
+            const outputText = document.getElementById('outputText');
+            const inputLen = document.getElementById('inputLen');
+            const outputLen = document.getElementById('outputLen');
+            const inputStats = document.getElementById('inputStats');
+            const outputStats = document.getElementById('outputStats');
+
+            const encodeBtn = document.getElementById('encodeBtn');
+            const decodeBtn = document.getElementById('decodeBtn');
+            const swapBtn = document.getElementById('swapBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const copyOutputBtn = document.getElementById('copyOutputBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            // DOM Refs - File Section
+            const fileDropZone = document.getElementById('fileDropZone');
+            const fileInput = document.getElementById('fileInput');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const removeFileBtn = document.getElementById('removeFileBtn');
+            const fileOutput = document.getElementById('fileOutput');
+            const fileStatus = document.getElementById('fileStatus');
+            const encodeFileBtn = document.getElementById('encodeFileBtn');
+            const decodeFileBtn = document.getElementById('decodeFileBtn');
+            const clearFileBtn = document.getElementById('clearFileBtn');
+            const fileSizeDisplay = document.getElementById('fileSizeDisplay');
+            const fileBase64Len = document.getElementById('fileBase64Len');
+            const fileRatio = document.getElementById('fileRatio');
+            const copyFileOutput = document.getElementById('copyFileOutput');
+            const downloadFileBtn = document.getElementById('downloadFileBtn');
+
+            // Tabs
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const sections = { text: document.getElementById('tabText'), file: document.getElementById('tabFile') };
+
+            // State
+            let currentFile = null;
+            let currentBase64 = '';
+
+            // Text Functions
+            function doEncode() {
+                const text = inputText.value;
+                if (!text) { outputText.value = ''; updateTextStats(); return; }
+                try {
+                    const encoded = btoa(unescape(encodeURIComponent(text)));
+                    outputText.value = encoded;
+                    updateTextStats();
+                    showStatus('fileStatus', '✅ کدگذاری با موفقیت انجام شد.', 'success');
+                } catch (e) {
+                    outputText.value = '❌ خطا: ' + e.message;
+                    showStatus('fileStatus', '❌ خطا در کدگذاری: ' + e.message, 'error');
+                }
+            }
+
+            function doDecode() {
+                const text = inputText.value;
+                if (!text) { outputText.value = ''; updateTextStats(); return; }
+                try {
+                    const decoded = decodeURIComponent(escape(atob(text)));
+                    outputText.value = decoded;
+                    updateTextStats();
+                    showStatus('fileStatus', '✅ رمزگشایی با موفقیت انجام شد.', 'success');
+                } catch (e) {
+                    outputText.value = '❌ خطا: ' + e.message;
+                    showStatus('fileStatus', '❌ خطا در رمزگشایی: ' + e.message, 'error');
+                }
+            }
+
+            function updateTextStats() {
+                const inLen = inputText.value.length;
+                const outLen = outputText.value.length;
+                inputLen.textContent = inLen.toLocaleString('fa-IR');
+                outputLen.textContent = outLen.toLocaleString('fa-IR');
+                inputStats.textContent = `${inLen} کاراکتر`;
+                outputStats.textContent = `${outLen} کاراکتر`;
+            }
+
+            function swapInputs() {
+                const temp = inputText.value;
+                inputText.value = outputText.value;
+                outputText.value = temp;
+                updateTextStats();
+                showStatus('fileStatus', '🔄 ورودی و خروجی تعویض شدند.', 'info');
+            }
+
+            function clearText() {
+                inputText.value = '';
+                outputText.value = '';
+                updateTextStats();
+                inputText.focus();
+            }
+
+            function showStatus(elId, message, type) {
+                const el = document.getElementById(elId);
+                if (!el) return;
+                el.textContent = message;
+                el.className = `tool-status visible ${type}`;
+                setTimeout(() => { el.className = 'tool-status'; }, 4000);
+            }
+
+            // File Functions
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' B';
+                if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+                if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + ' MB';
+                return (bytes / 1073741824).toFixed(2) + ' GB';
+            }
+
+            function isValidBase64(str) {
+                try { return btoa(atob(str)) === str; } catch (err) { return false; }
+            }
+
+            function handleFile(file) {
+                if (!file) return;
+                if (file.size > 50 * 1024 * 1024) {
+                    showStatus('fileStatus', '⚠️ حجم فایل نباید بیشتر از ۵۰ مگابایت باشد.', 'error');
+                    return;
+                }
+                currentFile = file;
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+                fileInfo.style.display = 'flex';
+                fileOutput.value = '';
+                currentBase64 = '';
+                downloadFileBtn.disabled = true;
+                fileSizeDisplay.textContent = formatFileSize(file.size);
+                fileBase64Len.textContent = '۰';
+                fileRatio.textContent = '—';
+            }
+
+            function removeFile() {
+                currentFile = null;
+                fileInfo.style.display = 'none';
+                fileInput.value = '';
+                fileOutput.value = '';
+                currentBase64 = '';
+                downloadFileBtn.disabled = true;
+                fileSizeDisplay.textContent = '—';
+                fileBase64Len.textContent = '۰';
+                fileRatio.textContent = '—';
+            }
+
+            function encodeFile() {
+                if (!currentFile) {
+                    showStatus('fileStatus', '⚠️ لطفاً ابتدا یک فایل انتخاب کنید.', 'error');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const bytes = new Uint8Array(e.target.result);
+                        let binary = '';
+                        for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+                        const base64 = btoa(binary);
+                        currentBase64 = base64;
+                        fileOutput.value = base64;
+                        fileBase64Len.textContent = base64.length.toLocaleString('fa-IR');
+                        const ratio = base64.length / currentFile.size;
+                        fileRatio.textContent = ratio.toFixed(2) + 'x';
+                        downloadFileBtn.disabled = false;
+                        showStatus('fileStatus', `✅ فایل "${currentFile.name}" با موفقیت به Base64 تبدیل شد.`, 'success');
+                    } catch (err) {
+                        showStatus('fileStatus', '❌ خطا در کدگذاری فایل: ' + err.message, 'error');
+                    }
+                };
+                reader.onerror = function() { showStatus('fileStatus', '❌ خطا در خواندن فایل.', 'error'); };
+                reader.readAsArrayBuffer(currentFile);
+            }
+
+            function decodeFile() {
+                const base64 = fileOutput.value.trim();
+                if (!base64) {
+                    showStatus('fileStatus', '⚠️ لطفاً کد Base64 را وارد کنید یا فایلی را کدگذاری کنید.', 'error');
+                    return;
+                }
+                if (!isValidBase64(base64)) {
+                    showStatus('fileStatus', '⚠️ کد Base64 نامعتبر است.', 'error');
+                    return;
+                }
+                try {
+                    const binary = atob(base64);
+                    const bytes = new Uint8Array(binary.length);
+                    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+                    const blob = new Blob([bytes]);
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    const ext = currentFile ? currentFile.name.split('.').pop() : 'bin';
+                    const name = currentFile ? currentFile.name.replace(/\.[^.]+$/, '') : 'decoded';
+                    link.download = `${name}-decoded.${ext}`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                    showStatus('fileStatus', '✅ فایل با موفقیت رمزگشایی شد و دانلود شد.', 'success');
+                } catch (err) {
+                    showStatus('fileStatus', '❌ خطا در رمزگشایی کردن: ' + err.message, 'error');
+                }
+            }
+
+            function downloadDecodedFile() {
+                const base64 = fileOutput.value.trim();
+                if (!base64 || !isValidBase64(base64)) {
+                    showStatus('fileStatus', '⚠️ کد Base64 نامعتبر است یا وجود ندارد.', 'error');
+                    return;
+                }
+                try {
+                    const binary = atob(base64);
+                    const bytes = new Uint8Array(binary.length);
+                    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+                    const blob = new Blob([bytes]);
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    const ext = currentFile ? currentFile.name.split('.').pop() : 'bin';
+                    const name = currentFile ? currentFile.name.replace(/\.[^.]+$/, '') : 'decoded';
+                    link.download = `${name}-decoded.${ext}`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                    showStatus('fileStatus', '✅ فایل با موفقیت دانلود شد.', 'success');
+                } catch (err) {
+                    showStatus('fileStatus', '❌ خطا در دانلود: ' + err.message, 'error');
+                }
+            }
+
+            // Copy Helper
+            function copyToClipboard(text, btn) {
+                if (!text) { alert('متن برای کپی وجود ندارد.'); return; }
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text)
+                        .then(() => showCopied(btn))
+                        .catch(() => fallbackCopy(text, btn));
+                } else { fallbackCopy(text, btn); }
+            }
+
+            function fallbackCopy(text, btn) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try { document.execCommand('copy'); showCopied(btn); } catch (_) { alert('کپی نشد. لطفاً دستی کپی کنید.'); }
+                document.body.removeChild(textarea);
+            }
+
+            function showCopied(btn) {
+                if (!btn) return;
+                const orig = btn.textContent;
+                btn.textContent = '✅ کپی شد';
+                btn.classList.add('copied');
+                setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+            }
+
+            // Tabs
+            function switchTab(tabId) {
+                tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+                Object.keys(sections).forEach(key => sections[key].classList.toggle('active', key === tabId));
+            }
+
+            // Events - Text
+            encodeBtn.addEventListener('click', doEncode);
+            decodeBtn.addEventListener('click', doDecode);
+            swapBtn.addEventListener('click', swapInputs);
+            clearBtn.addEventListener('click', clearText);
+            copyOutputBtn.addEventListener('click', function() { copyToClipboard(outputText.value, this); });
+            downloadBtn.addEventListener('click', function() {
+                const text = outputText.value;
+                if (!text) return;
+                const blob = new Blob([text], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'base64-output.txt';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+            inputText.addEventListener('input', updateTextStats);
+
+            // Events - File
+            encodeFileBtn.addEventListener('click', encodeFile);
+            decodeFileBtn.addEventListener('click', decodeFile);
+            clearFileBtn.addEventListener('click', removeFile);
+            downloadFileBtn.addEventListener('click', downloadDecodedFile);
+            copyFileOutput.addEventListener('click', function() { copyToClipboard(fileOutput.value, this); });
+
+            fileDropZone.addEventListener('click', function() { fileInput.click(); });
+            fileDropZone.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('dragover'); });
+            fileDropZone.addEventListener('dragleave', function(e) { e.preventDefault(); this.classList.remove('dragover'); });
+            fileDropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+            });
+            fileInput.addEventListener('change', function() { if (this.files.length > 0) handleFile(this.files[0]); });
+            removeFileBtn.addEventListener('click', removeFile);
+
+            // Events - Tabs
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() { switchTab(this.dataset.tab); });
+            });
+
+            // Init
+            setTimeout(doEncode, 100);
+            console.log('📦 Base64 Encoder/Decoder loaded!');
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>بازی‌های آنلاین | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+
+    <!-- ===== CSS فایل‌های جداگانه ===== -->
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+
+    <style>
+        /* ===== استایل‌های اختصاصی بازی‌ها ===== */
+        main h2 {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #00ffcc;
+            text-shadow: 0 0 30px rgba(0, 255, 204, 0.15);
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .game-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 30px 15px;
+            text-align: center;
+            text-decoration: none;
+            color: #e8f5f0;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .game-item:hover {
+            transform: translateY(-5px);
+            border-color: #00ffcc;
+            box-shadow: 0 10px 40px rgba(0, 255, 204, 0.1);
+            color: #00ffcc;
+        }
+
+        .game-item:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+            .game-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            .game-item {
+                padding: 20px 10px;
+                font-size: 0.95rem;
+            }
+            main h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .game-item {
+                padding: 15px 8px;
+                font-size: 0.8rem;
+                border-radius: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER توسط header.js ساخته می‌شود ===== -->
+
+    <main>
+        <h2>🎯 بازی‌های محبوب</h2>
+        <div class="game-grid">
+            <a href="../game_page/snake.html" class="game-item">🐍 مار</a>
+            <a href="../game_page/tetris.html" class="game-item">🧱 تتریس</a>
+            <a href="../game_page/flappy-bird.html" class="game-item">🐦 فلپی برد</a>
+            <a href="../game_page/tic-tac-toe.html" class="game-item">❌ دوز</a>
+            <a href="../game_page/memory.html" class="game-item">🧠 حافظه</a>
+            <a href="../game_page/whack-mole.html" class="game-item">🔨 موش‌کوب</a>
+            <a href="../game_page/pong.html" class="game-item">🏓 پینگ پنگ</a>
+            <a href="../game_page/2048.html" class="game-item">🔢 ۲۰۴۸</a>
+            <a href="../game_page/fruit-ninja.html" class="game-item">🍉 برش میوه</a>
+            <a href="../game_page/catch-eggs.html" class="game-item">🥚 تخم‌مرغ</a>
+            <a href="../game_page/chess.html" class="game-item">♟ شطرنج</a>
+            <a href="../game_page/Minesweeper.html" class="game-item">💣 مین‌روب</a>
+            <a href="../game_page/Sudoku.html" class="game-item">سودوکو</a>
+            <a href="../game_page/Snake_Ladders.html" class="game-item">🐍 ماروپله</a>
+        </div>
+    </main>
+
+    <!-- ===== FOOTER توسط footer.js ساخته می‌شود ===== -->
+
+    <!-- ===== اسکریپت‌ها ===== -->
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+</body>
+</html>

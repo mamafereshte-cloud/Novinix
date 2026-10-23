@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>خزندگان | نوینیکس</title>
+    <meta name="description" content="معرفی و اطلاعات کامل انواع خزندگان شامل مارها، مارمولک‌ها، لاک‌پشت‌ها، تمساح‌ها و تواتارا" />
+    <link rel="canonical" href="https://novinix.ir/pages/general-info/reptiles.html" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <style>
+        .reptiles-hero {
+            background: linear-gradient(135deg, #1a1a2e, #2d1b69, #0f3460);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(15, 52, 96, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .reptiles-hero::before { content: '🦎'; position: absolute; font-size: 10rem; opacity: 0.05; right: -30px; bottom: -30px; transform: rotate(10deg); }
+        .reptiles-hero h2 { font-size: 2rem; margin-bottom: 10px; position: relative; z-index: 1; }
+        .reptiles-hero h2 span { color: #f1c40f; }
+        .reptiles-hero p { opacity: 0.85; font-size: 1.05rem; position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+        .category-filter { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
+        .cat-tag { background: rgba(255, 255, 255, 0.05); padding: 8px 20px; border-radius: 30px; font-size: 0.85rem; color: #a0b4c8; cursor: pointer; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.06); font-weight: 500; user-select: none; }
+        .cat-tag:hover { border-color: #00ffcc; transform: translateY(-2px); color: #00ffcc; }
+        .cat-tag.active { background: linear-gradient(135deg, #00ffcc, #00b4db); color: #0f0c29; border-color: #00ffcc; }
+        .reptile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 10px; }
+        .reptile-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 18px; padding: 20px; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+        .reptile-card:hover { transform: translateY(-5px); border-color: #00ffcc; box-shadow: 0 12px 40px rgba(0, 255, 204, 0.1); }
+        .reptile-card .reptile-image { width: 100%; height: 200px; border-radius: 12px; overflow: hidden; margin-bottom: 15px; background: rgba(255, 255, 255, 0.03); display: flex; align-items: center; justify-content: center; position: relative; }
+        .reptile-card .reptile-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .reptile-card:hover .reptile-image img { transform: scale(1.05); }
+        .reptile-card .reptile-image .emoji-placeholder { font-size: 4rem; opacity: 0.3; }
+        .reptile-card .reptile-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .reptile-card .reptile-name { font-size: 1.2rem; font-weight: 700; color: #e8f5f0; }
+        .reptile-card .reptile-name-en { font-size: 0.9rem; font-weight: 400; color: #a0b4c8; display: block; }
+        .reptile-card .category-badge { font-size: 0.6rem; padding: 3px 12px; border-radius: 20px; font-weight: 700; white-space: nowrap; margin-top: 2px; }
+        .category-badge.snake { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+        .category-badge.lizard { background: rgba(52, 152, 219, 0.2); color: #3498db; }
+        .category-badge.turtle { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .category-badge.crocodile { background: rgba(155, 89, 182, 0.2); color: #9b59b6; }
+        .category-badge.tuatara { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+        .reptile-card .reptile-description { font-size: 0.85rem; color: #a0b4c8; line-height: 1.6; flex-grow: 1; }
+        .reptile-card .reptile-description p { margin-bottom: 6px; }
+        .reptile-card .reptile-description p:last-child { margin-bottom: 0; }
+        .reptile-card { opacity: 0; animation: fadeInUp 0.5s ease forwards; }
+        .reptile-card:nth-child(1) { animation-delay: 0.03s; }
+        .reptile-card:nth-child(2) { animation-delay: 0.06s; }
+        .reptile-card:nth-child(3) { animation-delay: 0.09s; }
+        .reptile-card:nth-child(4) { animation-delay: 0.12s; }
+        .reptile-card:nth-child(5) { animation-delay: 0.15s; }
+        .reptile-card:nth-child(6) { animation-delay: 0.18s; }
+        .reptile-card:nth-child(7) { animation-delay: 0.21s; }
+        .reptile-card:nth-child(8) { animation-delay: 0.24s; }
+        .reptile-card:nth-child(9) { animation-delay: 0.27s; }
+        .reptile-card:nth-child(10) { animation-delay: 0.30s; }
+        .reptile-card:nth-child(11) { animation-delay: 0.33s; }
+        .reptile-card:nth-child(12) { animation-delay: 0.36s; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .no-results { text-align: center; padding: 50px 20px; color: #a0b4c8; display: none; }
+        .no-results .big-icon { font-size: 4rem; display: block; margin-bottom: 15px; }
+        .no-results h3 { color: #e8f5f0; margin-bottom: 5px; }
+        @media (max-width: 768px) {
+            .reptiles-hero { padding: 25px 20px; }
+            .reptiles-hero h2 { font-size: 1.5rem; }
+            .reptile-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .reptile-card .reptile-image { height: 150px; }
+            .cat-tag { font-size: 0.75rem; padding: 6px 14px; }
+        }
+        @media (max-width: 480px) {
+            .reptile-grid { grid-template-columns: 1fr; }
+            .reptile-card .reptile-image { height: 180px; }
+            .reptile-card .reptile-name { font-size: 1rem; }
+            .reptiles-hero h2 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader"></header>
+
+    <main>
+        <div class="reptiles-hero">
+            <h2>🦎 خزندگان <span>جهان</span></h2>
+            <p>دنیای شگفت‌انگیز خزندگان از مارها تا تمساح‌ها</p>
+        </div>
+
+        <div class="category-filter">
+            <span class="cat-tag active" data-cat="all">همه</span>
+            <span class="cat-tag" data-cat="snake">🐍 مارها</span>
+            <span class="cat-tag" data-cat="lizard">🦎 مارمولک‌ها</span>
+            <span class="cat-tag" data-cat="turtle">🐢 لاک‌پشت‌ها</span>
+            <span class="cat-tag" data-cat="crocodile">🐊 تمساح‌ها</span>
+            <span class="cat-tag" data-cat="tuatara">🦖 تواتارا</span>
+        </div>
+
+        <div class="reptile-grid" id="reptileGrid"></div>
+
+        <div class="no-results" id="noResults">
+            <span class="big-icon">🔍</span>
+            <h3>نتیجه‌ای یافت نشد</h3>
+            <p>در دسته‌بندی انتخاب شده خزنده‌ای وجود ندارد</p>
+        </div>
+    </main>
+
+    <footer id="mainFooter"></footer>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        const reptilesData = [
+            { id: 'cobra', nameFa: 'کبری', nameEn: 'Cobra', category: 'snake', image: 'cobra.jpg', emoji: '🐍', description: ['کبری یکی از معروف‌ترین مارهای سمی با گردن قابل باز شدن و نیش مرگبار است.', 'کبری در فرهنگ هندوستان نماد قدرت و خطر است.'] },
+            { id: 'python', nameFa: 'پایتون', nameEn: 'Python', category: 'snake', image: 'python.jpg', emoji: '🐍', description: ['پایتون یکی از بزرگ‌ترین مارهای غیرسمی با توانایی بلعیدن طعمه‌های بزرگ است.', 'پایتون توری بزرگ‌ترین گونه با طول ۱۰ متر است.'] },
+            { id: 'rattlesnake', nameFa: 'مار زنگی', nameEn: 'Rattlesnake', category: 'snake', image: 'rattlesnake.jpg', emoji: '🐍', description: ['مار زنگی با صدای زنگوله‌ای در انتهای دم در آمریکای شمالی زندگی می‌کند.', 'صدای زنگی این مار برای هشدار به شکارچیان است.'] },
+            { id: 'anaconda', nameFa: 'آناکوندا', nameEn: 'Anaconda', category: 'snake', image: 'anaconda.jpg', emoji: '🐍', description: ['آناکوندا بزرگ‌ترین و سنگین‌ترین مار جهان با طول ۹ متر و وزن ۲۵۰ کیلوگرم است.', 'آناکوندا سبز رایج‌ترین گونه و یکی از شکارچیان اصلی آمازون است.'] },
+            { id: 'gecko', nameFa: 'گکو', nameEn: 'Gecko', category: 'lizard', image: 'gecko.jpg', emoji: '🦎', description: ['گکو مارمولکی کوچک با توانایی چسبیدن به سطوح و چشم‌های بزرگ است.', 'گکوها می‌توانند از دیوار و سقف بالا بروند و صداهای خاصی تولید کنند.'] },
+            { id: 'iguana', nameFa: 'ایگوانا', nameEn: 'Iguana', category: 'lizard', image: 'iguana.jpg', emoji: '🦎', description: ['ایگوانا مارمولکی بزرگ با تاج پشتی و رنگ سبز در آمریکای مرکزی و جنوبی است.', 'ایگوانای سبز یکی از محبوب‌ترین مارمولک‌های خانگی است.'] },
+            { id: 'chameleon', nameFa: 'آفتاب‌پرست', nameEn: 'Chameleon', category: 'lizard', image: 'chameleon.jpg', emoji: '🦎', description: ['آفتاب‌پرست مارمولکی با توانایی تغییر رنگ و چشم‌های مستقل در آفریقا است.', 'تغییر رنگ آفتاب‌پرست برای استتار، ارتباط و تنظیم دما است.'] },
+            { id: 'komodo_dragon', nameFa: 'اژدهای کومودو', nameEn: 'Komodo Dragon', category: 'lizard', image: 'komodo_dragon.jpg', emoji: '🦎', description: ['اژدهای کومودو بزرگ‌ترین مارمولک جهان با طول ۳ متر و وزن ۷۰ کیلوگرم در اندونزی است.', 'این مارمولک به دلیل اندازه و قدرت، "اژدهای زنده" نامیده می‌شود.'] },
+            { id: 'sea_turtle', nameFa: 'لاک‌پشت دریایی', nameEn: 'Sea Turtle', category: 'turtle', image: 'sea_turtle.jpg', emoji: '🐢', description: ['لاک‌پشت دریایی خزنده‌ای با لاک و باله‌ها در اقیانوس‌های گرمسیری است.', 'لاک‌پشت چرمی بزرگ‌ترین گونه لاک‌پشت دریایی با وزن ۹۰۰ کیلوگرم است.'] },
+            { id: 'tortoise', nameFa: 'لاک‌پشت خشکی', nameEn: 'Tortoise', category: 'turtle', image: 'tortoise.jpg', emoji: '🐢', description: ['لاک‌پشت خشکی خزنده‌ای با لاک ضخیم و پاهای ستونی در مناطق خشک است.', 'لاک‌پشت گالاپاگوس بزرگ‌ترین گونه با عمر ۱۵۰ سال است.'] },
+            { id: 'nile_crocodile', nameFa: 'تمساح نیل', nameEn: 'Nile Crocodile', category: 'crocodile', image: 'nile_crocodile.jpg', emoji: '🐊', description: ['تمساح نیل خزنده‌ای بزرگ با آرواره‌های قدرتمند و فلس‌های زره‌پوش است.', 'تمساح نیل یکی از بزرگ‌ترین تمساح‌های جهان با طول ۶ متر است.'] },
+            { id: 'saltwater_crocodile', nameFa: 'تمساح آب شور', nameEn: 'Saltwater Crocodile', category: 'crocodile', image: 'saltwater_crocodile.jpg', emoji: '🐊', description: ['تمساح آب شور بزرگ‌ترین خزنده زنده جهان با طول ۷ متر و وزن ۱۰۰۰ کیلوگرم است.', 'تمساح آب شور به "سالتی" معروف است و یکی از خطرناک‌ترین تمساح‌ها است.'] },
+            { id: 'tuatara', nameFa: 'تواتارا', nameEn: 'Tuatara', category: 'tuatara', image: 'tuatara.jpg', emoji: '🦖', description: ['تواتارا خزنده‌ای باستانی با چشم سوم و فلس‌های خاردار در نیوزیلند است.', 'تواتارا به عنوان "فسیل زنده" شناخته می‌شود و یکی از قدیمی‌ترین خزندگان است.'] }
+        ];
+
+        function renderReptiles(data, filterCategory = 'all') {
+            const grid = document.getElementById('reptileGrid');
+            const noResults = document.getElementById('noResults');
+            let html = '';
+            let count = 0;
+
+            data.forEach(item => {
+                if (filterCategory !== 'all' && item.category !== filterCategory) return;
+                count++;
+                const imagePath = `reptiles_ph/${item.image}`;
+                const catLabels = { snake: '🐍 مارها', lizard: '🦎 مارمولک‌ها', turtle: '🐢 لاک‌پشت‌ها', crocodile: '🐊 تمساح‌ها', tuatara: '🦖 تواتارا' };
+                const catClasses = { snake: 'snake', lizard: 'lizard', turtle: 'turtle', crocodile: 'crocodile', tuatara: 'tuatara' };
+
+                html += `
+                    <div class="reptile-card" data-category="${item.category}">
+                        <div class="reptile-image">
+                            <img src="${imagePath}" alt="${item.nameFa}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                            <span class="emoji-placeholder" style="display:none;">${item.emoji || '🦎'}</span>
+                        </div>
+                        <div class="reptile-header">
+                            <div>
+                                <div class="reptile-name">${item.nameFa}</div>
+                                <span class="reptile-name-en">${item.nameEn}</span>
+                            </div>
+                            <span class="category-badge ${catClasses[item.category]}">${catLabels[item.category]}</span>
+                        </div>
+                        <div class="reptile-description">${item.description.map(p => `<p>${p}</p>`).join('')}</div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+            if (count === 0) noResults.style.display = 'block';
+            else noResults.style.display = 'none';
+
+            const cards = grid.querySelectorAll('.reptile-card');
+            cards.forEach((card, index) => {
+                card.style.animation = 'none';
+                card.offsetHeight;
+                card.style.animation = `fadeInUp 0.5s ease forwards`;
+                card.style.animationDelay = `${(index % 12) * 0.03 + 0.03}s`;
+            });
+        }
+
+        document.querySelectorAll('.cat-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                document.querySelectorAll('.cat-tag').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                renderReptiles(reptilesData, this.dataset.cat);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderReptiles(reptilesData, 'all');
+        });
+    </script>
+</body>
+</html>

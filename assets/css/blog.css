@@ -1,0 +1,440 @@
+/* ===== استایل‌های مشترک برای مقالات وبلاگ ===== */
+
+/* کانتینر مقاله */
+.post-container {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 24px;
+    padding: 40px 35px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* لینک بازگشت */
+.post-back {
+    display: inline-block;
+    color: #a0b4c8;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    transition: color 0.3s ease;
+}
+.post-back:hover { color: #00ffcc; }
+
+/* دسته‌بندی مقاله */
+.post-category {
+    display: inline-block;
+    background: rgba(0, 255, 204, 0.12);
+    color: #00ffcc;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    border: 1px solid rgba(0, 255, 204, 0.1);
+}
+
+/* عنوان مقاله */
+.post-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #e8f5f0;
+    margin-bottom: 12px;
+    line-height: 1.3;
+}
+
+/* نویسنده */
+.post-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.post-author .avatar { font-size: 2.5rem; }
+.post-author .info .name { font-weight: 600; color: #e8f5f0; }
+.post-author .info .date { font-size: 0.8rem; color: rgba(160, 180, 200, 0.5); }
+
+/* تصویر مقاله */
+.post-image {
+    width: 100%;
+    height: 250px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    margin-bottom: 25px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* محتوای مقاله */
+.post-content { font-size: 1.05rem; line-height: 2; color: #c8d6e5; }
+.post-content p { margin-bottom: 16px; }
+.post-content h2 {
+    color: #00ffcc;
+    margin: 30px 0 15px;
+    font-size: 1.6rem;
+    border-right: 4px solid #00ffcc;
+    padding-right: 15px;
+}
+.post-content h3 {
+    color: #e8f5f0;
+    margin: 25px 0 12px;
+    font-size: 1.2rem;
+}
+.post-content h4 {
+    color: #a0b4c8;
+    margin: 20px 0 10px;
+    font-size: 1.05rem;
+}
+.post-content ul, .post-content ol {
+    padding-right: 25px;
+    margin: 10px 0 16px;
+}
+.post-content ul li, .post-content ol li {
+    padding: 4px 0;
+    color: #c8d6e5;
+}
+.post-content ul li::marker { color: #00ffcc; }
+
+/* باکس‌های هایلایت */
+.post-content .highlight-box {
+    background: rgba(0, 255, 204, 0.06);
+    border: 1px solid rgba(0, 255, 204, 0.1);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 16px 0;
+}
+.post-content .highlight-box strong { color: #00ffcc; }
+.post-content .highlight-box ul { margin: 8px 0 0; }
+
+/* باکس هشدار */
+.post-content .warning-box {
+    background: rgba(239, 68, 68, 0.06);
+    border: 1px solid rgba(239, 68, 68, 0.1);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    color: #f87171;
+}
+
+/* کارت‌های ابزار/محصول */
+.post-content .tool-card {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-right: 3px solid #fbbf24;
+}
+.post-content .tool-card h4 { color: #fbbf24; margin-bottom: 4px; }
+.post-content .tool-card .tool-link { color: #00b4db; text-decoration: none; }
+.post-content .tool-card .tool-link:hover { text-decoration: underline; }
+.post-content .tool-card .rating {
+    display: inline-block;
+    background: rgba(0, 255, 204, 0.08);
+    padding: 2px 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: #00ffcc;
+}
+
+/* کارت‌های روش/ایده */
+.post-content .method-card {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-right: 3px solid #fbbf24;
+}
+.post-content .method-card h4 { color: #fbbf24; margin-bottom: 4px; }
+.post-content .method-card .income {
+    display: inline-block;
+    background: rgba(0, 255, 204, 0.08);
+    padding: 2px 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: #00ffcc;
+}
+
+/* کارت‌های اصول طراحی */
+.post-content .principle-card {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-right: 3px solid #fbbf24;
+}
+.post-content .principle-card h4 { color: #fbbf24; margin-bottom: 4px; }
+
+/* کارت‌های رنگ */
+.post-content .color-card {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    margin: 4px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+.post-content .color-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 8px 0;
+    align-items: center;
+}
+.post-content .color-row .color-label {
+    font-size: 0.85rem;
+    color: #a0b4c8;
+}
+
+/* جدول مقایسه */
+.post-content .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.85rem;
+}
+.post-content .comparison-table th {
+    background: rgba(0, 255, 204, 0.08);
+    color: #00ffcc;
+    padding: 10px 12px;
+    text-align: right;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.post-content .comparison-table td {
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: #a0b4c8;
+}
+.post-content .comparison-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
+
+/* شماره مرحله */
+.post-content .step-number {
+    display: inline-block;
+    background: rgba(0, 255, 204, 0.12);
+    color: #00ffcc;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 28px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-left: 8px;
+}
+
+/* بلاک کد */
+.post-content .code-block {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: #a0b4c8;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    overflow-x: auto;
+    direction: ltr;
+    text-align: left;
+}
+
+/* کارت‌های فونت */
+.post-content .font-card {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-right: 3px solid #00ffcc;
+}
+.post-content .font-card h4 { color: #00ffcc; margin-bottom: 4px; }
+.post-content .font-card .font-sample {
+    font-size: 1.4rem;
+    padding: 8px 0;
+    color: #e8f5f0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    margin-top: 8px;
+}
+.post-content .font-card .font-link { color: #00b4db; text-decoration: none; }
+.post-content .font-card .font-link:hover { text-decoration: underline; }
+
+/* آماری */
+.post-content .stat-card {
+    display: inline-block;
+    background: rgba(0, 255, 204, 0.08);
+    border-radius: 12px;
+    padding: 12px 20px;
+    margin: 4px;
+    text-align: center;
+    border: 1px solid rgba(0, 255, 204, 0.1);
+}
+.post-content .stat-card .number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #00ffcc;
+    display: block;
+}
+.post-content .stat-card .label {
+    font-size: 0.8rem;
+    color: rgba(160, 180, 200, 0.6);
+}
+.post-content .stat-row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 16px 0;
+}
+
+/* چک‌لیست */
+.post-content .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.post-content .checklist-item .check-icon {
+    color: #00ffcc;
+    font-size: 1.2rem;
+    min-width: 24px;
+}
+.post-content .checklist-item .check-icon.done { color: #00ffcc; }
+.post-content .checklist-item .check-icon.pending { color: #f87171; }
+.post-content .checklist-item .check-icon.warning { color: #fbbf24; }
+
+/* FAQ */
+.post-content .faq-section {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.post-content .faq-section h3 { color: #00ffcc; margin-bottom: 15px; font-size: 1.3rem; }
+.post-content .faq-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+.post-content .faq-item .faq-q {
+    padding: 14px 18px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    color: #e8f5f0;
+}
+.post-content .faq-item .faq-q .icon {
+    transition: transform 0.3s ease;
+    color: #a0b4c8;
+}
+.post-content .faq-item.open .faq-q .icon {
+    transform: rotate(180deg);
+    color: #00ffcc;
+}
+.post-content .faq-item .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0 18px;
+    color: #a0b4c8;
+}
+.post-content .faq-item.open .faq-a {
+    max-height: 300px;
+    padding: 0 18px 16px;
+}
+
+/* برچسب‌ها */
+.post-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.post-tags .tag {
+    padding: 4px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    color: rgba(160, 180, 200, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* دکمه‌های اقدام */
+.post-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.post-actions button {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.04);
+    color: #a0b4c8;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.post-actions button:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #00ffcc;
+}
+
+/* دکمه دانلود */
+.post-content .btn-download {
+    display: inline-block;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #00ffcc, #00b4db);
+    color: #0f0c29;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    margin: 8px 0;
+}
+.post-content .btn-download:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 255, 204, 0.25);
+}
+
+/* ===== ریسپانسیو ===== */
+@media (max-width: 768px) {
+    .post-container { padding: 20px 16px; }
+    .post-title { font-size: 1.6rem; }
+    .post-content h2 { font-size: 1.3rem; }
+    .post-image { height: 180px; }
+    .post-content .comparison-table { font-size: 0.7rem; }
+    .post-content .comparison-table th,
+    .post-content .comparison-table td { padding: 6px 8px; }
+    .post-content .color-card { width: 40px; height: 40px; }
+}
+
+@media (max-width: 480px) {
+    .post-title { font-size: 1.3rem; }
+    .post-container { padding: 14px 12px; }
+    .post-content { font-size: 0.95rem; }
+    .post-image { height: 140px; }
+    .post-content .comparison-table { font-size: 0.6rem; }
+    .post-content .comparison-table th,
+    .post-content .comparison-table td { padding: 4px 6px; }
+    .post-content .color-card { width: 30px; height: 30px; }
+    .post-content .stat-row { gap: 8px; }
+    .post-content .stat-card { padding: 8px 14px; }
+    .post-content .stat-card .number { font-size: 1.2rem; }
+    .post-content .code-block { font-size: 0.7rem; padding: 8px 10px; }
+    .post-content .font-card .font-sample { font-size: 1.1rem; }
+}

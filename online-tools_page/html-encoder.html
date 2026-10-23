@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>کدگذاری کننده و رمزگشایی کننده HTML آنلاین | ابزار کدگذاری کاراکترهای HTML Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای کدگذاری و کدگشایی کاراکترهای ویژه HTML به Entities." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/html-encoder" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .tool-textarea {
+            min-height: 300px;
+        }
+        .tool-stats .stat-value.changed {
+            color: #00ffcc;
+        }
+        @media (max-width: 820px) {
+            .tool-textarea {
+                min-height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">🔐</span>
+                <h2>کدگذاری کننده / رمزگشایی کننده HTML</h2>
+                <span class="badge">Entities &bull; XSS Protection &bull; فایل</span>
+            </div>
+
+            <div class="toolbar">
+                <button class="tb-btn primary" id="encodeBtn">🔐 کدگذاری</button>
+                <button class="tb-btn primary" id="decodeBtn">🔓 رمزگشایی</button>
+                <span class="tb-divider"></span>
+                <button class="tb-btn upload" id="uploadBtn">📂 آپلود فایل</button>
+                <button class="tb-btn" id="sampleBtn">📄 نمونه</button>
+                <button class="tb-btn danger" id="clearBtn">🗑️ پاک</button>
+                <span class="tb-divider"></span>
+                <button class="tb-btn" id="swapBtn">🔄 تعویض</button>
+            </div>
+
+            <div class="drop-zone" id="fileDropZone">
+                <span class="dz-icon">📂</span>
+                <span class="dz-text">برای آپلود فایل <strong>کلیک کنید</strong> یا فایل را <strong>بکشید</strong> و رها کنید</span>
+                <span class="dz-hint">پسوندهای مجاز: .html, .htm, .txt • حداکثر حجم: ۵ مگابایت</span>
+                <input type="file" id="fileInput" accept=".html,.htm,.txt" />
+            </div>
+
+            <div class="file-info" id="fileInfo" style="display:none;">
+                <span class="fi-icon">📄</span>
+                <span class="fi-name" id="fileName">file.html</span>
+                <span class="fi-size" id="fileSize">۰ KB</span>
+                <span class="fi-remove" id="removeFileBtn">✕ حذف فایل</span>
+            </div>
+
+            <div class="two-col-layout">
+                <div>
+                    <div class="panel-header"><span>📥 ورودی</span><span class="panel-stats"><span id="inputStats">۰ کاراکتر</span></span></div>
+                    <textarea class="tool-textarea" id="htmlInput" placeholder="متن یا کد HTML را اینجا وارد کنید..."></textarea>
+                </div>
+                <div>
+                    <div class="panel-header"><span>📤 خروجی</span><span class="panel-stats"><span id="outputStats">۰ کاراکتر</span></span></div>
+                    <textarea class="tool-textarea output" id="htmlOutput" placeholder="نتیجه در اینجا نمایش داده می‌شود..." readonly></textarea>
+                </div>
+            </div>
+
+            <div class="tool-stats">
+                <span>📊 ورودی: <span class="stat-value" id="inputLen">۰</span> کاراکتر</span>
+                <span>📊 خروجی: <span class="stat-value changed" id="outputLen">۰</span> کاراکتر</span>
+                <span>📈 تغییر: <span class="stat-value" id="changePercent">۰%</span></span>
+                <span>🔢 Entities: <span class="stat-value changed" id="entityCount">۰</span></span>
+            </div>
+
+            <div class="tool-status" id="htmlStatus"></div>
+
+            <div class="tool-actions">
+                <button class="act-btn act-btn-copy" id="copyOutputBtn">📋 کپی خروجی</button>
+                <button class="act-btn act-btn-copy" id="copyInputBtn">📋 کپی ورودی</button>
+                <button class="act-btn act-btn-swap" id="swapActionBtn">🔄 تعویض</button>
+                <button class="act-btn act-btn-download" id="downloadBtn">📥 دانلود</button>
+                <button class="act-btn act-btn-clear" id="clearAllBtn">🗑️ پاک کردن همه</button>
+            </div>
+        </div>
+    </main>
+
+    
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            const htmlInput = document.getElementById('htmlInput');
+            const htmlOutput = document.getElementById('htmlOutput');
+            const inputStats = document.getElementById('inputStats');
+            const outputStats = document.getElementById('outputStats');
+            const encodeBtn = document.getElementById('encodeBtn');
+            const decodeBtn = document.getElementById('decodeBtn');
+            const sampleBtn = document.getElementById('sampleBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const swapBtn = document.getElementById('swapBtn');
+            const inputLen = document.getElementById('inputLen');
+            const outputLen = document.getElementById('outputLen');
+            const changePercent = document.getElementById('changePercent');
+            const entityCount = document.getElementById('entityCount');
+            const htmlStatus = document.getElementById('htmlStatus');
+            const copyOutputBtn = document.getElementById('copyOutputBtn');
+            const copyInputBtn = document.getElementById('copyInputBtn');
+            const swapActionBtn = document.getElementById('swapActionBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+
+            const fileDropZone = document.getElementById('fileDropZone');
+            const fileInput = document.getElementById('fileInput');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const removeFileBtn = document.getElementById('removeFileBtn');
+            const uploadBtn = document.getElementById('uploadBtn');
+
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' B';
+                if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+                return (bytes / 1048576).toFixed(1) + ' MB';
+            }
+
+            function handleFile(file) {
+                if (!file) return;
+                if (file.size > 5 * 1024 * 1024) {
+                    showStatus('⚠️ حجم فایل نباید بیشتر از ۵ مگابایت باشد.', 'error');
+                    return;
+                }
+                const ext = file.name.split('.').pop().toLowerCase();
+                if (!['html', 'htm', 'txt'].includes(ext)) {
+                    showStatus('⚠️ پسوند فایل باید .html, .htm یا .txt باشد.', 'error');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    htmlInput.value = e.target.result;
+                    fileName.textContent = file.name;
+                    fileSize.textContent = formatFileSize(file.size);
+                    fileInfo.style.display = 'flex';
+                    showStatus(`📂 فایل "${file.name}" با موفقیت بارگذاری شد.`, 'success');
+                    updateStats(htmlInput.value, htmlOutput.value);
+                    setTimeout(handleEncode, 200);
+                };
+                reader.onerror = function() { showStatus('❌ خطا در خواندن فایل.', 'error'); };
+                reader.readAsText(file, 'UTF-8');
+            }
+
+            function removeFile() {
+                fileInput.value = '';
+                fileInfo.style.display = 'none';
+                showStatus('🗑️ فایل حذف شد.', 'info');
+            }
+
+            fileDropZone.addEventListener('click', function() { fileInput.click(); });
+            fileDropZone.addEventListener('dragover', function(e) { e.preventDefault();
+                this.classList.add('dragover'); });
+            fileDropZone.addEventListener('dragleave', function(e) { e.preventDefault();
+                this.classList.remove('dragover'); });
+            fileDropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+            });
+            fileInput.addEventListener('change', function() { if (this.files.length > 0) handleFile(this.files[0]); });
+            removeFileBtn.addEventListener('click', removeFile);
+            uploadBtn.addEventListener('click', function() { fileInput.click(); });
+
+            function encodeHTML(str) {
+                if (!str) return { encoded: '', count: 0 };
+                const map = {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;',
+                    '`': '&#096;',
+                    '/': '&#047;',
+                    '=': '&#061;',
+                    '(': '&#040;',
+                    ')': '&#041;',
+                    '[': '&#091;',
+                    ']': '&#093;',
+                    '{': '&#123;',
+                    '}': '&#125;',
+                    '|': '&#124;',
+                    '\\': '&#092;',
+                    ';': '&#059;',
+                    ':': '&#058;',
+                    '@': '&#064;',
+                    '$': '&#036;',
+                    '%': '&#037;',
+                    '?': '&#063;',
+                    '!': '&#033;',
+                    '#': '&#035;',
+                    '*': '&#042;',
+                    '+': '&#043;',
+                    ',': '&#044;',
+                    '-': '&#045;',
+                    '.': '&#046;',
+                    '_': '&#095;',
+                    '~': '&#126;'
+                };
+                let result = '',
+                    count = 0;
+                for (let i = 0; i < str.length; i++) {
+                    const char = str[i];
+                    if (map[char]) { result += map[char];
+                        count++; } else result += char;
+                }
+                return { encoded: result, count: count };
+            }
+
+            function decodeHTML(str) {
+                if (!str) return '';
+                const map = {
+                    '&amp;': '&',
+                    '&lt;': '<',
+                    '&gt;': '>',
+                    '&quot;': '"',
+                    '&#039;': "'",
+                    '&#096;': '`',
+                    '&#047;': '/',
+                    '&#061;': '=',
+                    '&#040;': '(',
+                    '&#041;': ')',
+                    '&#091;': '[',
+                    '&#093;': ']',
+                    '&#123;': '{',
+                    '&#125;': '}',
+                    '&#124;': '|',
+                    '&#092;': '\\',
+                    '&#059;': ';',
+                    '&#058;': ':',
+                    '&#064;': '@',
+                    '&#036;': '$',
+                    '&#037;': '%',
+                    '&#063;': '?',
+                    '&#033;': '!',
+                    '&#035;': '#',
+                    '&#042;': '*',
+                    '&#043;': '+',
+                    '&#044;': ',',
+                    '&#045;': '-',
+                    '&#046;': '.',
+                    '&#095;': '_',
+                    '&#126;': '~'
+                };
+                let result = str;
+                Object.keys(map).forEach(entity => { result = result.split(entity).join(map[entity]); });
+                result = result.replace(/&#(\d+);/g, (match, num) => String.fromCharCode(parseInt(num, 10)));
+                result = result.replace(/&#x([0-9a-fA-F]+);/g, (match, hex) => String.fromCharCode(parseInt(hex, 16)));
+                return result;
+            }
+
+            function handleEncode() {
+                const input = htmlInput.value;
+                if (!input.trim()) { showStatus('⚠️ لطفاً متنی برای کدگذاری وارد کنید یا فایل آپلود کنید.', 'error'); return; }
+                const result = encodeHTML(input);
+                htmlOutput.value = result.encoded;
+                updateStats(input, result.encoded, result.count);
+                showStatus(`✅ متن با موفقیت کدگذاری شد. (${result.count} entity)`, 'success');
+            }
+
+            function handleDecode() {
+                const input = htmlInput.value;
+                if (!input.trim()) { showStatus('⚠️ لطفاً متنی برای کدگشایی وارد کنید یا فایل آپلود کنید.', 'error'); return; }
+                const decoded = decodeHTML(input);
+                htmlOutput.value = decoded;
+                const entityMatches = input.match(/&[a-zA-Z]+;|&#\d+;|&#x[0-9a-fA-F]+;/g) || [];
+                updateStats(input, decoded, entityMatches.length);
+                showStatus(`✅ متن با موفقیت کدگشایی شد. (${entityMatches.length} entity)`, 'success');
+            }
+
+            function updateStats(input, output, entities) {
+                const inLen = input.length,
+                    outLen = output.length;
+                inputStats.textContent = `${inLen} کاراکتر`;
+                outputStats.textContent = `${outLen} کاراکتر`;
+                inputLen.textContent = inLen.toLocaleString('fa-IR');
+                outputLen.textContent = outLen.toLocaleString('fa-IR');
+                if (inLen > 0) {
+                    const change = ((outLen - inLen) / inLen * 100);
+                    const sign = change > 0 ? '+' : '';
+                    changePercent.textContent = `${sign}${change.toFixed(1)}%`;
+                    changePercent.style.color = change > 0 ? '#1abc9c' : change < 0 ? '#e74c3c' : '#95a5a6';
+                } else { changePercent.textContent = '۰%'; }
+                entityCount.textContent = entities || 0;
+            }
+
+            function showStatus(message, type) {
+                htmlStatus.textContent = message;
+                htmlStatus.className = `tool-status visible ${type}`;
+                setTimeout(() => { htmlStatus.className = 'tool-status'; }, 4000);
+            }
+
+            const SAMPLE_PLAIN = `<p>سلام! این یک <strong>متن نمونه</strong> با کاراکترهای ویژه است:</p>
+<ul>
+    <li>& (امپرسند)</li>
+    <li>< (کمتر از)</li>
+    <li>> (بیشتر از)</li>
+    <li>" (دابل کوتیشن)</li>
+    <li>' (سینگل کوتیشن)</li>
+    <li>@ (آت)</li>
+    <li>$ (دلار)</li>
+    <li>% (درصد)</li>
+    <li>? (علامت سوال)</li>
+    <li>! (علامت تعجب)</li>
+</ul>`;
+
+            function loadSample() {
+                htmlInput.value = SAMPLE_PLAIN;
+                htmlOutput.value = '';
+                removeFile();
+                updateStats(htmlInput.value, '');
+                showStatus('📄 نمونه متن بارگذاری شد. برای کدگذاری روی دکمه کدگذاری کلیک کنید.', 'info');
+            }
+
+            function copyToClipboard(text, btn) {
+                if (!text) { showStatus('⚠️ متنی برای کپی وجود ندارد.', 'error'); return; }
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text)
+                        .then(() => { btn.textContent = '✅ کپی شد';
+                            btn.classList.add('copied');
+                            setTimeout(() => { btn.textContent = btn.dataset.original || '📋 کپی خروجی';
+                                btn.classList.remove('copied'); }, 2000); })
+                        .catch(() => fallbackCopy(text, btn));
+                } else { fallbackCopy(text, btn); }
+            }
+
+            function fallbackCopy(text, btn) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try { document.execCommand('copy');
+                    btn.textContent = '✅ کپی شد';
+                    setTimeout(() => { btn.textContent = btn.dataset.original || '📋 کپی خروجی'; }, 2000); } catch (_) { showStatus(
+                        '❌ کپی نشد.', 'error'); }
+                document.body.removeChild(textarea);
+            }
+
+            function downloadHTML() {
+                const output = htmlOutput.value;
+                if (!output.trim()) { showStatus('⚠️ ابتدا متن را کدگذاری یا کدگشایی کنید.', 'error'); return; }
+                const blob = new Blob([output], { type: 'text/html;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                const name = fileInfo.style.display !== 'none' ? fileName.textContent.replace(/\.[^.]+$/, '') : 'output';
+                link.download = `${name}-encoded.html`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                showStatus('✅ فایل با موفقیت دانلود شد.', 'success');
+            }
+
+            function clearAll() {
+                htmlInput.value = '';
+                htmlOutput.value = '';
+                removeFile();
+                updateStats('', '');
+                showStatus('🗑️ همه چیز پاک شد.', 'info');
+                htmlInput.focus();
+            }
+
+            function swapFields() {
+                const temp = htmlInput.value;
+                htmlInput.value = htmlOutput.value;
+                htmlOutput.value = temp;
+                updateStats(htmlInput.value, htmlOutput.value);
+                showStatus('🔄 ورودی و خروجی تعویض شدند.', 'info');
+            }
+
+            encodeBtn.addEventListener('click', handleEncode);
+            decodeBtn.addEventListener('click', handleDecode);
+            sampleBtn.addEventListener('click', loadSample);
+            clearBtn.addEventListener('click', clearAll);
+            swapBtn.addEventListener('click', swapFields);
+            copyOutputBtn.addEventListener('click', function() { copyToClipboard(htmlOutput.value, this); });
+            copyInputBtn.addEventListener('click', function() { copyToClipboard(htmlInput.value, this); });
+            swapActionBtn.addEventListener('click', swapFields);
+            downloadBtn.addEventListener('click', downloadHTML);
+            clearAllBtn.addEventListener('click', clearAll);
+            htmlInput.addEventListener('input', function() { updateStats(this.value, htmlOutput.value); });
+
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    e.preventDefault();
+                    if (document.activeElement === htmlInput || document.activeElement === htmlOutput) handleEncode();
+                }
+            });
+
+            setTimeout(loadSample, 300);
+            setTimeout(handleEncode, 500);
+            console.log('🔐 HTML Encoder/Decoder loaded!');
+        })();
+    </script>
+</body>
+</html>

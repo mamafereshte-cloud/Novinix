@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🧱 تتریس</title>
+    <link rel="stylesheet" href="../assets/css/game.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 8px;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            font-family: system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tetris-wrapper {
+            max-width: 650px;
+            width: 100%;
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .game-header h1 {
+            font-size: 1.2rem;
+            margin: 0;
+            color: #e6edf3;
+        }
+
+        .exit-btn {
+            color: #e74c3c;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: rgba(231, 76, 60, 0.15);
+        }
+
+        .game-info {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .info-box {
+            background: rgba(255,255,255,0.05);
+            padding: 6px 4px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .info-box .label {
+            display: block;
+            font-size: 0.55rem;
+            color: #8a8fa8;
+            margin-bottom: 2px;
+        }
+
+        .info-box .value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #e6edf3;
+            direction: ltr;
+        }
+
+        .info-box .value.high-score {
+            color: #f1c40f;
+        }
+        .info-box .value.score { color: #2ecc71; }
+        .info-box .value.level { color: #3498db; }
+        .info-box .value.lines { color: #e74c3c; }
+
+        .status-message {
+            text-align: center;
+            padding: 8px;
+            margin: 6px 0;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #e6edf3;
+            background: rgba(255,255,255,0.05);
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-message.success {
+            background: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+        }
+
+        .board-wrapper {
+            position: relative;
+            margin: 4px 0;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #0a0a1a;
+        }
+
+        .tetris-area {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 8px;
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            aspect-ratio: 300/600;
+            background: #0d1117;
+            border-radius: 12px;
+            touch-action: none;
+        }
+
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 120px;
+            flex: 1;
+            max-width: 180px;
+        }
+
+        .next-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .next-box .label {
+            font-size: 0.65rem;
+            color: #8a8fa8;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        #nextCanvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 120/120;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+
+        /* ===== کنترل‌ها ===== */
+        .ctrl-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+        }
+
+        .ctrl-grid .btn {
+            padding: 10px 6px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.06);
+            color: #e6edf3;
+            cursor: pointer;
+            transition: all 0.1s;
+            touch-action: manipulation;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .ctrl-grid .btn:active {
+            transform: scale(0.9);
+            background: rgba(255,255,255,0.12);
+        }
+
+        .ctrl-grid .btn-primary {
+            background: rgba(52, 152, 219, 0.15);
+            border-color: rgba(52, 152, 219, 0.2);
+        }
+        .ctrl-grid .btn-primary:active {
+            background: rgba(52, 152, 219, 0.3);
+        }
+
+        .ctrl-grid .btn-warning {
+            background: rgba(241, 196, 15, 0.15);
+            border-color: rgba(241, 196, 15, 0.2);
+        }
+        .ctrl-grid .btn-warning:active {
+            background: rgba(241, 196, 15, 0.3);
+        }
+
+        .ctrl-grid .btn-success {
+            background: rgba(46, 204, 113, 0.15);
+            border-color: rgba(46, 204, 113, 0.2);
+        }
+        .ctrl-grid .btn-success:active {
+            background: rgba(46, 204, 113, 0.3);
+        }
+
+        .ctrl-grid .btn-restart {
+            background: rgba(231, 76, 60, 0.15);
+            border-color: rgba(231, 76, 60, 0.2);
+            color: #ff6b6b;
+        }
+        .ctrl-grid .btn-restart:active {
+            background: rgba(231, 76, 60, 0.3);
+        }
+
+        /* ===== Game Over ===== */
+        .game-over-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+            z-index: 20;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .game-over-overlay.active {
+            display: flex;
+        }
+
+        .game-over-overlay h2 {
+            color: #ff6b6b;
+            font-size: 2rem;
+            margin: 0 0 8px 0;
+        }
+
+        .game-over-overlay .final-score {
+            color: #f1c40f;
+            font-size: 1.2rem;
+            margin: 4px 0;
+        }
+
+        .game-over-overlay .final-lines {
+            color: #58a6ff;
+            font-size: 1rem;
+            margin: 4px 0;
+        }
+
+        .game-over-overlay .final-level {
+            color: #8a8fa8;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .game-over-overlay .btn {
+            padding: 10px 28px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            touch-action: manipulation;
+            background: linear-gradient(135deg, #00b894, #00a381);
+            color: #fff;
+        }
+
+        .game-over-overlay .btn:active {
+            transform: scale(0.95);
+        }
+
+        .key-hints {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+            font-size: 0.6rem;
+            color: #8a8fa8;
+            flex-wrap: wrap;
+        }
+
+        .key-hints span {
+            background: rgba(255,255,255,0.05);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        @media (max-width: 550px) {
+            .tetris-area {
+                flex-direction: column;
+                align-items: center;
+                padding: 4px;
+            }
+            .side-panel {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 100%;
+                max-width: 100%;
+                gap: 8px;
+            }
+            .next-box {
+                flex: 1;
+                min-width: 100px;
+                max-width: 150px;
+            }
+            .ctrl-grid {
+                flex: 1;
+                min-width: 160px;
+                max-width: 220px;
+            }
+            #gameCanvas {
+                max-width: 280px;
+            }
+            .ctrl-grid .btn {
+                padding: 8px 4px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .game-info {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 4px;
+            }
+            .info-box .value {
+                font-size: 0.8rem;
+            }
+            .game-header h1 {
+                font-size: 1rem;
+            }
+            #gameCanvas {
+                max-width: 240px;
+            }
+            .ctrl-grid .btn {
+                padding: 6px 3px;
+                font-size: 0.7rem;
+                border-radius: 8px;
+            }
+            .next-box {
+                min-width: 80px;
+            }
+            #nextCanvas {
+                max-width: 80px;
+            }
+            .game-over-overlay h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="game-wrapper tetris-wrapper">
+    <div class="game-header">
+        <h1>🧱 تتریس</h1>
+        <div class="header-buttons"><a href="../pages/games.html" class="exit-btn">✕ خروج</a></div>
+    </div>
+
+    <div class="game-info">
+        <div class="info-box"><span class="label">🎯 امتیاز</span><span class="value score" id="scoreDisplay">0</span></div>
+        <div class="info-box"><span class="label">📊 سطح</span><span class="value level" id="levelDisplay">1</span></div>
+        <div class="info-box"><span class="label">📈 خطوط</span><span class="value lines" id="linesDisplay">0</span></div>
+        <div class="info-box"><span class="label">🏆 برترین</span><span class="value high-score" id="highScoreDisplay">0</span></div>
+    </div>
+
+    <div class="status-message" id="statusMsg">🧱 شروع بازی!</div>
+
+    <div class="board-wrapper">
+        <div class="tetris-area">
+            <canvas id="gameCanvas" width="300" height="600"></canvas>
+            <div class="side-panel">
+                <div class="next-box">
+                    <span class="label">🔮 قطعه بعدی</span>
+                    <canvas id="nextCanvas" width="120" height="120"></canvas>
+                </div>
+                <div class="ctrl-grid">
+                    <button class="btn btn-primary" data-action="left">⬅</button>
+                    <button class="btn btn-primary" data-action="right">➡</button>
+                    <button class="btn btn-warning" data-action="rotate">🔄</button>
+                    <button class="btn btn-primary" data-action="down">⬇</button>
+                    <button class="btn btn-success" data-action="drop">⏬</button>
+                    <button class="btn btn-restart" data-action="reset">🔄</button>
+                </div>
+            </div>
+        </div>
+        <div class="game-over-overlay" id="gameOverOverlay">
+            <h2>💀 بازی تمام شد</h2>
+            <div class="final-score">🎯 امتیاز: <span id="finalScore">0</span></div>
+            <div class="final-lines">📈 خطوط: <span id="finalLines">0</span></div>
+            <div class="final-level">📊 سطح: <span id="finalLevel">1</span></div>
+            <button class="btn" onclick="resetGame()">🔄 شروع مجدد</button>
+        </div>
+    </div>
+
+    <div class="key-hints">
+        <span>⬅➡ حرکت</span>
+        <span>⬆ چرخش</span>
+        <span>⬇ پایین</span>
+        <span>␣ رها کردن</span>
+        <span>R ریست</span>
+    </div>
+</div>
+
+<script>
+// ===== تتریس حرفه‌ای با گرافیک زیبا =====
+const COLS = 10;
+const ROWS = 20;
+const BS = 30;
+const BASE_SPEED = 500;
+
+// ===== قطعات با رنگ‌های زیبا =====
+const PIECES = {
+    I: {
+        shape: [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]],
+        color: '#00e5ff',
+        glow: 'rgba(0,229,255,0.3)',
+        name: 'I'
+    },
+    O: {
+        shape: [[1,1],[1,1]],
+        color: '#ffeb3b',
+        glow: 'rgba(255,235,59,0.3)',
+        name: 'O'
+    },
+    T: {
+        shape: [[0,1,0],[1,1,1],[0,0,0]],
+        color: '#aa00ff',
+        glow: 'rgba(170,0,255,0.3)',
+        name: 'T'
+    },
+    S: {
+        shape: [[0,1,1],[1,1,0],[0,0,0]],
+        color: '#00e676',
+        glow: 'rgba(0,230,118,0.3)',
+        name: 'S'
+    },
+    Z: {
+        shape: [[1,1,0],[0,1,1],[0,0,0]],
+        color: '#ff1744',
+        glow: 'rgba(255,23,68,0.3)',
+        name: 'Z'
+    },
+    J: {
+        shape: [[1,0,0],[1,1,1],[0,0,0]],
+        color: '#2979ff',
+        glow: 'rgba(41,121,255,0.3)',
+        name: 'J'
+    },
+    L: {
+        shape: [[0,0,1],[1,1,1],[0,0,0]],
+        color: '#ff9100',
+        glow: 'rgba(255,145,0,0.3)',
+        name: 'L'
+    }
+};
+
+const PIECE_NAMES = ['I', 'O', 'T', 'S', 'Z', 'J', 'L'];
+
+// ===== DOM =====
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const nextCanvas = document.getElementById('nextCanvas');
+const nextCtx = nextCanvas.getContext('2d');
+
+// ===== حالت بازی =====
+let board = [];
+let currentPiece = null;
+let nextPiece = null;
+let score = 0;
+let level = 1;
+let lines = 0;
+let highScore = parseInt(localStorage.getItem('tetrisHigh')) || 0;
+let gameOver = false;
+let gameInterval = null;
+let dropCounter = 0;
+let lastTime = 0;
+let dropInterval = BASE_SPEED;
+let finalScore = 0;
+let isPaused = false;
+
+// ===== توابع اصلی =====
+function createBoard() {
+    board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+}
+
+function randomPiece() {
+    const name = PIECE_NAMES[Math.floor(Math.random() * PIECE_NAMES.length)];
+    const piece = PIECES[name];
+    return {
+        name: piece.name,
+        shape: piece.shape.map(row => [...row]),
+        color: piece.color,
+        glow: piece.glow,
+        x: Math.floor((COLS - piece.shape[0].length) / 2),
+        y: 0
+    };
+}
+
+function rotateMatrix(matrix) {
+    const n = matrix.length;
+    const rotated = Array.from({ length: n }, () => Array(n).fill(0));
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+            rotated[j][n - 1 - i] = matrix[i][j];
+        }
+    }
+    return rotated;
+}
+
+function isValid(shape, x, y) {
+    for (let i = 0; i < shape.length; i++) {
+        for (let j = 0; j < shape[i].length; j++) {
+            if (shape[i][j]) {
+                const nx = x + j;
+                const ny = y + i;
+                if (nx < 0 || nx >= COLS || ny >= ROWS || ny < 0) return false;
+                if (ny >= 0 && board[ny][nx] !== 0) return false;
+            }
+        }
+    }
+    return true;
+}
+
+function lockPiece() {
+    const piece = currentPiece;
+    for (let i = 0; i < piece.shape.length; i++) {
+        for (let j = 0; j < piece.shape[i].length; j++) {
+            if (piece.shape[i][j]) {
+                const y = piece.y + i;
+                const x = piece.x + j;
+                if (y < 0) {
+                    endGame();
+                    return;
+                }
+                board[y][x] = piece.color;
+            }
+        }
+    }
+    clearLines();
+    spawnPiece();
+    draw();
+}
+
+function clearLines() {
+    let cleared = 0;
+    for (let i = ROWS - 1; i >= 0; i--) {
+        if (board[i].every(cell => cell !== 0)) {
+            board.splice(i, 1);
+            board.unshift(Array(COLS).fill(0));
+            cleared++;
+            i++;
+        }
+    }
+    
+    if (cleared > 0) {
+        lines += cleared;
+        // امتیازدهی پیشرفته
+        const points = [0, 100, 300, 500, 800];
+        const bonus = level * 10;
+        score += points[cleared] * level + bonus;
+        
+        // افزایش سطح
+        const newLevel = Math.floor(lines / 10) + 1;
+        if (newLevel > level) {
+            level = newLevel;
+            dropInterval = Math.max(80, BASE_SPEED - (level - 1) * 25);
+            showStatus(`🎉 سطح ${level}!`, 'success');
+            playSound('levelup');
+        }
+        
+        // نمایش خطوط پاک شده
+        if (cleared >= 4) {
+            showStatus(`🔥 ${cleared} خط پاک شد!`, 'success');
+        }
+        
+        updateUI();
+        playSound('clear');
+    }
+}
+
+function spawnPiece() {
+    if (!nextPiece) nextPiece = randomPiece();
+    currentPiece = {
+        name: nextPiece.name,
+        shape: nextPiece.shape.map(row => [...row]),
+        color: nextPiece.color,
+        glow: nextPiece.glow,
+        x: Math.floor((COLS - nextPiece.shape[0].length) / 2),
+        y: 0
+    };
+    nextPiece = randomPiece();
+    
+    if (!isValid(currentPiece.shape, currentPiece.x, currentPiece.y)) {
+        endGame();
+    }
+    drawNext();
+    draw();
+}
+
+function movePiece(action) {
+    if (gameOver || !currentPiece) return;
+    
+    switch(action) {
+        case 'left':
+            if (isValid(currentPiece.shape, currentPiece.x - 1, currentPiece.y)) {
+                currentPiece.x--;
+            }
+            break;
+        case 'right':
+            if (isValid(currentPiece.shape, currentPiece.x + 1, currentPiece.y)) {
+                currentPiece.x++;
+            }
+            break;
+        case 'rotate': {
+            const rotated = rotateMatrix(currentPiece.shape);
+            // Wall kick
+            if (isValid(rotated, currentPiece.x, currentPiece.y)) {
+                currentPiece.shape = rotated;
+            } else if (isValid(rotated, currentPiece.x - 1, currentPiece.y)) {
+                currentPiece.shape = rotated;
+                currentPiece.x--;
+            } else if (isValid(rotated, currentPiece.x + 1, currentPiece.y)) {
+                currentPiece.shape = rotated;
+                currentPiece.x++;
+            } else if (isValid(rotated, currentPiece.x, currentPiece.y - 1)) {
+                currentPiece.shape = rotated;
+                currentPiece.y--;
+            }
+            break;
+        }
+        case 'down':
+            if (isValid(currentPiece.shape, currentPiece.x, currentPiece.y + 1)) {
+                currentPiece.y++;
+                dropCounter = 0;
+            }
+            break;
+        case 'drop':
+            while (isValid(currentPiece.shape, currentPiece.x, currentPiece.y + 1)) {
+                currentPiece.y++;
+            }
+            lockPiece();
+            break;
+    }
+    draw();
+}
+
+// ===== حلقه بازی =====
+function gameLoop(time) {
+    if (gameOver) {
+        requestAnimationFrame(gameLoop);
+        return;
+    }
+    
+    const deltaTime = time - lastTime;
+    lastTime = time;
+    
+    if (!isPaused) {
+        dropCounter += deltaTime;
+        if (dropCounter > dropInterval) {
+            dropCounter = 0;
+            if (currentPiece) {
+                if (isValid(currentPiece.shape, currentPiece.x, currentPiece.y + 1)) {
+                    currentPiece.y++;
+                    draw();
+                } else {
+                    lockPiece();
+                }
+            }
+        }
+    }
+    
+    requestAnimationFrame(gameLoop);
+}
+
+// ===== گرافیک =====
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // پس‌زمینه با گرید
+    ctx.fillStyle = '#0d1117';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // گرید
+    ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i <= COLS; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * BS, 0);
+        ctx.lineTo(i * BS, canvas.height);
+        ctx.stroke();
+    }
+    for (let i = 0; i <= ROWS; i++) {
+        ctx.beginPath();
+        ctx.moveTo(0, i * BS);
+        ctx.lineTo(canvas.width, i * BS);
+        ctx.stroke();
+    }
+    
+    // بلوک‌های ثابت
+    for (let i = 0; i < ROWS; i++) {
+        for (let j = 0; j < COLS; j++) {
+            if (board[i][j] !== 0) {
+                drawBlock(ctx, j, i, board[i][j]);
+            }
+        }
+    }
+    
+    // قطعه فعلی
+    if (currentPiece && !gameOver) {
+        // نمایش سایه (Ghost piece)
+        let ghostY = currentPiece.y;
+        while (isValid(currentPiece.shape, currentPiece.x, ghostY + 1)) {
+            ghostY++;
+        }
+        if (ghostY !== currentPiece.y) {
+            ctx.globalAlpha = 0.15;
+            for (let i = 0; i < currentPiece.shape.length; i++) {
+                for (let j = 0; j < currentPiece.shape[i].length; j++) {
+                    if (currentPiece.shape[i][j]) {
+                        const x = currentPiece.x + j;
+                        const y = ghostY + i;
+                        if (y >= 0) {
+                            drawBlock(ctx, x, y, '#ffffff');
+                        }
+                    }
+                }
+            }
+            ctx.globalAlpha = 1;
+        }
+        
+        // قطعه اصلی
+        for (let i = 0; i < currentPiece.shape.length; i++) {
+            for (let j = 0; j < currentPiece.shape[i].length; j++) {
+                if (currentPiece.shape[i][j]) {
+                    const x = currentPiece.x + j;
+                    const y = currentPiece.y + i;
+                    if (y >= 0) {
+                        drawBlock(ctx, x, y, currentPiece.color, currentPiece.glow);
+                    }
+                }
+            }
+        }
+    }
+}
+
+function drawBlock(context, x, y, color, glow = null) {
+    const padding = 1;
+    const size = BS - padding * 2;
+    const px = x * BS + padding;
+    const py = y * BS + padding;
+    
+    // سایه
+    context.shadowColor = glow || 'rgba(0,0,0,0.3)';
+    context.shadowBlur = 8;
+    context.shadowOffsetY = 2;
+    
+    // بدنه اصلی
+    const grad = context.createRadialGradient(
+        px + size * 0.3, py + size * 0.3, 2,
+        px + size * 0.5, py + size * 0.5, size * 0.7
+    );
+    grad.addColorStop(0, lightenColor(color, 30));
+    grad.addColorStop(1, color);
+    
+    context.fillStyle = grad;
+    context.beginPath();
+    context.roundRect(px, py, size, size, 4);
+    context.fill();
+    
+    // براقیت
+    context.shadowBlur = 0;
+    const highlight = context.createLinearGradient(px, py, px, py + size);
+    highlight.addColorStop(0, 'rgba(255,255,255,0.2)');
+    highlight.addColorStop(0.5, 'rgba(255,255,255,0)');
+    highlight.addColorStop(1, 'rgba(0,0,0,0.15)');
+    context.fillStyle = highlight;
+    context.beginPath();
+    context.roundRect(px, py, size, size, 4);
+    context.fill();
+    
+    // برجستگی
+    context.strokeStyle = 'rgba(255,255,255,0.1)';
+    context.lineWidth = 1;
+    context.beginPath();
+    context.roundRect(px + 2, py + 2, size - 4, size - 4, 3);
+    context.stroke();
+    
+    context.shadowBlur = 0;
+}
+
+function drawNext() {
+    nextCtx.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
+    nextCtx.fillStyle = 'rgba(0,0,0,0.3)';
+    nextCtx.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
+    
+    if (nextPiece) {
+        const shape = nextPiece.shape;
+        const cellSize = 25;
+        const cols = shape[0].length;
+        const rows = shape.length;
+        const offsetX = (nextCanvas.width - cols * cellSize) / 2;
+        const offsetY = (nextCanvas.height - rows * cellSize) / 2;
+        
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                if (shape[i][j]) {
+                    const px = offsetX + j * cellSize + 2;
+                    const py = offsetY + i * cellSize + 2;
+                    const s = cellSize - 4;
+                    
+                    nextCtx.shadowColor = nextPiece.glow || 'rgba(0,0,0,0.3)';
+                    nextCtx.shadowBlur = 6;
+                    
+                    const grad = nextCtx.createRadialGradient(
+                        px + s * 0.3, py + s * 0.3, 1,
+                        px + s * 0.5, py + s * 0.5, s * 0.6
+                    );
+                    grad.addColorStop(0, lightenColor(nextPiece.color, 30));
+                    grad.addColorStop(1, nextPiece.color);
+                    nextCtx.fillStyle = grad;
+                    nextCtx.beginPath();
+                    nextCtx.roundRect(px, py, s, s, 3);
+                    nextCtx.fill();
+                    nextCtx.shadowBlur = 0;
+                }
+            }
+        }
+    }
+}
+
+// ===== ابزارهای رنگ =====
+function lightenColor(color, percent) {
+    const num = parseInt(color.replace('#', ''), 16);
+    const amt = Math.round(2.55 * percent);
+    const R = Math.min(255, (num >> 16) + amt);
+    const G = Math.min(255, ((num >> 8) & 0x00FF) + amt);
+    const B = Math.min(255, (num & 0x0000FF) + amt);
+    return `#${(1 << 24 | R << 16 | G << 8 | B).toString(16).slice(1)}`;
+}
+
+// ===== صدا =====
+function playSound(type) {
+    try {
+        const ac = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ac.createOscillator();
+        const g = ac.createGain();
+        o.connect(g);
+        g.connect(ac.destination);
+        
+        if (type === 'clear') {
+            o.frequency.value = 500;
+            g.gain.setValueAtTime(0.1, ac.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01, ac.currentTime + 0.15);
+            o.type = 'sine';
+        } else if (type === 'levelup') {
+            o.frequency.value = 400;
+            g.gain.setValueAtTime(0.1, ac.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01, ac.currentTime + 0.3);
+            o.type = 'square';
+        } else {
+            o.frequency.value = 300;
+            g.gain.setValueAtTime(0.08, ac.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01, ac.currentTime + 0.1);
+            o.type = 'sawtooth';
+        }
+        o.start(ac.currentTime);
+        o.stop(ac.currentTime + 0.2);
+    } catch(e) {}
+}
+
+// ===== UI =====
+function updateUI() {
+    document.getElementById('scoreDisplay').textContent = score;
+    document.getElementById('levelDisplay').textContent = level;
+    document.getElementById('linesDisplay').textContent = lines;
+    
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('tetrisHigh', highScore);
+    }
+    document.getElementById('highScoreDisplay').textContent = highScore;
+}
+
+function showStatus(text, type = '') {
+    const el = document.getElementById('statusMsg');
+    el.textContent = text;
+    el.className = 'status-message' + (type ? ' ' + type : '');
+    if (type) {
+        setTimeout(() => {
+            if (!gameOver) {
+                el.textContent = '🧱 در حال بازی...';
+                el.className = 'status-message';
+            }
+        }, 2000);
+    }
+}
+
+// ===== پایان بازی =====
+async function endGame() {
+    gameOver = true;
+    finalScore = score;
+    
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('tetrisHigh', highScore);
+    }
+    
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('finalLines').textContent = lines;
+    document.getElementById('finalLevel').textContent = level;
+    document.getElementById('gameOverOverlay').classList.add('active');
+    
+    await saveScore();
+    draw();
+}
+
+async function saveScore() {
+    try {
+        if (typeof NovinixAuth !== 'undefined' && NovinixAuth.isLoggedIn()) {
+            await NovinixAuth.saveGameScore('tetris', finalScore, {
+                level: level,
+                lines: lines
+            });
+        }
+    } catch(e) {}
+}
+
+// ===== ریست =====
+function resetGame() {
+    createBoard();
+    score = 0;
+    level = 1;
+    lines = 0;
+    gameOver = false;
+    dropCounter = 0;
+    dropInterval = BASE_SPEED;
+    finalScore = 0;
+    isPaused = false;
+    
+    document.getElementById('gameOverOverlay').classList.remove('active');
+    document.getElementById('statusMsg').textContent = '🧱 بازی جدید!';
+    document.getElementById('statusMsg').className = 'status-message';
+    
+    nextPiece = randomPiece();
+    spawnPiece();
+    updateUI();
+    draw();
+}
+
+// ===== Polyfill =====
+if (!CanvasRenderingContext2D.prototype.roundRect) {
+    CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+        if (r > w/2) r = w/2;
+        if (r > h/2) r = h/2;
+        this.moveTo(x + r, y);
+        this.lineTo(x + w - r, y);
+        this.quadraticCurveTo(x + w, y, x + w, y + r);
+        this.lineTo(x + w, y + h - r);
+        this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        this.lineTo(x + r, y + h);
+        this.quadraticCurveTo(x, y + h, x, y + h - r);
+        this.lineTo(x, y + r);
+        this.quadraticCurveTo(x, y, x + r, y);
+        this.closePath();
+        return this;
+    };
+}
+
+// ===== رویدادها =====
+// دکمه‌های لمسی
+document.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const action = btn.dataset.action;
+        if (action === 'reset') {
+            resetGame();
+        } else {
+            movePiece(action);
+        }
+    });
+    
+    btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        btn.click();
+    });
+});
+
+// کیبورد
+document.addEventListener('keydown', (e) => {
+    if (gameOver) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            resetGame();
+        }
+        return;
+    }
+    
+    switch(e.key) {
+        case 'ArrowLeft': e.preventDefault(); movePiece('left'); break;
+        case 'ArrowRight': e.preventDefault(); movePiece('right'); break;
+        case 'ArrowUp': e.preventDefault(); movePiece('rotate'); break;
+        case 'ArrowDown': e.preventDefault(); movePiece('down'); break;
+        case ' ': e.preventDefault(); movePiece('drop'); break;
+        case 'r':
+        case 'R': resetGame(); break;
+        case 'p':
+        case 'P': isPaused = !isPaused; 
+            showStatus(isPaused ? '⏸️ مکث' : '▶️ ادامه', '');
+            break;
+    }
+});
+
+// سوایپ روی Canvas برای موبایل
+let touchStartX = 0;
+let touchStartY = 0;
+let touchStartTime = 0;
+
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    touchStartTime = Date.now();
+});
+
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (!touchStartX || !touchStartY || gameOver) return;
+    
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - touchStartX;
+    const deltaY = touch.clientY - touchStartY;
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    
+    if (distance < 20) return;
+    
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        if (deltaX > 0) movePiece('right');
+        else movePiece('left');
+    } else {
+        if (deltaY > 0) movePiece('down');
+        else {
+            // سوایپ به بالا = چرخش
+            const timeDiff = Date.now() - touchStartTime;
+            if (timeDiff < 300) {
+                movePiece('rotate');
+            }
+        }
+    }
+    
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+});
+
+canvas.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    touchStartX = 0;
+    touchStartY = 0;
+});
+
+// ===== شروع =====
+document.getElementById('highScoreDisplay').textContent = highScore;
+createBoard();
+nextPiece = randomPiece();
+spawnPiece();
+updateUI();
+lastTime = performance.now();
+requestAnimationFrame(gameLoop);
+</script>
+<script src="../assets/js/seo.js"></script>
+</body>
+</html>

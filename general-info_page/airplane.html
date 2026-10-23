@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>هواپیماها | نوینیکس</title>
+    <meta name="description" content="معرفی و اطلاعات کامل انواع هواپیماهای مسافربری، جنگی، خصوصی، باری، تاریخی، مافوق صوت و تجاری" />
+    <link rel="canonical" href="https://novinix.ir/pages/general-info/airplane.html" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <style>
+        .airplanes-hero {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(15, 52, 96, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .airplanes-hero::before {
+            content: '✈️';
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.05;
+            right: -30px;
+            bottom: -30px;
+            transform: rotate(10deg);
+        }
+        .airplanes-hero h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .airplanes-hero h2 span {
+            color: #f1c40f;
+        }
+        .airplanes-hero p {
+            opacity: 0.85;
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .category-filter {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .cat-tag {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #a0b4c8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            font-weight: 500;
+            user-select: none;
+        }
+        .cat-tag:hover {
+            border-color: #00ffcc;
+            transform: translateY(-2px);
+            color: #00ffcc;
+        }
+        .cat-tag.active {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            border-color: #00ffcc;
+        }
+        .airplane-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 10px;
+        }
+        .airplane-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
+            padding: 20px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+        }
+        .airplane-card:hover {
+            transform: translateY(-5px);
+            border-color: #00ffcc;
+            box-shadow: 0 12px 40px rgba(0, 255, 204, 0.1);
+        }
+        .airplane-card .airplane-image {
+            width: 100%;
+            height: 200px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .airplane-card .airplane-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .airplane-card:hover .airplane-image img {
+            transform: scale(1.05);
+        }
+        .airplane-card .airplane-image .emoji-placeholder {
+            font-size: 4rem;
+            opacity: 0.3;
+        }
+        .airplane-card .airplane-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        .airplane-card .airplane-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e8f5f0;
+        }
+        .airplane-card .airplane-name-en {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #a0b4c8;
+            display: block;
+        }
+        .airplane-card .category-badge {
+            font-size: 0.6rem;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+        .category-badge.commercial { background: rgba(52, 152, 219, 0.2); color: #3498db; }
+        .category-badge.military { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+        .category-badge.private { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .category-badge.cargo { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+        .category-badge.historic { background: rgba(155, 89, 182, 0.2); color: #9b59b6; }
+        .category-badge.supersonic { background: rgba(243, 156, 18, 0.2); color: #f39c12; }
+        .category-badge.business { background: rgba(85, 239, 196, 0.2); color: #55efc4; }
+        .airplane-card .airplane-description {
+            font-size: 0.85rem;
+            color: #a0b4c8;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+        .airplane-card .airplane-description p {
+            margin-bottom: 6px;
+        }
+        .airplane-card .airplane-description p:last-child {
+            margin-bottom: 0;
+        }
+        .airplane-card {
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        .airplane-card:nth-child(1) { animation-delay: 0.03s; }
+        .airplane-card:nth-child(2) { animation-delay: 0.06s; }
+        .airplane-card:nth-child(3) { animation-delay: 0.09s; }
+        .airplane-card:nth-child(4) { animation-delay: 0.12s; }
+        .airplane-card:nth-child(5) { animation-delay: 0.15s; }
+        .airplane-card:nth-child(6) { animation-delay: 0.18s; }
+        .airplane-card:nth-child(7) { animation-delay: 0.21s; }
+        .airplane-card:nth-child(8) { animation-delay: 0.24s; }
+        .airplane-card:nth-child(9) { animation-delay: 0.27s; }
+        .airplane-card:nth-child(10) { animation-delay: 0.30s; }
+        .airplane-card:nth-child(11) { animation-delay: 0.33s; }
+        .airplane-card:nth-child(12) { animation-delay: 0.36s; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .no-results {
+            text-align: center;
+            padding: 50px 20px;
+            color: #a0b4c8;
+            display: none;
+        }
+        .no-results .big-icon {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+        .no-results h3 {
+            color: #e8f5f0;
+            margin-bottom: 5px;
+        }
+        @media (max-width: 768px) {
+            .airplanes-hero { padding: 25px 20px; }
+            .airplanes-hero h2 { font-size: 1.5rem; }
+            .airplane-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .airplane-card .airplane-image { height: 150px; }
+            .cat-tag { font-size: 0.75rem; padding: 6px 14px; }
+        }
+        @media (max-width: 480px) {
+            .airplane-grid { grid-template-columns: 1fr; }
+            .airplane-card .airplane-image { height: 180px; }
+            .airplane-card .airplane-name { font-size: 1rem; }
+            .airplanes-hero h2 { font-size: 1.3rem; }
+            .airplanes-hero p { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader"></header>
+
+    <main>
+        <div class="airplanes-hero">
+            <h2>✈️ هواپیماهای <span>جهان</span></h2>
+            <p>دنیای شگفت‌انگیز هواپیماها از مسافربری تا جنگی و مافوق صوت</p>
+        </div>
+
+        <div class="category-filter" id="categoryFilter">
+            <span class="cat-tag active" data-cat="all">همه</span>
+            <span class="cat-tag" data-cat="commercial">🛫 مسافربری</span>
+            <span class="cat-tag" data-cat="military">⚔️ جنگی</span>
+            <span class="cat-tag" data-cat="private">🛩️ خصوصی</span>
+            <span class="cat-tag" data-cat="cargo">📦 باری</span>
+            <span class="cat-tag" data-cat="historic">🕰️ تاریخی</span>
+            <span class="cat-tag" data-cat="supersonic">💨 مافوق صوت</span>
+            <span class="cat-tag" data-cat="business">👔 تجاری</span>
+        </div>
+
+        <div class="airplane-grid" id="airplaneGrid"></div>
+
+        <div class="no-results" id="noResults">
+            <span class="big-icon">🔍</span>
+            <h3>نتیجه‌ای یافت نشد</h3>
+            <p>در دسته‌بندی انتخاب شده هواپیمایی وجود ندارد</p>
+        </div>
+    </main>
+
+    <footer id="mainFooter"></footer>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        // ===== داده‌های هواپیماها =====
+        const airplanesData = [
+            { id: 'boeing_737', nameFa: 'بوئینگ ۷۳۷', nameEn: 'Boeing 737', category: 'commercial', image: 'boeing_737.jpg', emoji: '🛫', description: ['بوئینگ ۷۳۷ یکی از پرفروش‌ترین هواپیماهای مسافربری تاریخ است.', 'این هواپیما با طراحی دو موتور و ظرفیت ۱۳۰ تا ۲۲۰ مسافر شناخته می‌شود.', 'بوئینگ ۷۳۷ به عنوان "ستون فقرات" صنعت هوانوردی جهان شناخته می‌شود.'] },
+            { id: 'boeing_747', nameFa: 'بوئینگ ۷۴۷', nameEn: 'Boeing 747', category: 'commercial', image: 'boeing_747.jpg', emoji: '🛫', description: ['بوئینگ ۷۴۷ با نام "جامبو جت" یکی از نمادین‌ترین هواپیماهای مسافربری جهان است.', 'این هواپیما با طراحی دوطبقه و ظرفیت تا ۶۶۰ مسافر شناخته می‌شود.', 'بوئینگ ۷۴۷ به عنوان "ملکه آسمان‌ها" در تاریخ هوانوردی شناخته می‌شود.'] },
+            { id: 'boeing_777', nameFa: 'بوئینگ ۷۷۷', nameEn: 'Boeing 777', category: 'commercial', image: 'boeing_777.jpg', emoji: '🛫', description: ['بوئینگ ۷۷۷ یک هواپیمای مسافربری با برد بلند و طراحی مدرن است.', 'این هواپیما با موتورهای قدرتمند و ظرفیت تا ۴۴۰ مسافر شناخته می‌شود.', 'بوئینگ ۷۷۷ به عنوان یکی از بهترین هواپیماهای مسافربری در جهان شناخته می‌شود.'] },
+            { id: 'airbus_a320', nameFa: 'ایرباس A320', nameEn: 'Airbus A320', category: 'commercial', image: 'airbus_a320.jpg', emoji: '🛫', description: ['ایرباس A320 رقیب اصلی بوئینگ ۷۳۷ با طراحی مدرن و مصرف سوخت بهینه است.', 'این هواپیما با سیستم‌های دیجیتال و کابین جادار شناخته می‌شود.', 'ایرباس A320 به عنوان یکی از پرفروش‌ترین هواپیماهای اروپا شناخته می‌شود.'] },
+            { id: 'airbus_a380', nameFa: 'ایرباس A380', nameEn: 'Airbus A380', category: 'commercial', image: 'airbus_a380.jpg', emoji: '🛫', description: ['ایرباس A380 بزرگ‌ترین هواپیمای مسافربری جهان با ظرفیت ۸۵۳ مسافر است.', 'این هواپیما با طراحی دوطبقه و چهار موتور شناخته می‌شود.', 'ایرباس A380 به عنوان "غول آسمان‌ها" شناخته می‌شود.'] },
+            { id: 'boeing_787', nameFa: 'بوئینگ ۷۸۷ دریم‌لاینر', nameEn: 'Boeing 787 Dreamliner', category: 'commercial', image: 'boeing_787.jpg', emoji: '🛫', description: ['بوئینگ ۷۸۷ دریم‌لاینر یکی از پیشرفته‌ترین هواپیماهای مسافربری با بدنه کامپوزیتی است.', 'این هواپیما با مصرف سوخت ۲۰٪ کمتر و کابین شیشه‌ای شناخته می‌شود.', 'دریم‌لاینر به عنوان "هواپیمای آینده" در صنعت هوانوردی شناخته می‌شود.'] },
+            { id: 'f_22_raptor', nameFa: 'اف-۲۲ رپتور', nameEn: 'F-22 Raptor', category: 'military', image: 'f_22_raptor.jpg', emoji: '⚔️', description: ['اف-۲۲ رپتور پیشرفته‌ترین جنگنده رهگیر با تکنولوژی رادارگریز در جهان است.', 'این هواپیما با سرعت مافوق صوت و قدرت مانور بالا شناخته می‌شود.', 'اف-۲۲ رپتور به عنوان "جنگنده نسل پنجم" در جهان شناخته می‌شود.'] },
+            { id: 'f_35_lightning', nameFa: 'اف-۳۵ لایتنینگ', nameEn: 'F-35 Lightning', category: 'military', image: 'f_35_lightning.jpg', emoji: '⚔️', description: ['اف-۳۵ لایتنینگ یک جنگنده چندمنظوره نسل پنجم با قابلیت عملیات در هر شرایطی است.', 'این هواپیما با توانایی برخاست عمودی و رادارگریز شناخته می‌شود.', 'اف-۳۵ به عنوان یکی از پیشرفته‌ترین جنگنده‌های جهان شناخته می‌شود.'] },
+            { id: 'eurofighter_typhoon', nameFa: 'یوروفایتر تایفون', nameEn: 'Eurofighter Typhoon', category: 'military', image: 'eurofighter_typhoon.jpg', emoji: '⚔️', description: ['یوروفایتر تایفون یک جنگنده چندمنظوره اروپایی با طراحی دلتا و کانارد است.', 'این هواپیما با سرعت مافوق صوت و قدرت مانور بالا شناخته می‌شود.', 'یوروفایتر تایفون به عنوان یکی از بهترین جنگنده‌های اروپا شناخته می‌شود.'] },
+            { id: 'mig_29', nameFa: 'میگ-۲۹', nameEn: 'MiG-29', category: 'military', image: 'mig_29.jpg', emoji: '⚔️', description: ['میگ-۲۹ یک جنگنده قدرتمند روسی با طراحی دو موتور و عملکرد بالا است.', 'این هواپیما با سرعت مافوق صوت و قدرت شناور شدن شناخته می‌شود.', 'میگ-۲۹ به عنوان یکی از بهترین جنگنده‌های روسیه شناخته می‌شود.'] },
+            { id: 'su_27', nameFa: 'سوخو-۲۷', nameEn: 'Su-27', category: 'military', image: 'su_27.jpg', emoji: '⚔️', description: ['سوخو-۲۷ یک جنگنده رهگیر روسی با طراحی زیبا و قدرت مانور فوق‌العاده است.', 'این هواپیما با برد بلند و توانایی عملیات در شرایط آب‌وهوایی مختلف شناخته می‌شود.', 'سوخو-۲۷ به عنوان یکی از مانورپذیرترین جنگنده‌های جهان شناخته می‌شود.'] },
+            { id: 'cessna_172', nameFa: 'سسنا ۱۷۲', nameEn: 'Cessna 172', category: 'private', image: 'cessna_172.jpg', emoji: '🛩️', description: ['سسنا ۱۷۲ یکی از پرفروش‌ترین و محبوب‌ترین هواپیماهای خصوصی در جهان است.', 'این هواپیما با طراحی ساده و قابلیت اطمینان بالا شناخته می‌شود.', 'سسنا ۱۷۲ به عنوان "مربی" خلبانان در سراسر جهان شناخته می‌شود.'] },
+            { id: 'piper_cherokee', nameFa: 'پایپر چروکی', nameEn: 'Piper Cherokee', category: 'private', image: 'piper_cherokee.jpg', emoji: '🛩️', description: ['پایپر چروکی یک هواپیمای خصوصی با طراحی کلاسیک و عملکرد قابل اعتماد است.', 'این هواپیما با کابین جادار و موتورهای پیستونی شناخته می‌شود.', 'پایپر چروکی به عنوان یکی از محبوب‌ترین هواپیماهای آموزشی شناخته می‌شود.'] },
+            { id: 'cirrus_sr22', nameFa: 'سیروس SR22', nameEn: 'Cirrus SR22', category: 'private', image: 'cirrus_sr22.jpg', emoji: '🛩️', description: ['سیروس SR22 یک هواپیمای خصوصی پیشرفته با طراحی مدرن و سیستم‌های دیجیتال است.', 'این هواپیما با چتر نجات هوایی و کابین مجلل شناخته می‌شود.', 'سیروس SR22 به عنوان یکی از بهترین هواپیماهای خصوصی در جهان شناخته می‌شود.'] },
+            { id: 'boeing_747_freighter', nameFa: 'بوئینگ ۷۴۷ باری', nameEn: 'Boeing 747 Freighter', category: 'cargo', image: 'boeing_747_freighter.jpg', emoji: '📦', description: ['بوئینگ ۷۴۷ باری نسخه‌ای از جامبو جت برای حمل بار با ظرفیت بالا است.', 'این هواپیما با درب بار بزرگ و توانایی حمل محموله‌های سنگین شناخته می‌شود.', 'بوئینگ ۷۴۷ باری به عنوان یکی از بهترین هواپیماهای باری جهان شناخته می‌شود.'] },
+            { id: 'airbus_a300', nameFa: 'ایرباس A300', nameEn: 'Airbus A300', category: 'cargo', image: 'airbus_a300.jpg', emoji: '📦', description: ['ایرباس A300 نخستین هواپیمای دو موتوره ایرباس و یکی از موفق‌ترین هواپیماهای باری است.', 'این هواپیما با طراحی مدرن و مصرف سوخت بهینه شناخته می‌شود.', 'ایرباس A300 به عنوان یکی از بهترین هواپیماهای باری در اروپا شناخته می‌شود.'] },
+            { id: 'antonov_an_124', nameFa: 'آنتونوف An-124', nameEn: 'Antonov An-124', category: 'cargo', image: 'antonov_an_124.jpg', emoji: '📦', description: ['آنتونوف An-124 یکی از بزرگ‌ترین هواپیماهای باری جهان با ظرفیت ۱۵۰ تن بار است.', 'این هواپیما با طراحی شش چرخ و موتورهای قدرتمند شناخته می‌شود.', 'آنتونوف An-124 به عنوان یکی از قدرتمندترین هواپیماهای باری جهان شناخته می‌شود.'] },
+            { id: 'wright_flyer', nameFa: 'رایت فلایر', nameEn: 'Wright Flyer', category: 'historic', image: 'wright_flyer.jpg', emoji: '🕰️', description: ['رایت فلایر نخستین هواپیمای موفق تاریخ با پرواز در سال ۱۹۰۳ میلادی است.', 'این هواپیما با طراحی چوبی و موتور ۱۲ اسب‌بخار شناخته می‌شود.', 'رایت فلایر به عنوان "آغاز عصر هوانوردی" در تاریخ شناخته می‌شود.'] },
+            { id: 'spirit_of_st_louis', nameFa: 'روح سنت لوئیس', nameEn: 'Spirit of St. Louis', category: 'historic', image: 'spirit_of_st_louis.jpg', emoji: '🕰️', description: ['روح سنت لوئیس، هواپیمایی که چارلز لیندبرگ با آن نخستین پرواز انفرادی بدون توقف از نیویورک به پاریس را انجام داد.', 'این هواپیما با طراحی تک موتور و مخازن سوخت اضافی شناخته می‌شود.', 'روح سنت لوئیس به عنوان یکی از نمادین‌ترین هواپیماهای تاریخ شناخته می‌شود.'] },
+            { id: 'douglas_dc_3', nameFa: 'داگلاس دی‌سی-۳', nameEn: 'Douglas DC-3', category: 'historic', image: 'douglas_dc_3.jpg', emoji: '🕰️', description: ['داگلاس دی‌سی-۳ یکی از مهم‌ترین و تأثیرگذارترین هواپیماهای تاریخ هوانوردی است.', 'این هواپیما با طراحی دو موتور و ظرفیت ۲۱ مسافر شناخته می‌شود.', 'داگلاس دی‌سی-۳ به عنوان "هواپیمای تغییردهنده هوانوردی" شناخته می‌شود.'] },
+            { id: 'concorde', nameFa: 'کنکورد', nameEn: 'Concorde', category: 'supersonic', image: 'concorde.jpg', emoji: '💨', description: ['کنکورد یکی از معروف‌ترین هواپیماهای مافوق صوت جهان با سرعت ۲.۰۴ ماخ است.', 'این هواپیما با طراحی دلتا و موتورهای قدرتمند شناخته می‌شود.', 'کنکورد به عنوان "نماد سرعت و ظرافت" در تاریخ هوانوردی شناخته می‌شود.'] },
+            { id: 'tu_144', nameFa: 'توپولف تو-۱۴۴', nameEn: 'Tupolev Tu-144', category: 'supersonic', image: 'tu_144.jpg', emoji: '💨', description: ['توپولف تو-۱۴۴ نخستین هواپیمای مافوق صوت مسافربری جهان با سرعت ۲.۳۵ ماخ است.', 'این هواپیما با طراحی دلتا و موتورهای قدرتمند شناخته می‌شود.', 'توپولف تو-۱۴۴ به عنوان "کنکورد روسی" شناخته می‌شود.'] },
+            { id: 'gulfstream_g650', nameFa: 'گلف‌استریم G650', nameEn: 'Gulfstream G650', category: 'business', image: 'gulfstream_g650.jpg', emoji: '👔', description: ['گلف‌استریم G650 یکی از پیشرفته‌ترین و لوکس‌ترین هواپیماهای تجاری در جهان است.', 'این هواپیما با برد ۱۳۰۰۰ کیلومتر و کابین مجلل شناخته می‌شود.', 'گلف‌استریم G650 به عنوان یکی از بهترین هواپیماهای تجاری جهان شناخته می‌شود.'] },
+            { id: 'bombardier_global_7500', nameFa: 'بمباردیر گلوبال ۷۵۰۰', nameEn: 'Bombardier Global 7500', category: 'business', image: 'bombardier_global_7500.jpg', emoji: '👔', description: ['بمباردیر گلوبال ۷۵۰۰ یکی از بهترین هواپیماهای تجاری با برد ۱۴۰۰۰ کیلومتر است.', 'این هواپیما با کابین فوق‌العاده جادار و طراحی مدرن شناخته می‌شود.', 'بمباردیر گلوبال ۷۵۰۰ به عنوان "پرچمدار" هواپیماهای تجاری شناخته می‌شود.'] },
+            { id: 'embraer_phenom_300', nameFa: 'امبرائر فنوم ۳۰۰', nameEn: 'Embraer Phenom 300', category: 'business', image: 'embraer_phenom_300.jpg', emoji: '👔', description: ['امبرائر فنوم ۳۰۰ یک هواپیمای تجاری سبک با عملکرد بالا و قیمت مناسب است.', 'این هواپیما با طراحی مدرن و کابین راحت شناخته می‌شود.', 'امبرائر فنوم ۳۰۰ به عنوان یکی از پرفروش‌ترین هواپیماهای تجاری سبک شناخته می‌شود.'] }
+        ];
+
+        function renderAirplanes(data, filterCategory = 'all') {
+            const grid = document.getElementById('airplaneGrid');
+            const noResults = document.getElementById('noResults');
+            let html = '';
+            let count = 0;
+
+            data.forEach(item => {
+                if (filterCategory !== 'all' && item.category !== filterCategory) return;
+                count++;
+                const imagePath = `airplanes_ph/${item.image}`;
+                const catLabels = { commercial: '🛫 مسافربری', military: '⚔️ جنگی', private: '🛩️ خصوصی', cargo: '📦 باری', historic: '🕰️ تاریخی', supersonic: '💨 مافوق صوت', business: '👔 تجاری' };
+                const catClasses = { commercial: 'commercial', military: 'military', private: 'private', cargo: 'cargo', historic: 'historic', supersonic: 'supersonic', business: 'business' };
+
+                html += `
+                    <div class="airplane-card" data-category="${item.category}">
+                        <div class="airplane-image">
+                            <img src="${imagePath}" alt="${item.nameFa}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                            <span class="emoji-placeholder" style="display:none;">${item.emoji || '✈️'}</span>
+                        </div>
+                        <div class="airplane-header">
+                            <div>
+                                <div class="airplane-name">${item.nameFa}</div>
+                                <span class="airplane-name-en">${item.nameEn}</span>
+                            </div>
+                            <span class="category-badge ${catClasses[item.category]}">${catLabels[item.category]}</span>
+                        </div>
+                        <div class="airplane-description">${item.description.map(p => `<p>${p}</p>`).join('')}</div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+            if (count === 0) noResults.style.display = 'block';
+            else noResults.style.display = 'none';
+
+            const cards = grid.querySelectorAll('.airplane-card');
+            cards.forEach((card, index) => {
+                card.style.animation = 'none';
+                card.offsetHeight;
+                card.style.animation = `fadeInUp 0.5s ease forwards`;
+                card.style.animationDelay = `${(index % 12) * 0.03 + 0.03}s`;
+            });
+        }
+
+        document.querySelectorAll('.cat-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                document.querySelectorAll('.cat-tag').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                renderAirplanes(airplanesData, this.dataset.cat);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderAirplanes(airplanesData, 'all');
+        });
+    </script>
+</body>
+</html>

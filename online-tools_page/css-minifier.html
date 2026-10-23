@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>فشرده‌ساز CSS آنلاین | ابزار Minify CSS Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای فشرده‌سازی کد CSS. کاهش حجم فایل‌های CSS تا ۷۰٪ برای افزایش سرعت بارگذاری وب‌سایت." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/css-minifier" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .tool-stats .stat-bar {
+            width: 120px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .tool-stats .stat-bar .bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.6s ease;
+            background: #00ffcc;
+        }
+        .tool-textarea {
+            min-height: 350px;
+        }
+        @media (max-width: 820px) {
+            .tool-textarea {
+                min-height: 200px;
+            }
+            .tool-stats .stat-bar {
+                width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">🧹</span>
+                <h2>فشرده‌ساز CSS</h2>
+                <span class="badge">Minify &bull; Optimize &bull; File</span>
+            </div>
+
+            <div class="toolbar">
+                <button class="tb-btn primary" id="minifyBtn">🧹 فشرده‌سازی</button>
+                <button class="tb-btn" id="formatBtn">📐 فرمت</button>
+                <button class="tb-btn upload" id="uploadBtn">📂 آپلود فایل</button>
+                <button class="tb-btn" id="sampleBtn">📄 نمونه</button>
+                <span class="tb-divider"></span>
+                <button class="tb-btn danger" id="clearBtn">🗑️ پاک</button>
+            </div>
+
+            <div class="drop-zone" id="fileDropZone">
+                <span class="dz-icon">📂</span>
+                <span class="dz-text">برای آپلود فایل CSS <strong>کلیک کنید</strong> یا فایل را <strong>بکشید</strong> و رها کنید</span>
+                <span class="dz-hint">پسوندهای مجاز: .css, .scss, .less • حداکثر حجم: ۵ مگابایت</span>
+                <input type="file" id="fileInput" accept=".css,.scss,.less,.txt" />
+            </div>
+
+            <div class="file-info" id="fileInfo" style="display:none;">
+                <span class="fi-icon">📄</span>
+                <span class="fi-name" id="fileName">style.css</span>
+                <span class="fi-size" id="fileSize">۰ KB</span>
+                <span class="fi-remove" id="removeFileBtn">✕ حذف فایل</span>
+            </div>
+
+            <div class="two-col-layout">
+                <div>
+                    <div class="panel-header"><span>📥 کد CSS ورودی</span><span class="panel-stats"><span id="inputStats">۰ کاراکتر</span></span></div>
+                    <textarea class="tool-textarea" id="cssInput" placeholder="کد CSS خود را اینجا وارد کنید..."></textarea>
+                </div>
+                <div>
+                    <div class="panel-header"><span>📤 کد CSS خروجی</span><span class="panel-stats"><span id="outputStats">۰ کاراکتر</span></span></div>
+                    <textarea class="tool-textarea output" id="cssOutput" placeholder="کد فشرده‌شده در اینجا نمایش داده می‌شود..." readonly></textarea>
+                </div>
+            </div>
+
+            <div class="tool-stats">
+                <span>📊 حجم ورودی: <span class="stat-value" id="inputSize">۰ B</span></span>
+                <span>📊 حجم خروجی: <span class="stat-value changed" id="outputSize">۰ B</span></span>
+                <span>📉 کاهش: <span class="stat-value changed" id="savedPercent">۰%</span></span>
+                <span>💾 صرفه‌جویی: <span class="stat-value changed" id="savedSize">۰ B</span></span>
+                <span>📈 نرخ فشرده‌سازی <span class="stat-bar"><span class="bar-fill" id="compressionBar" style="width:0%;"></span></span></span>
+            </div>
+
+            <div class="tool-status" id="cssStatus"></div>
+
+            <div class="tool-actions">
+                <button class="act-btn act-btn-copy" id="copyOutputBtn">📋 کپی خروجی</button>
+                <button class="act-btn act-btn-copy" id="copyInputBtn">📋 کپی ورودی</button>
+                <button class="act-btn act-btn-download" id="downloadBtn">📥 دانلود CSS</button>
+                <button class="act-btn act-btn-clear" id="clearAllBtn">🗑️ پاک کردن همه</button>
+            </div>
+        </div>
+    </main>
+
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            const cssInput = document.getElementById('cssInput');
+            const cssOutput = document.getElementById('cssOutput');
+            const inputStats = document.getElementById('inputStats');
+            const outputStats = document.getElementById('outputStats');
+            const minifyBtn = document.getElementById('minifyBtn');
+            const formatBtn = document.getElementById('formatBtn');
+            const sampleBtn = document.getElementById('sampleBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const inputSize = document.getElementById('inputSize');
+            const outputSize = document.getElementById('outputSize');
+            const savedPercent = document.getElementById('savedPercent');
+            const savedSize = document.getElementById('savedSize');
+            const compressionBar = document.getElementById('compressionBar');
+            const cssStatus = document.getElementById('cssStatus');
+            const copyOutputBtn = document.getElementById('copyOutputBtn');
+            const copyInputBtn = document.getElementById('copyInputBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+
+            const fileDropZone = document.getElementById('fileDropZone');
+            const fileInput = document.getElementById('fileInput');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const removeFileBtn = document.getElementById('removeFileBtn');
+            const uploadBtn = document.getElementById('uploadBtn');
+
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' B';
+                if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+                return (bytes / 1048576).toFixed(1) + ' MB';
+            }
+
+            function handleFile(file) {
+                if (!file) return;
+                if (file.size > 5 * 1024 * 1024) {
+                    showStatus('⚠️ حجم فایل نباید بیشتر از ۵ مگابایت باشد.', 'error');
+                    return;
+                }
+                const ext = file.name.split('.').pop().toLowerCase();
+                if (!['css', 'scss', 'less', 'txt'].includes(ext)) {
+                    showStatus('⚠️ پسوند فایل باید .css, .scss, .less یا .txt باشد.', 'error');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    cssInput.value = e.target.result;
+                    fileName.textContent = file.name;
+                    fileSize.textContent = formatFileSize(file.size);
+                    fileInfo.style.display = 'flex';
+                    showStatus(`📂 فایل "${file.name}" با موفقیت بارگذاری شد.`, 'success');
+                    updateStats(cssInput.value, cssOutput.value);
+                    setTimeout(handleMinify, 200);
+                };
+                reader.onerror = function() { showStatus('❌ خطا در خواندن فایل.', 'error'); };
+                reader.readAsText(file, 'UTF-8');
+            }
+
+            function removeFile() {
+                fileInput.value = '';
+                fileInfo.style.display = 'none';
+                showStatus('🗑️ فایل حذف شد.', 'info');
+            }
+
+            fileDropZone.addEventListener('click', function() { fileInput.click(); });
+            fileDropZone.addEventListener('dragover', function(e) { e.preventDefault();
+                this.classList.add('dragover'); });
+            fileDropZone.addEventListener('dragleave', function(e) { e.preventDefault();
+                this.classList.remove('dragover'); });
+            fileDropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+            });
+            fileInput.addEventListener('change', function() { if (this.files.length > 0) handleFile(this.files[0]); });
+            removeFileBtn.addEventListener('click', removeFile);
+            uploadBtn.addEventListener('click', function() { fileInput.click(); });
+
+            function minifyCSS(css) {
+                if (!css || !css.trim()) return { success: false, error: 'لطفاً کد CSS را وارد کنید.' };
+                try {
+                    let minified = css
+                        .replace(/\/\*[\s\S]*?\*\//g, '')
+                        .replace(/\s+/g, ' ')
+                        .replace(/\s*{\s*/g, '{')
+                        .replace(/\s*}\s*/g, '}')
+                        .replace(/\s*:\s*/g, ':')
+                        .replace(/\s*;\s*/g, ';')
+                        .replace(/\s*,\s*/g, ',')
+                        .replace(/\s*([>+~])\s*/g, '$1')
+                        .replace(/;}/g, '}')
+                        .replace(/\s*\(/g, '(')
+                        .replace(/\)\s*/g, ')')
+                        .replace(/\s*\[/g, '[')
+                        .replace(/\]\s*/g, ']')
+                        .trim();
+                    return { success: true, data: minified };
+                } catch (err) { return { success: false, error: err.message }; }
+            }
+
+            function formatCSS(css) {
+                if (!css || !css.trim()) return { success: false, error: 'لطفاً کد CSS را وارد کنید.' };
+                try {
+                    let formatted = css
+                        .replace(/([^{])\{/g, '$1 {')
+                        .replace(/}(?=[^}])/g, '}\n')
+                        .replace(/;(?=[^}])/g, ';\n')
+                        .replace(/,(?=[^}])/g, ', ')
+                        .replace(/:(?=[^;\s])/g, ': ')
+                        .replace(/ {2,}/g, ' ')
+                        .replace(/}(?=\s*[^}])/g, '}\n\n');
+                    const lines = formatted.split('\n');
+                    let indentLevel = 0;
+                    const indentedLines = [];
+                    lines.forEach(line => {
+                        const trimmed = line.trim();
+                        if (!trimmed) return;
+                        if (trimmed.includes('}')) indentLevel = Math.max(0, indentLevel - 1);
+                        indentedLines.push('    '.repeat(indentLevel) + trimmed);
+                        if (trimmed.includes('{') && !trimmed.includes('}')) indentLevel++;
+                    });
+                    formatted = indentedLines.join('\n');
+                    return { success: true, data: formatted };
+                } catch (err) { return { success: false, error: err.message }; }
+            }
+
+            function updateStats(input, output) {
+                const inputLen = input.length;
+                const outputLen = output.length;
+                inputStats.textContent = `${inputLen} کاراکتر, ${input.split('\n').length} خط`;
+                inputSize.textContent = formatFileSize(inputLen);
+                if (output) {
+                    outputStats.textContent = `${outputLen} کاراکتر, ${output.split('\n').length} خط`;
+                    outputSize.textContent = formatFileSize(outputLen);
+                    if (inputLen > 0) {
+                        const saved = inputLen - outputLen;
+                        const percent = (saved / inputLen * 100);
+                        savedPercent.textContent = `${percent.toFixed(1)}%`;
+                        savedSize.textContent = formatFileSize(saved);
+                        compressionBar.style.width = `${Math.min(percent, 100)}%`;
+                    }
+                } else {
+                    outputStats.textContent = '۰ کاراکتر, ۰ خط';
+                    outputSize.textContent = '۰ B';
+                    savedPercent.textContent = '۰%';
+                    savedSize.textContent = '۰ B';
+                    compressionBar.style.width = '0%';
+                }
+            }
+
+            function showStatus(message, type) {
+                cssStatus.textContent = message;
+                cssStatus.className = `tool-status visible ${type}`;
+                setTimeout(() => { cssStatus.className = 'tool-status'; }, 4000);
+            }
+
+            function handleMinify() {
+                const input = cssInput.value;
+                if (!input.trim()) { showStatus('⚠️ لطفاً کد CSS را وارد کنید یا فایل آپلود کنید.', 'error'); return; }
+                const result = minifyCSS(input);
+                if (result.success) {
+                    cssOutput.value = result.data;
+                    updateStats(input, result.data);
+                    showStatus('✅ کد CSS با موفقیت فشرده شد.', 'success');
+                } else { showStatus('❌ خطا: ' + result.error, 'error'); }
+            }
+
+            function handleFormat() {
+                const input = cssInput.value;
+                if (!input.trim()) { showStatus('⚠️ لطفاً کد CSS را وارد کنید.', 'error'); return; }
+                const result = formatCSS(input);
+                if (result.success) {
+                    cssOutput.value = result.data;
+                    updateStats(input, result.data);
+                    showStatus('✅ کد CSS با موفقیت فرمت شد.', 'success');
+                } else { showStatus('❌ خطا: ' + result.error, 'error'); }
+            }
+
+            const SAMPLE_CSS = `/* این یک استایل ساده است */
+body {
+    background-color: #f0f2f5;
+    font-family: 'Vazir', 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+.btn {
+    display: inline-block;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.btn-primary {
+    background: #1abc9c;
+    color: white;
+}
+.btn-primary:hover {
+    background: #16a085;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(26, 188, 156, 0.3);
+}`;
+
+            function loadSample() {
+                cssInput.value = SAMPLE_CSS;
+                cssOutput.value = '';
+                updateStats(cssInput.value, '');
+                showStatus('📄 نمونه CSS بارگذاری شد.', 'info');
+            }
+
+            function copyToClipboard(text, btn) {
+                if (!text) { showStatus('⚠️ متنی برای کپی وجود ندارد.', 'error'); return; }
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text)
+                        .then(() => { btn.textContent = '✅ کپی شد';
+                            btn.classList.add('copied');
+                            setTimeout(() => { btn.textContent = '📋 کپی خروجی';
+                                btn.classList.remove('copied'); }, 2000); })
+                        .catch(() => fallbackCopy(text, btn));
+                } else { fallbackCopy(text, btn); }
+            }
+
+            function fallbackCopy(text, btn) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try { document.execCommand('copy');
+                    btn.textContent = '✅ کپی شد';
+                    setTimeout(() => { btn.textContent = '📋 کپی خروجی'; }, 2000); } catch (_) { showStatus('❌ کپی نشد.', 'error'); }
+                document.body.removeChild(textarea);
+            }
+
+            function downloadCSS() {
+                const output = cssOutput.value;
+                if (!output.trim()) { showStatus('⚠️ ابتدا کد CSS را فشرده کنید.', 'error'); return; }
+                const blob = new Blob([output], { type: 'text/css;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                const name = fileInfo.style.display !== 'none' ? fileName.textContent.replace(/\.[^.]+$/, '') : 'style';
+                link.download = `${name}.min.css`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                showStatus('✅ فایل CSS با موفقیت دانلود شد.', 'success');
+            }
+
+            function clearAll() {
+                cssInput.value = '';
+                cssOutput.value = '';
+                updateStats('', '');
+                removeFile();
+                showStatus('🗑️ همه چیز پاک شد.', 'info');
+                cssInput.focus();
+            }
+
+            minifyBtn.addEventListener('click', handleMinify);
+            formatBtn.addEventListener('click', handleFormat);
+            sampleBtn.addEventListener('click', loadSample);
+            clearBtn.addEventListener('click', clearAll);
+            copyOutputBtn.addEventListener('click', function() { copyToClipboard(cssOutput.value, this); });
+            copyInputBtn.addEventListener('click', function() { copyToClipboard(cssInput.value, this); });
+            downloadBtn.addEventListener('click', downloadCSS);
+            clearAllBtn.addEventListener('click', clearAll);
+            cssInput.addEventListener('input', function() { updateStats(this.value, cssOutput.value); });
+
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    e.preventDefault();
+                    if (document.activeElement === cssInput || document.activeElement === cssOutput) handleMinify();
+                }
+            });
+
+            setTimeout(loadSample, 300);
+            setTimeout(handleMinify, 500);
+            console.log('🧹 CSS Minifier loaded!');
+        })();
+    </script>
+</body>
+</html>

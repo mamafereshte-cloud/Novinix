@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مشاهده اطلاعات IP آنلاین | ابزار جستجوی IP Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای نمایش اطلاعات IP شامل موقعیت جغرافیایی، ISP، سازمان، کشور و شهر." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/ip-lookup" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .ip-input-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .ip-input-group input {
+            flex: 1;
+            min-width: 200px;
+            padding: 14px 18px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8f5f0;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            direction: ltr;
+            text-align: right;
+        }
+        .ip-input-group input:focus {
+            border-color: #00ffcc;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.1);
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .ip-input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.15);
+            direction: rtl;
+        }
+        .ip-input-group .lookup-btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        .ip-input-group .lookup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 204, 0.3);
+        }
+
+        .quick-ips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .quick-ips .qi-btn {
+            padding: 4px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            font-size: 0.75rem;
+            color: #a0b4c8;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .quick-ips .qi-btn:hover {
+            border-color: #00ffcc;
+            color: #00ffcc;
+        }
+
+        .ip-status {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            align-items: center;
+            gap: 10px;
+        }
+        .ip-status.visible {
+            display: flex;
+        }
+        .ip-status .status-spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.06);
+            border-top-color: #00ffcc;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            flex-shrink: 0;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .ip-status.info {
+            background: rgba(52, 152, 219, 0.12);
+            color: #5fcde6;
+        }
+        .ip-status.success {
+            background: rgba(0, 255, 204, 0.08);
+            color: #00ffcc;
+        }
+        .ip-status.error {
+            background: rgba(239, 68, 68, 0.12);
+            color: #f87171;
+        }
+
+        .ip-results {
+            display: none;
+            margin-top: 16px;
+            animation: fadeSlideIn 0.4s ease;
+        }
+        .ip-results.visible {
+            display: block;
+        }
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ip-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .ip-summary .summary-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .ip-summary .summary-card .label {
+            font-size: 0.7rem;
+            color: rgba(160, 180, 200, 0.4);
+            display: block;
+            font-weight: 500;
+        }
+        .ip-summary .summary-card .value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #e8f5f0;
+            display: block;
+            margin-top: 4px;
+        }
+        .ip-summary .summary-card.highlight {
+            border-color: rgba(0, 255, 204, 0.15);
+            background: rgba(0, 255, 204, 0.03);
+        }
+
+        .ip-table-wrap {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .ip-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .ip-table tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .ip-table tr:last-child {
+            border-bottom: none;
+        }
+        .ip-table td {
+            padding: 10px 14px;
+        }
+        .ip-table .ip-label {
+            font-weight: 600;
+            color: #a0b4c8;
+            width: 140px;
+            white-space: nowrap;
+        }
+        .ip-table .ip-value {
+            color: #e8f5f0;
+            direction: ltr;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+        }
+
+        .tool-actions .act-btn-copy {
+            background: rgba(255, 255, 255, 0.06);
+            color: #a0b4c8;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .tool-actions .act-btn-copy:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #00ffcc;
+        }
+
+        @media (max-width: 640px) {
+            .ip-input-group {
+                flex-direction: column;
+            }
+            .ip-input-group .lookup-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .ip-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .ip-table td {
+                padding: 8px 10px;
+            }
+            .ip-table .ip-label {
+                width: 80px;
+                font-size: 0.75rem;
+            }
+            .ip-table .ip-value {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">🌐</span>
+                <h2>مشاهده اطلاعات IP</h2>
+                <span class="badge">موقعیت &bull; ISP &bull; جزئیات</span>
+            </div>
+
+            <div class="ip-input-group">
+                <input type="text" id="ipInput" placeholder="آدرس IP را وارد کنید..." value="8.8.8.8" />
+                <button class="lookup-btn" id="lookupBtn"><span>🔍</span> جستجو</button>
+            </div>
+
+            <div class="quick-ips">
+                <button class="qi-btn" data-ip="8.8.8.8">🟢 8.8.8.8</button>
+                <button class="qi-btn" data-ip="1.1.1.1">🔵 1.1.1.1</button>
+                <button class="qi-btn" data-ip="9.9.9.9">🟣 9.9.9.9</button>
+                <button class="qi-btn" data-ip="192.168.1.1">🏠 192.168.1.1</button>
+            </div>
+
+            <div class="ip-status" id="ipStatus"><div class="status-spinner"></div><span id="statusText">در حال جستجو...</span></div>
+
+            <div class="ip-results" id="ipResults">
+                <div class="ip-summary">
+                    <div class="summary-card highlight"><span class="label">🌐 IP</span><span class="value" id="ipAddress">—</span></div>
+                    <div class="summary-card"><span class="label">🏳️ کشور</span><span class="value" id="ipCountry">—</span></div>
+                    <div class="summary-card"><span class="label">🏙️ شهر</span><span class="value" id="ipCity">—</span></div>
+                    <div class="summary-card"><span class="label">📡 ISP</span><span class="value" id="ipIsp">—</span></div>
+                </div>
+
+                <div class="ip-table-wrap">
+                    <table class="ip-table">
+                        <tbody id="ipTableBody">
+                            <tr><td class="ip-label">📍 موقعیت</td><td class="ip-value" id="ipLocation">—</td></tr>
+                            <tr><td class="ip-label">🗺️ منطقه</td><td class="ip-value" id="ipRegion">—</td></tr>
+                            <tr><td class="ip-label">📮 کد پستی</td><td class="ip-value" id="ipPostal">—</td></tr>
+                            <tr><td class="ip-label">🌍 منطقه زمانی</td><td class="ip-value" id="ipTimezone">—</td></tr>
+                            <tr><td class="ip-label">📡 سازمان</td><td class="ip-value" id="ipOrg">—</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="copyIpBtn">📋 کپی</button>
+                    <button class="act-btn act-btn-clear" id="clearIpBtn">🗑️ پاک کردن</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            function fakeIPLookup(ip) {
+                const data = {
+                    '8.8.8.8': {
+                        country: '🇺🇸 ایالات متحده',
+                        city: 'مونتین ویو',
+                        isp: 'Google LLC',
+                        location: '37.422, -122.084',
+                        region: 'کالیفرنیا',
+                        postal: '94043',
+                        timezone: 'America/Los_Angeles',
+                        org: 'Google Public DNS'
+                    },
+                    '1.1.1.1': {
+                        country: '🇦🇺 استرالیا',
+                        city: 'سیدنی',
+                        isp: 'Cloudflare Inc.',
+                        location: '-33.868, 151.209',
+                        region: 'نیو ساوت ولز',
+                        postal: '2000',
+                        timezone: 'Australia/Sydney',
+                        org: 'Cloudflare Public DNS'
+                    },
+                    '9.9.9.9': {
+                        country: '🇺🇸 ایالات متحده',
+                        city: 'شیکاگو',
+                        isp: 'Quad9 Foundation',
+                        location: '41.878, -87.629',
+                        region: 'ایلینوی',
+                        postal: '60601',
+                        timezone: 'America/Chicago',
+                        org: 'Quad9 Public DNS'
+                    },
+                    '192.168.1.1': {
+                        country: '🏠 محلی (Private)',
+                        city: 'شبکه داخلی',
+                        isp: 'Local Network',
+                        location: '—',
+                        region: '—',
+                        postal: '—',
+                        timezone: '—',
+                        org: 'Local Gateway'
+                    }
+                };
+                const defaultData = { country: '🌍 ناشناخته', city: '—', isp: '—', location: '—', region: '—',
+                    postal: '—', timezone: '—', org: '—' };
+                return data[ip] || { ...defaultData, country: `🌍 ${ip}` };
+            }
+
+            function lookupIP() {
+                const ip = document.getElementById('ipInput').value.trim();
+                if (!ip) { alert('لطفاً آدرس IP را وارد کنید.'); return; }
+                const status = document.getElementById('ipStatus');
+                status.className = 'ip-status visible info';
+                document.getElementById('statusText').textContent = 'در حال جستجو...';
+                setTimeout(() => {
+                    const data = fakeIPLookup(ip);
+                    document.getElementById('ipAddress').textContent = ip;
+                    document.getElementById('ipCountry').textContent = data.country;
+                    document.getElementById('ipCity').textContent = data.city;
+                    document.getElementById('ipIsp').textContent = data.isp;
+                    document.getElementById('ipLocation').textContent = data.location;
+                    document.getElementById('ipRegion').textContent = data.region;
+                    document.getElementById('ipPostal').textContent = data.postal;
+                    document.getElementById('ipTimezone').textContent = data.timezone;
+                    document.getElementById('ipOrg').textContent = data.org;
+                    document.getElementById('ipResults').classList.add('visible');
+                    status.className = 'ip-status visible success';
+                    document.getElementById('statusText').textContent = '✅ اطلاعات با موفقیت دریافت شد!';
+                }, 500);
+            }
+
+            document.getElementById('lookupBtn').addEventListener('click', lookupIP);
+            document.querySelectorAll('.qi-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.getElementById('ipInput').value = this.dataset.ip;
+                    lookupIP();
+                });
+            });
+            document.getElementById('ipInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') lookupIP();
+            });
+
+            document.getElementById('copyIpBtn').addEventListener('click', function() {
+                const rows = document.querySelectorAll('#ipTableBody tr');
+                const text = Array.from(rows).map(row => {
+                    const label = row.querySelector('.ip-label').textContent.trim();
+                    const value = row.querySelector('.ip-value').textContent.trim();
+                    return `${label}: ${value}`;
+                }).join('\n');
+                navigator.clipboard.writeText(text).then(() => {
+                    const orig = this.textContent;
+                    this.textContent = '✅ کپی شد!';
+                    this.classList.add('copied');
+                    setTimeout(() => { this.textContent = orig;
+                        this.classList.remove('copied'); }, 1500);
+                });
+            });
+
+            document.getElementById('clearIpBtn').addEventListener('click', function() {
+                document.getElementById('ipResults').classList.remove('visible');
+                document.getElementById('ipInput').value = '';
+            });
+
+            setTimeout(lookupIP, 300);
+            console.log('🌐 IP Lookup loaded!');
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>آموزش پایتون | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+    <link rel="stylesheet" href="../assets/css/education.css" />
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar"></aside>
+        <main class="main-content" id="mainContent"></main>
+    </div>
+
+    <script>
+        // ================================================================
+        // 🐍 Python Course Data
+        // ================================================================
+
+        const lessons = [{
+            id: 'python-intro',
+            title: 'معرفی پایتون',
+            section: 'مقدمات',
+            order: 1,
+            badge: null,
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">🐍 آموزش پایتون / <span>مقدمات</span></div>
+                        <h1>معرفی <span>پایتون</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۱۵ دقیقه</span>
+                            <span>📊 سطح: مبتدی</span>
+                            <span>⭐ ۴.۹ (۱,۲۴۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>پایتون چیست؟</h2>
+                        <p>
+                            پایتون یک زبان آموزش ها سطح بالا، تفسیری و همه‌منظوره است که
+                            توسط <strong>خیدو فان روسوم</strong> در سال ۱۹۹۱ ساخته شد.
+                            این زبان به دلیل سادگی و خوانایی بالا، یکی از محبوب‌ترین زبان‌های دنیاست.
+                        </p>
+
+                        <div class="note-box">
+                            <strong>💡 نکته:</strong>
+                            <p>نام پایتون از مجموعه طنز <strong>Monty Python's Flying Circus</strong>
+                            الهام گرفته شده است.</p>
+                        </div>
+
+                        <h3>اولین برنامه</h3>
+                        <p>برنامه‌ای که عبارت "Hello, World!" را چاپ می‌کند:</p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="python">Python</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="python">
+                                    <pre><span class="comment"># First Python program</span>
+<span class="builtin">print</span>(<span class="string">"Hello, World!"</span>)
+
+<span class="comment"># In Persian</span>
+<span class="builtin">print</span>(<span class="string">"سلام، دنیا!"</span>)</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'python-variables',
+            title: 'متغیرها و انواع داده',
+            section: 'مقدمات',
+            order: 2,
+            badge: null,
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">🐍 آموزش پایتون / <span>مقدمات</span></div>
+                        <h1>متغیرها و <span>انواع داده</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۰ دقیقه</span>
+                            <span>📊 سطح: مبتدی</span>
+                            <span>⭐ ۴.۸ (۹۸۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>متغیرها در پایتون</h2>
+                        <p>
+                            متغیرها برای ذخیره داده‌ها استفاده می‌شوند. پایتون یک زبان با
+                            <strong>نوع‌دهی پویا</strong> است، یعنی نیازی به تعیین نوع متغیر ندارید.
+                        </p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="python">Python</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="python">
+                                    <pre><span class="comment"># Define variables</span>
+name = <span class="string">"Ali"</span>          <span class="comment"># str</span>
+age = <span class="number">25</span>              <span class="comment"># int</span>
+height = <span class="number">1.78</span>          <span class="comment"># float</span>
+is_student = <span class="keyword">True</span>    <span class="comment"># bool</span>
+
+<span class="builtin">print</span>(<span class="string">f"Name: {name}, Age: {age}"</span>)
+<span class="builtin">print</span>(<span class="string">f"Type of age: {type(age)}"</span>)</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'python-conditions',
+            title: 'ساختارهای شرطی',
+            section: 'مقدمات',
+            order: 3,
+            badge: 'new',
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">🐍 آموزش پایتون / <span>مقدمات</span></div>
+                        <h1>ساختارهای <span>شرطی</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۵ دقیقه</span>
+                            <span>📊 سطح: مبتدی</span>
+                            <span>⭐ ۴.۷ (۸۵۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>if, elif, else</h2>
+                        <p>
+                            با استفاده از شرط‌ها می‌توانید تصمیم‌گیری در کد را مدیریت کنید.
+                            در پایتون از <strong>if</strong>، <strong>elif</strong> و <strong>else</strong>
+                            استفاده می‌شود.
+                        </p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="python">Python</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="python">
+                                    <pre>score = <span class="number">85</span>
+
+<span class="keyword">if</span> score >= <span class="number">90</span>:
+    <span class="builtin">print</span>(<span class="string">"Grade: A"</span>)
+<span class="keyword">elif</span> score >= <span class="number">80</span>:
+    <span class="builtin">print</span>(<span class="string">"Grade: B"</span>)
+<span class="keyword">elif</span> score >= <span class="number">70</span>:
+    <span class="builtin">print</span>(<span class="string">"Grade: C"</span>)
+<span class="keyword">else</span>:
+    <span class="builtin">print</span>(<span class="string">"Grade: D"</span>)</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'python-loops',
+            title: 'حلقه‌ها (for و while)',
+            section: 'پیشرفته',
+            order: 1,
+            badge: 'hot',
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">🐍 آموزش پایتون / <span>پیشرفته</span></div>
+                        <h1>حلقه‌های <span>for و while</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۳۰ دقیقه</span>
+                            <span>📊 سطح: متوسط</span>
+                            <span>⭐ ۴.۹ (۷۲۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>حلقه for</h2>
+                        <p>
+                            حلقه <strong>for</strong> برای پیمایش روی یک دنباله (لیست، رشته، تاپل و غیره)
+                            استفاده می‌شود.
+                        </p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="python">Python</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="python">
+                                    <pre><span class="comment"># for loop on a list</span>
+fruits = [<span class="string">"Apple"</span>, <span class="string">"Banana"</span>, <span class="string">"Orange"</span>]
+<span class="keyword">for</span> fruit <span class="keyword">in</span> fruits:
+    <span class="builtin">print</span>(fruit)
+
+<span class="comment"># for loop with range</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">5</span>):
+    <span class="builtin">print</span>(<span class="string">f"Number: {i}"</span>)</pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>حلقه while</h3>
+                        <p>
+                            حلقه <strong>while</strong> تا زمانی که شرط برقرار است، تکرار می‌شود.
+                        </p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="python">Python</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="python">
+                                    <pre><span class="comment"># while loop</span>
+count = <span class="number">0</span>
+<span class="keyword">while</span> count < <span class="number">5</span>:
+    <span class="builtin">print</span>(<span class="string">f"Count: {count}"</span>)
+    count += <span class="number">1</span></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'python-functions',
+            title: 'توابع (Functions)',
+            section: 'پیشرفته',
+            order: 2,
+            badge: 'new',
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">🐍 آموزش پایتون / <span>پیشرفته</span></div>
+                        <h1>توابع <span>(Functions)</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۵ دقیقه</span>
+                            <span>📊 سطح: متوسط</span>
+                            <span>⭐ ۴.۸ (۶۵۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>توابع در پایتون</h2>
+                        <p>
+                            توابع بلوک‌های کدی هستند که یک کار مشخص را انجام می‌دهند.
+                            با استفاده از توابع می‌توانید کد را <strong>مدولار</strong> و
+                            <strong>قابل استفاده مجدد</strong> کنید.
+                        </p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="python">Python</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="python">
+                                    <pre><span class="comment"># Define a function</span>
+<span class="keyword">def</span> <span class="function">greet</span>(name):
+    <span class="keyword">return</span> <span class="string">f"Hello {name}!"</span>
+
+<span class="comment"># Function with multiple parameters</span>
+<span class="keyword">def</span> <span class="function">add</span>(a, b):
+    <span class="keyword">return</span> a + b
+
+<span class="comment"># Call functions</span>
+<span class="builtin">print</span>(<span class="function">greet</span>(<span class="string">"Ali"</span>))
+<span class="builtin">print</span>(<span class="string">f"Sum: {add(5, 3)}"</span>)</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }];
+
+        // ================================================================
+        // 🔧 Core Functions
+        // ================================================================
+
+        let currentLessonId = 'python-intro';
+
+        function renderSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const sections = {};
+
+            lessons.forEach(lesson => {
+                if (!sections[lesson.section]) sections[lesson.section] = [];
+                sections[lesson.section].push(lesson);
+            });
+
+            let html = '';
+            for (const [sectionName, items] of Object.entries(sections)) {
+                html += `
+                    <div class="sidebar-section">
+                        <div class="section-title">${sectionName}</div>
+                        <ul>
+                `;
+                items.sort((a, b) => a.order - b.order).forEach(item => {
+                    const badge = item.badge ? `<span class="badge ${item.badge}">${item.badge}</span>` : '';
+                    html += `
+                        <li>
+                            <a href="#" data-id="${item.id}" class="${item.id === currentLessonId ? 'active-link' : ''}">
+                                ${item.title} ${badge}
+                            </a>
+                        </li>
+                    `;
+                });
+                html += `</ul></div>`;
+            }
+
+            sidebar.innerHTML = html;
+
+            sidebar.querySelectorAll('a[data-id]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = this.dataset.id;
+                    loadLesson(id);
+                    sidebar.querySelectorAll('a[data-id]').forEach(l => l.classList.remove('active-link'));
+                    this.classList.add('active-link');
+                });
+            });
+        }
+
+        function loadLesson(id) {
+            const lesson = lessons.find(l => l.id === id);
+            if (!lesson) return;
+
+            currentLessonId = id;
+            document.getElementById('mainContent').innerHTML = lesson.content;
+
+            initTabs();
+            renderSidebar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function initTabs() {
+            document.querySelectorAll('.code-container').forEach(container => {
+                const tabs = container.querySelectorAll('.tab');
+                const panels = container.querySelectorAll('.code-panel');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        const tabName = this.dataset.tab;
+                        tabs.forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        panels.forEach(p => p.classList.remove('active'));
+                        const target = container.querySelector(`.code-panel[data-panel="${tabName}"]`);
+                        if (target) target.classList.add('active');
+                    });
+                });
+            });
+        }
+
+        // ================================================================
+        // 📋 Copy Code
+        // ================================================================
+
+        function copyCode(btn) {
+            const container = btn.closest('.code-body');
+            const activePanel = container.querySelector('.code-panel.active');
+            const pre = activePanel ? activePanel.querySelector('pre') : container.querySelector('pre');
+            if (!pre) return;
+
+            const text = pre.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = '✅ Copied';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '📋 Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(() => {
+                const range = document.createRange();
+                range.selectNode(pre);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                document.execCommand('copy');
+                btn.textContent = '✅ Copied';
+                setTimeout(() => { btn.textContent = '📋 Copy'; }, 2000);
+            });
+        }
+
+        // ================================================================
+        // 🚀 Initial Load
+        // ================================================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = `
+                <div class="python-hero">
+                    <div class="hero-icon">🐍</div>
+                    <h2>🐍 آموزش جامع <span>پایتون</span></h2>
+                    <p>یادگیری پایتون از مقدماتی تا پیشرفته با مثال‌های عملی</p>
+                    <div class="hero-meta">
+                        <span>📚 ۵ فصل</span>
+                        <span>⏱️ ۱۸ ساعت</span>
+                        <span>⭐ ۴.۹ از ۵</span>
+                        <span>👨‍🎓 ۱,۵۰۰ دانشجو</span>
+                    </div>
+                </div>
+                <div style="text-align:center; padding:20px; color:#6b7a8a;">
+                    <p style="font-size:1.1rem;">📚 یک درس را از سایدبار سمت راست انتخاب کنید</p>
+                    <p style="font-size:0.85rem; margin-top:5px;">دروس: مقدمات (۳ درس) | پیشرفته (۲ درس)</p>
+                </div>
+            `;
+
+            renderSidebar();
+            setTimeout(() => {
+                loadLesson('python-intro');
+            }, 100);
+        });
+
+        console.log('🐍 Python learning system ready!');
+    </script>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../auth/header.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/user-panel.js"></script>
+    <script src="../assets/js/settings.js"></script>
+    <script src="../assets/js/seo.js"></script>
+</body>
+</html>

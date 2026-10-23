@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تبدیل تایم‌استمپ آنلاین | ابزار Unix Timestamp Novinix</title>
+    <meta name="description" content="تبدیل تایم‌استمپ Unix به تاریخ میلادی، شمسی و قمری با پشتیبانی از مناطق زمانی مختلف." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/timestamp-converter" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <script src="moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-hijri/2.1.0/moment-hijri.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-jalaali/0.9.2/moment-jalaali.min.js"></script>
+    <style>
+        .converter-mode {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        .mode-btn {
+            padding: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #a0b4c8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .mode-btn:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        .mode-btn.active {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            border-color: #00ffcc;
+            color: #0f0c29;
+            box-shadow: 0 4px 15px rgba(0, 255, 204, 0.2);
+        }
+
+        .input-section {
+            display: none;
+            animation: fadeSlideIn 0.3s ease;
+        }
+        .input-section.active {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            color: #e8f5f0;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        .input-group label .hint {
+            font-weight: 400;
+            color: rgba(160, 180, 200, 0.4);
+            font-size: 0.8rem;
+        }
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8f5f0;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: #00ffcc;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.1);
+        }
+        .input-group input {
+            direction: ltr;
+            text-align: right;
+            font-family: 'Courier New', monospace;
+            font-size: 1.05rem;
+        }
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.15);
+        }
+        .input-group select option {
+            background: #0f0c29;
+        }
+
+        .input-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .result-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 14px;
+            padding: 18px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.25s ease;
+        }
+        .result-card:hover {
+            border-color: rgba(0, 255, 204, 0.15);
+        }
+        .result-card .label {
+            font-size: 0.8rem;
+            color: rgba(160, 180, 200, 0.4);
+            font-weight: 500;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .result-card .value {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #e8f5f0;
+            direction: ltr;
+            text-align: right;
+            word-break: break-all;
+        }
+        .result-card .value.persian {
+            font-family: inherit;
+            direction: rtl;
+        }
+        .result-card.highlight {
+            background: rgba(0, 255, 204, 0.04);
+            border-color: rgba(0, 255, 204, 0.1);
+        }
+
+        .now-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            background: rgba(0, 255, 204, 0.08);
+            border: 1px solid rgba(0, 255, 204, 0.15);
+            border-radius: 10px;
+            color: #00ffcc;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            margin-top: 4px;
+        }
+        .now-btn:hover {
+            background: rgba(0, 255, 204, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .timezone-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .timezone-section .tz-label {
+            font-size: 0.85rem;
+            color: #a0b4c8;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .timezone-section .tz-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #00ffcc;
+            font-family: 'Courier New', monospace;
+        }
+
+        @media (max-width: 768px) {
+            .converter-mode {
+                grid-template-columns: 1fr;
+            }
+            .input-row-3 {
+                grid-template-columns: 1fr;
+            }
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+            .result-card .value {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">⏳</span>
+                <h2>تبدیل تایم‌استمپ</h2>
+                <span class="badge">دقیق &bull; آنی &bull; ۳ تقویم</span>
+            </div>
+
+            <div class="converter-mode">
+                <button class="mode-btn active" data-mode="toDate">📅 تایم‌استمپ → تاریخ</button>
+                <button class="mode-btn" data-mode="toTimestamp">🕐 تاریخ → تایم‌استمپ</button>
+            </div>
+
+            <!-- تایم‌استمپ → تاریخ -->
+            <div class="input-section active" id="sectionToDate">
+                <div class="input-group">
+                    <label>تایم‌استمپ (Unix Timestamp) <span class="hint">(ثانیه از ۱۹۷۰/۱/۱)</span></label>
+                    <input type="text" id="timestampInput" placeholder="مثلاً: 1700000000" value="1700000000" />
+                    <button class="now-btn" id="nowTimestampBtn">⏱️ اکنون</button>
+                </div>
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="convertToDateBtn" style="background:linear-gradient(135deg, #00ffcc, #00b4db);color:#0f0c29;">🔄 تبدیل</button>
+                    <button class="act-btn act-btn-copy" id="copyTimestampResult">📋 کپی نتایج</button>
+                </div>
+                <div class="result-grid">
+                    <div class="result-card highlight"><span class="label">🌍 تاریخ میلادی</span><span class="value" id="gregorianDate">—</span></div>
+                    <div class="result-card highlight"><span class="label">🇮🇷 تاریخ شمسی</span><span class="value persian" id="persianDate">—</span></div>
+                    <div class="result-card highlight"><span class="label">☪️ تاریخ قمری</span><span class="value persian" id="islamicDate">—</span></div>
+                    <div class="result-card"><span class="label">🕐 ساعت</span><span class="value" id="timeDisplay">—</span></div>
+                    <div class="result-card"><span class="label">📆 روز هفته</span><span class="value persian" id="weekdayDisplay">—</span></div>
+                    <div class="result-card"><span class="label">📅 تاریخ کامل</span><span class="value persian" id="fullDateDisplay">—</span></div>
+                </div>
+                <div class="timezone-section">
+                    <span class="tz-label">🌍 منطقه زمانی</span>
+                    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                        <select id="timezoneSelect" style="flex:1;min-width:150px;padding:10px 14px;border:2px solid rgba(255,255,255,0.08);border-radius:10px;font-family:inherit;background:rgba(255,255,255,0.04);color:#e8f5f0;">
+                            <option value="Asia/Tehran">🕌 قم (UTC+3:30)</option>
+                            <option value="UTC">🌐 UTC</option>
+                            <option value="America/New_York">🗽 نیویورک (UTC-5)</option>
+                            <option value="Europe/London">🇬🇧 لندن (UTC+0)</option>
+                            <option value="Asia/Dubai">🇦🇪 دبی (UTC+4)</option>
+                            <option value="Asia/Tokyo">🇯🇵 توکیو (UTC+9)</option>
+                        </select>
+                        <span class="tz-value" id="timezoneOffset">UTC+3:30</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تاریخ → تایم‌استمپ -->
+            <div class="input-section" id="sectionToTimestamp">
+                <div class="input-row-3">
+                    <div class="input-group">
+                        <label>تقویم ورودی</label>
+                        <select id="inputCalendar">
+                            <option value="gregorian">🌍 میلادی</option>
+                            <option value="jalali" selected>🇮🇷 شمسی</option>
+                            <option value="islamic">☪️ قمری</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>📅 تاریخ</label>
+                        <input type="text" id="dateInput" placeholder="مثلاً 1404/01/15" />
+                    </div>
+                    <div class="input-group">
+                        <label>🕐 ساعت (اختیاری)</label>
+                        <input type="text" id="timeInput" placeholder="مثلاً 14:30:00" value="00:00:00" />
+                    </div>
+                </div>
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="convertToTimestampBtn" style="background:linear-gradient(135deg, #00ffcc, #00b4db);color:#0f0c29;">🔄 تبدیل</button>
+                    <button class="act-btn act-btn-copy" id="copyTimestampResult2">📋 کپی</button>
+                </div>
+                <div class="result-grid">
+                    <div class="result-card highlight" style="grid-column:1/-1;"><span class="label">⏳ تایم‌استمپ (Unix)</span><span class="value" id="timestampResult">—</span></div>
+                    <div class="result-card"><span class="label">🌍 تاریخ میلادی</span><span class="value" id="gregorianDate2">—</span></div>
+                    <div class="result-card"><span class="label">🇮🇷 تاریخ شمسی</span><span class="value persian" id="persianDate2">—</span></div>
+                    <div class="result-card"><span class="label">☪️ تاریخ قمری</span><span class="value persian" id="islamicDate2">—</span></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            moment.locale('fa');
+
+            function parseDate(str, cal) {
+                if (!str || str.trim() === '') return null;
+                str = str.trim().replace(/[^\d\/\-]/g, '');
+                if (cal === 'gregorian') {
+                    const m = moment(str, ['YYYY/MM/DD', 'YYYY-M-D'], true);
+                    return m.isValid() ? m.toDate() : null;
+                } else if (cal === 'jalali') {
+                    const m = moment(str, ['jYYYY/jMM/jDD', 'jYYYY-jM-jD'], true);
+                    return m.isValid() ? m.toDate() : null;
+                } else if (cal === 'islamic') {
+                    const m = moment(str, ['iYYYY/iMM/iDD', 'iYYYY-iM-iD'], true);
+                    return m.isValid() ? m.toDate() : null;
+                }
+                return null;
+            }
+
+            function formatJalali(date) {
+                if (!date || isNaN(date.getTime())) return 'نامعتبر';
+                const m = moment(date);
+                const months = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+                return `${m.jDate()} ${months[m.jMonth()]} ${m.jYear()}`;
+            }
+
+            function formatIslamic(date) {
+                if (!date || isNaN(date.getTime())) return 'نامعتبر';
+                const m = moment(date);
+                const months = ['محرم', 'صفر', 'ربیع‌الاول', 'ربیع‌الثانی', 'جمادی‌الاول', 'جمادی‌الثانی', 'رجب', 'شعبان', 'رمضان', 'شوال',
+                    'ذی‌قعده', 'ذی‌الحجه'
+                ];
+                return `${m.iDate()} ${months[m.iMonth()]} ${m.iYear()}`;
+            }
+
+            function formatGregorian(date) {
+                if (!date || isNaN(date.getTime())) return 'نامعتبر';
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
+                    'October', 'November', 'December'
+                ];
+                return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+            }
+
+            function formatFullJalali(date) {
+                if (!date || isNaN(date.getTime())) return 'نامعتبر';
+                const weekdays = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه', 'شنبه'];
+                const m = moment(date);
+                const months = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+                return `${weekdays[date.getDay()]} ${m.jDate()} ${months[m.jMonth()]} ${m.jYear()}`;
+            }
+
+            function getWeekday(date) {
+                if (!date || isNaN(date.getTime())) return 'نامعتبر';
+                const weekdays = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه', 'شنبه'];
+                return weekdays[date.getDay()];
+            }
+
+            function formatTime(date) {
+                if (!date || isNaN(date.getTime())) return '--:--:--';
+                const h = String(date.getHours()).padStart(2, '0');
+                const m = String(date.getMinutes()).padStart(2, '0');
+                const s = String(date.getSeconds()).padStart(2, '0');
+                return `${h}:${m}:${s}`;
+            }
+
+            // DOM Refs
+            const modeBtns = document.querySelectorAll('.mode-btn');
+            const sectionToDate = document.getElementById('sectionToDate');
+            const sectionToTimestamp = document.getElementById('sectionToTimestamp');
+            const timestampInput = document.getElementById('timestampInput');
+            const nowTimestampBtn = document.getElementById('nowTimestampBtn');
+            const convertToDateBtn = document.getElementById('convertToDateBtn');
+            const copyTimestampResult = document.getElementById('copyTimestampResult');
+            const gregorianDate = document.getElementById('gregorianDate');
+            const persianDate = document.getElementById('persianDate');
+            const islamicDate = document.getElementById('islamicDate');
+            const timeDisplay = document.getElementById('timeDisplay');
+            const weekdayDisplay = document.getElementById('weekdayDisplay');
+            const fullDateDisplay = document.getElementById('fullDateDisplay');
+            const timezoneSelect = document.getElementById('timezoneSelect');
+            const timezoneOffset = document.getElementById('timezoneOffset');
+            const inputCalendar = document.getElementById('inputCalendar');
+            const dateInput = document.getElementById('dateInput');
+            const timeInput = document.getElementById('timeInput');
+            const convertToTimestampBtn = document.getElementById('convertToTimestampBtn');
+            const copyTimestampResult2 = document.getElementById('copyTimestampResult2');
+            const timestampResult = document.getElementById('timestampResult');
+            const gregorianDate2 = document.getElementById('gregorianDate2');
+            const persianDate2 = document.getElementById('persianDate2');
+            const islamicDate2 = document.getElementById('islamicDate2');
+
+            function getTimezone() { return timezoneSelect.value; }
+
+            function updateTimezoneOffset() {
+                try {
+                    const tz = getTimezone();
+                    const now = new Date();
+                    const local = new Date(now.toLocaleString('en-US', { timeZone: tz }));
+                    const offsetMinutes = -(now.getTimezoneOffset() - local.getTimezoneOffset());
+                    const hours = Math.floor(Math.abs(offsetMinutes) / 60);
+                    const mins = Math.abs(offsetMinutes) % 60;
+                    const sign = offsetMinutes >= 0 ? '+' : '-';
+                    timezoneOffset.textContent = `UTC${sign}${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+                } catch (e) { timezoneOffset.textContent = 'UTC+00:00'; }
+            }
+
+            function timestampToDate(timestamp, tz) {
+                try {
+                    const date = new Date(timestamp * 1000);
+                    const formatter = new Intl.DateTimeFormat('en-US', {
+                        timeZone: tz,
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false
+                    });
+                    const parts = formatter.formatToParts(date);
+                    let year = '',
+                        month = '',
+                        day = '',
+                        hour = '',
+                        minute = '',
+                        second = '';
+                    parts.forEach(p => {
+                        if (p.type === 'year') year = p.value;
+                        if (p.type === 'month') month = p.value;
+                        if (p.type === 'day') day = p.value;
+                        if (p.type === 'hour') hour = p.value;
+                        if (p.type === 'minute') minute = p.value;
+                        if (p.type === 'second') second = p.value;
+                    });
+                    const dateObj = new Date(Date.UTC(parseInt(year), parseInt(month) - 1, parseInt(day), parseInt(hour),
+                        parseInt(minute), parseInt(second)));
+                    return {
+                        gregorian: formatGregorian(dateObj),
+                        persian: formatJalali(dateObj),
+                        islamic: formatIslamic(dateObj),
+                        time: `${hour}:${minute}:${second}`,
+                        weekday: getWeekday(dateObj),
+                        full: formatFullJalali(dateObj),
+                        dateObj: dateObj
+                    };
+                } catch (e) { return null; }
+            }
+
+            function updateToDate() {
+                const val = timestampInput.value.trim();
+                const timestamp = parseInt(val, 10);
+                if (isNaN(timestamp) || timestamp < 0) {
+                    gregorianDate.textContent = '❌ نامعتبر';
+                    persianDate.textContent = '❌ نامعتبر';
+                    islamicDate.textContent = '❌ نامعتبر';
+                    timeDisplay.textContent = '❌';
+                    weekdayDisplay.textContent = '❌';
+                    fullDateDisplay.textContent = '❌';
+                    return;
+                }
+                const result = timestampToDate(timestamp, getTimezone());
+                if (!result) {
+                    gregorianDate.textContent = '⚠️ خطا';
+                    persianDate.textContent = '⚠️ خطا';
+                    islamicDate.textContent = '⚠️ خطا';
+                    timeDisplay.textContent = '⚠️';
+                    weekdayDisplay.textContent = '⚠️';
+                    fullDateDisplay.textContent = '⚠️';
+                    return;
+                }
+                gregorianDate.textContent = result.gregorian;
+                persianDate.textContent = result.persian;
+                islamicDate.textContent = result.islamic;
+                timeDisplay.textContent = result.time;
+                weekdayDisplay.textContent = result.weekday;
+                fullDateDisplay.textContent = result.full;
+            }
+
+            function dateToTimestamp(dateStr, timeStr, tz, cal) {
+                try {
+                    const date = parseDate(dateStr, cal);
+                    if (!date) return null;
+                    if (timeStr) {
+                        const timeParts = timeStr.split(':');
+                        if (timeParts.length >= 2) {
+                            date.setHours(parseInt(timeParts[0]) || 0);
+                            date.setMinutes(parseInt(timeParts[1]) || 0);
+                            date.setSeconds(parseInt(timeParts[2]) || 0);
+                        }
+                    }
+                    const localDate = new Date(date.toLocaleString('en-US', { timeZone: tz }));
+                    const timestamp = Math.floor(localDate.getTime() / 1000);
+                    return {
+                        timestamp: timestamp,
+                        gregorian: formatGregorian(localDate),
+                        persian: formatJalali(localDate),
+                        islamic: formatIslamic(localDate)
+                    };
+                } catch (e) { return null; }
+            }
+
+            function updateToTimestamp() {
+                const dateVal = dateInput.value.trim();
+                if (!dateVal) {
+                    timestampResult.textContent = '⚠️ تاریخ را وارد کنید';
+                    gregorianDate2.textContent = '—';
+                    persianDate2.textContent = '—';
+                    islamicDate2.textContent = '—';
+                    return;
+                }
+                const result = dateToTimestamp(dateVal, timeInput.value || '00:00:00', getTimezone(), inputCalendar.value);
+                if (!result) {
+                    timestampResult.textContent = '❌ خطا در تبدیل';
+                    gregorianDate2.textContent = '❌';
+                    persianDate2.textContent = '❌';
+                    islamicDate2.textContent = '❌';
+                    return;
+                }
+                timestampResult.textContent = result.timestamp.toLocaleString('en-US');
+                gregorianDate2.textContent = result.gregorian;
+                persianDate2.textContent = result.persian;
+                islamicDate2.textContent = result.islamic;
+            }
+
+            function setCurrentTimestamp() {
+                const now = Math.floor(Date.now() / 1000);
+                timestampInput.value = now;
+                updateToDate();
+            }
+
+            function setTodayDate() {
+                const cal = inputCalendar.value;
+                const now = new Date();
+                let dateStr = '';
+                if (cal === 'gregorian') dateStr = moment(now).format('YYYY/MM/DD');
+                else if (cal === 'jalali') dateStr = moment(now).format('jYYYY/jMM/jDD');
+                else if (cal === 'islamic') dateStr = moment(now).format('iYYYY/iMM/iDD');
+                dateInput.value = dateStr;
+                updateToTimestamp();
+            }
+
+            function copyResults() {
+                const text = `تایم‌استمپ: ${timestampInput.value}
+تاریخ میلادی: ${gregorianDate.textContent}
+تاریخ شمسی: ${persianDate.textContent}
+تاریخ قمری: ${islamicDate.textContent}
+ساعت: ${timeDisplay.textContent}
+روز هفته: ${weekdayDisplay.textContent}
+تاریخ کامل: ${fullDateDisplay.textContent}
+منطقه زمانی: ${timezoneOffset.textContent}`;
+                copyToClipboard(text, copyTimestampResult);
+            }
+
+            function copyTimestampResultOnly() {
+                const text = timestampResult.textContent;
+                if (text && !text.includes('⚠️') && !text.includes('❌')) {
+                    copyToClipboard(text, copyTimestampResult2);
+                } else { alert('لطفاً ابتدا تبدیل را انجام دهید.'); }
+            }
+
+            function copyToClipboard(text, btn) {
+                if (!text) return;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text)
+                        .then(() => { btn.textContent = '✅ کپی شد';
+                            btn.classList.add('copied');
+                            setTimeout(() => { btn.textContent = btn.dataset.original || '📋 کپی';
+                                btn.classList.remove('copied'); }, 2000); })
+                        .catch(() => fallbackCopy(text, btn));
+                } else { fallbackCopy(text, btn); }
+            }
+
+            function fallbackCopy(text, btn) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try { document.execCommand('copy');
+                    btn.textContent = '✅ کپی شد';
+                    setTimeout(() => { btn.textContent = btn.dataset.original || '📋 کپی'; }, 2000); } catch (_) { alert(
+                        'کپی نشد.'); }
+                document.body.removeChild(textarea);
+            }
+
+            function switchMode(mode) {
+                modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+                sectionToDate.classList.toggle('active', mode === 'toDate');
+                sectionToTimestamp.classList.toggle('active', mode === 'toTimestamp');
+                if (mode === 'toTimestamp' && !dateInput.value) setTodayDate();
+                if (mode === 'toDate') updateToDate();
+            }
+
+            modeBtns.forEach(btn => {
+                btn.addEventListener('click', function() { switchMode(this.dataset.mode); });
+            });
+
+            convertToDateBtn.addEventListener('click', updateToDate);
+            convertToTimestampBtn.addEventListener('click', updateToTimestamp);
+            nowTimestampBtn.addEventListener('click', setCurrentTimestamp);
+            copyTimestampResult.addEventListener('click', copyResults);
+            copyTimestampResult2.addEventListener('click', copyTimestampResultOnly);
+
+            timezoneSelect.addEventListener('change', function() {
+                updateTimezoneOffset();
+                if (sectionToDate.classList.contains('active')) updateToDate();
+                else updateToTimestamp();
+            });
+
+            inputCalendar.addEventListener('change', setTodayDate);
+
+            timestampInput.addEventListener('keypress', function(e) { if (e.key === 'Enter') { e.preventDefault();
+                    updateToDate(); } });
+            dateInput.addEventListener('keypress', function(e) { if (e.key === 'Enter') { e.preventDefault();
+                    updateToTimestamp(); } });
+            dateInput.addEventListener('change', updateToTimestamp);
+            timeInput.addEventListener('change', updateToTimestamp);
+
+            // Init
+            const now = new Date();
+            dateInput.value = moment(now).format('jYYYY/jMM/jDD');
+            const timestamp = Math.floor(Date.now() / 1000);
+            timestampInput.value = timestamp;
+            updateTimezoneOffset();
+            updateToDate();
+            updateToTimestamp();
+
+            console.log('⏳ Timestamp Converter loaded!');
+        })();
+    </script>
+</body>
+</html>

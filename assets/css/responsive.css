@@ -1,0 +1,73 @@
+/* ============================================
+   ریسپانسیو - تمام صفحات
+   ============================================ */
+
+/* ===== تبلت و موبایل ===== */
+@media (max-width: 992px) {
+    main {
+        padding: 30px 16px;
+    }
+}
+
+/* ===== موبایل ===== */
+@media (max-width: 768px) {
+    main {
+        padding: 20px 12px;
+    }
+
+    /* کارت‌ها */
+    .card-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 15px !important;
+    }
+
+    /* دکمه‌ها */
+    .btn {
+        padding: 10px 24px;
+        font-size: 0.85rem;
+    }
+
+    /* تایتل‌ها */
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.3rem; }
+    h3 { font-size: 1.1rem; }
+}
+
+/* ===== موبایل کوچک ===== */
+@media (max-width: 480px) {
+    main {
+        padding: 15px 10px;
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    .btn {
+        padding: 8px 18px;
+        font-size: 0.75rem;
+    }
+
+    h1 { font-size: 1.2rem; }
+    h2 { font-size: 1.1rem; }
+    h3 { font-size: 0.95rem; }
+
+    .hide-mobile {
+        display: none !important;
+    }
+}
+
+/* ===== نمایش در موبایل ===== */
+@media (min-width: 481px) {
+    .show-mobile {
+        display: none !important;
+    }
+}
+
+/* ===== نمایش در دسکتاپ ===== */
+@media (min-width: 769px) {
+    .hide-desktop {
+        display: none !important;
+    }
+}

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تولید UUID آنلاین | ابزار تولید شناسه یکتا Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای تولید UUID نسخه‌های ۱، ۴ و ۷." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/uuid-generator" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .uuid-controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        .uuid-controls .version-group {
+            display: flex;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 4px;
+            border-radius: 12px;
+        }
+        .uuid-controls .version-btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #a0b4c8;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+        .uuid-controls .version-btn:hover {
+            color: #e8f5f0;
+        }
+        .uuid-controls .version-btn.active {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .uuid-controls .count-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-right: auto;
+        }
+        .uuid-controls .count-control label {
+            font-size: 0.85rem;
+            color: #a0b4c8;
+            font-weight: 500;
+        }
+        .uuid-controls .count-control select {
+            padding: 8px 14px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8f5f0;
+            font-family: inherit;
+            cursor: pointer;
+        }
+        .uuid-controls .count-control select:focus {
+            border-color: #00ffcc;
+            outline: none;
+        }
+        .uuid-controls .count-control select option {
+            background: #0f0c29;
+        }
+        .uuid-controls .generate-btn {
+            padding: 10px 28px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .uuid-controls .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 204, 0.3);
+        }
+
+        .uuid-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 12px 0 16px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .uuid-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .uuid-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+        .uuid-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .uuid-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s ease;
+            animation: fadeSlideIn 0.3s ease;
+        }
+        .uuid-item:hover {
+            border-color: rgba(0, 255, 204, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .uuid-item .index {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: rgba(160, 180, 200, 0.3);
+            min-width: 30px;
+            text-align: center;
+        }
+        .uuid-item .uuid-value {
+            flex: 1;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #e8f5f0;
+            direction: ltr;
+            text-align: left;
+            word-break: break-all;
+            user-select: all;
+        }
+        .uuid-item .uuid-copy {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #a0b4c8;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .uuid-item .uuid-copy:hover {
+            background: rgba(0, 255, 204, 0.12);
+            color: #00ffcc;
+        }
+        .uuid-item .uuid-copy.copied {
+            background: rgba(0, 255, 204, 0.2);
+            color: #00ffcc;
+        }
+
+        .act-btn-copy-all {
+            background: rgba(255, 255, 255, 0.06);
+            color: #a0b4c8;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .act-btn-copy-all:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #00ffcc;
+        }
+
+        @media (max-width: 640px) {
+            .uuid-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .uuid-controls .version-group {
+                justify-content: center;
+            }
+            .uuid-controls .count-control {
+                margin-right: 0;
+                justify-content: center;
+            }
+            .uuid-controls .generate-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .uuid-item {
+                flex-wrap: wrap;
+                gap: 6px;
+                padding: 8px 10px;
+            }
+            .uuid-item .uuid-value {
+                font-size: 0.75rem;
+                width: 100%;
+                order: 1;
+            }
+            .uuid-item .index {
+                order: 0;
+            }
+            .uuid-item .uuid-copy {
+                order: 2;
+                margin-right: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">🆔</span>
+                <h2>تولید UUID</h2>
+                <span class="badge">یکتا &bull; استاندارد</span>
+            </div>
+
+            <div class="uuid-controls">
+                <div class="version-group">
+                    <button class="version-btn active" data-version="4">v4 (تصادفی)</button>
+                    <button class="version-btn" data-version="1">v1 (زمانی)</button>
+                    <button class="version-btn" data-version="7">v7 (زمانی + تصادفی)</button>
+                </div>
+                <div class="count-control">
+                    <label for="uuidCount">تعداد:</label>
+                    <select id="uuidCount">
+                        <option value="1">۱</option>
+                        <option value="5">۵</option>
+                        <option value="10" selected>۱۰</option>
+                        <option value="25">۲۵</option>
+                        <option value="50">۵۰</option>
+                    </select>
+                </div>
+                <button class="generate-btn" id="generateBtn"><span>🔄</span> تولید</button>
+            </div>
+
+            <div class="uuid-list" id="uuidList"></div>
+
+            <div class="tool-actions">
+                <button class="act-btn act-btn-copy-all" id="copyAllBtn">📋 کپی همه</button>
+                <button class="act-btn act-btn-clear" id="clearBtn">🗑️ پاک کردن</button>
+            </div>
+        </div>
+    </main>
+
+    
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            function generateUUIDv4() {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    const r = Math.random() * 16 | 0;
+                    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                });
+            }
+
+            function generateUUIDv1() {
+                const now = Date.now();
+                const hex = now.toString(16).padStart(12, '0');
+                return 'xxxxxxxx-xxxx-1xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c, i) {
+                    const r = (i < 8) ? parseInt(hex[i] || '0', 16) : (Math.random() * 16 | 0);
+                    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                });
+            }
+
+            function generateUUIDv7() {
+                const now = Date.now();
+                const hex = now.toString(16).padStart(12, '0');
+                return 'xxxxxxx-xxxx-7xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c, i) {
+                    const r = (i < 8) ? parseInt(hex[i] || '0', 16) : (Math.random() * 16 | 0);
+                    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                });
+            }
+
+            function generateUUID(version) {
+                switch (version) {
+                    case '1':
+                        return generateUUIDv1();
+                    case '7':
+                        return generateUUIDv7();
+                    default:
+                        return generateUUIDv4();
+                }
+            }
+
+            const uuidList = document.getElementById('uuidList');
+            let currentVersion = '4';
+
+            function generateList() {
+                const count = parseInt(document.getElementById('uuidCount').value) || 10;
+                uuidList.innerHTML = '';
+                for (let i = 0; i < count; i++) {
+                    const id = generateUUID(currentVersion);
+                    const div = document.createElement('div');
+                    div.className = 'uuid-item';
+                    div.innerHTML = `
+                        <span class="index">#${i+1}</span>
+                        <span class="uuid-value">${id}</span>
+                        <button class="uuid-copy" data-uuid="${id}">📋 کپی</button>
+                    `;
+                    uuidList.appendChild(div);
+                }
+                document.querySelectorAll('.uuid-copy').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const text = this.dataset.uuid;
+                        navigator.clipboard.writeText(text).then(() => {
+                            const orig = this.textContent;
+                            this.textContent = '✅ کپی شد!';
+                            this.classList.add('copied');
+                            setTimeout(() => { this.textContent = orig;
+                                this.classList.remove('copied'); }, 1500);
+                        });
+                    });
+                });
+            }
+
+            document.querySelectorAll('.version-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.version-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentVersion = this.dataset.version;
+                    generateList();
+                });
+            });
+
+            document.getElementById('generateBtn').addEventListener('click', generateList);
+            document.getElementById('uuidCount').addEventListener('change', generateList);
+
+            document.getElementById('copyAllBtn').addEventListener('click', function() {
+                const items = document.querySelectorAll('.uuid-value');
+                const text = Array.from(items).map(el => el.textContent).join('\n');
+                if (!text) return;
+                navigator.clipboard.writeText(text).then(() => {
+                    const orig = this.textContent;
+                    this.textContent = '✅ کپی شد!';
+                    this.classList.add('copied');
+                    setTimeout(() => { this.textContent = orig;
+                        this.classList.remove('copied'); }, 1500);
+                });
+            });
+
+            document.getElementById('clearBtn').addEventListener('click', function() {
+                uuidList.innerHTML = '';
+            });
+
+            generateList();
+            console.log('🆔 UUID Generator loaded!');
+        })();
+    </script>
+</body>
+</html>

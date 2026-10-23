@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ویرایش پروفایل | نوینیکس</title>
+    <meta name="description" content="ویرایش اطلاعات پروفایل کاربری نوینیکس" />
+    <link rel="canonical" href="https://novinix.ir/auth/profile-edit.html" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    
+    <!-- Cropper.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
+    
+    <style>
+        .profile-wrapper {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 35px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        .profile-wrapper h2 { color: #00ffcc; margin-bottom: 20px; text-align: center; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 0.85rem; color: #a0b4c8; margin-bottom: 5px; }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8f5f0;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #00ffcc;
+            box-shadow: 0 0 0 3px rgba(0, 255, 204, 0.1);
+        }
+        .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255, 255, 255, 0.2); }
+        
+        /* ===== آواتار سلکتور ===== */
+        .avatar-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 10px 0;
+        }
+        .avatar-option {
+            font-size: 2rem;
+            padding: 8px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid transparent;
+        }
+        .avatar-option:hover { background: rgba(0, 255, 204, 0.1); }
+        .avatar-option.selected {
+            border-color: #00ffcc;
+            background: rgba(0, 255, 204, 0.15);
+        }
+        
+        /* ===== آپلود عکس با Cropper ===== */
+        .avatar-upload-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+        }
+        .avatar-upload-area .current-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            border: 2px solid rgba(0, 255, 204, 0.2);
+            flex-shrink: 0;
+        }
+        .avatar-upload-area .current-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .avatar-upload-area .current-avatar .emoji {
+            font-size: 2.5rem;
+        }
+        .avatar-upload-area .upload-info {
+            flex: 1;
+        }
+        .avatar-upload-area .upload-info .file-name {
+            color: rgba(160, 180, 200, 0.5);
+            font-size: 0.8rem;
+            display: block;
+        }
+        .avatar-upload-area .upload-info .file-size {
+            color: rgba(160, 180, 200, 0.3);
+            font-size: 0.7rem;
+        }
+        .avatar-upload-area .upload-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(0, 255, 204, 0.12);
+            color: #00ffcc;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 0.85rem;
+        }
+        .avatar-upload-area .upload-btn:hover { background: rgba(0, 255, 204, 0.2); }
+        .avatar-upload-area input[type="file"] { display: none; }
+        .avatar-upload-area .remove-avatar {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(239, 68, 68, 0.12);
+            color: #f87171;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 0.75rem;
+        }
+        .avatar-upload-area .remove-avatar:hover { background: rgba(239, 68, 68, 0.25); }
+
+        /* ===== Cropper Modal ===== */
+        .cropper-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .cropper-modal.active { display: flex; }
+        .cropper-modal .cropper-container {
+            background: #1a1a2e;
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            position: relative;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+        }
+        .cropper-modal .cropper-container .cropper-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            color: #e8f5f0;
+        }
+        .cropper-modal .cropper-container .cropper-header h3 {
+            color: #00ffcc;
+            font-size: 1.1rem;
+        }
+        .cropper-modal .cropper-container .cropper-header .close-cropper {
+            background: rgba(239, 68, 68, 0.15);
+            border: none;
+            color: #f87171;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .cropper-modal .cropper-container .cropper-header .close-cropper:hover {
+            background: rgba(239, 68, 68, 0.25);
+            transform: rotate(90deg);
+        }
+        .cropper-modal .cropper-container .image-box {
+            width: 100%;
+            max-height: 400px;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #0f0c29;
+        }
+        .cropper-modal .cropper-container .image-box img {
+            max-width: 100%;
+            display: block;
+        }
+        .cropper-modal .cropper-container .cropper-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+        .cropper-modal .cropper-container .cropper-footer .cropper-btn {
+            padding: 10px 28px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .cropper-modal .cropper-container .cropper-footer .cropper-btn:hover { transform: translateY(-2px); }
+        .cropper-modal .cropper-container .cropper-footer .btn-apply {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+        }
+        .cropper-modal .cropper-container .cropper-footer .btn-apply:hover { box-shadow: 0 4px 20px rgba(0, 255, 204, 0.3); }
+        .cropper-modal .cropper-container .cropper-footer .btn-cancel-cropper {
+            background: rgba(255, 255, 255, 0.06);
+            color: #a0b4c8;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .cropper-modal .cropper-container .cropper-footer .btn-cancel-cropper:hover { background: rgba(255, 255, 255, 0.1); color: #00ffcc; }
+        .cropper-modal .cropper-container .cropper-footer .cropper-hint {
+            color: rgba(160, 180, 200, 0.4);
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0, 255, 204, 0.25); }
+        .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        
+        .auth-message {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            display: none;
+            font-size: 0.9rem;
+        }
+        .auth-message.visible { display: block; }
+        .auth-message.success { background: rgba(0, 255, 204, 0.12); color: #00ffcc; border: 1px solid rgba(0, 255, 204, 0.2); }
+        .auth-message.error { background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
+        
+        .back-home { display: inline-block; margin-bottom: 15px; color: #a0b4c8; text-decoration: none; font-size: 0.85rem; transition: all 0.3s ease; }
+        .back-home:hover { color: #00ffcc; }
+        .input-hint { color: rgba(255, 255, 255, 0.3); font-size: 0.75rem; margin-top: 4px; }
+
+        .upload-progress {
+            display: none;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .upload-progress .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        .upload-progress.active { display: block; }
+
+        /* Cropper override */
+        .cropper-container .cropper-crop-box,
+        .cropper-container .cropper-view-box {
+            border-radius: 50% !important;
+        }
+        .cropper-container .cropper-view-box {
+            box-shadow: 0 0 0 1px #00ffcc !important;
+            outline: 2px solid rgba(0, 255, 204, 0.3) !important;
+        }
+        .cropper-container .cropper-face {
+            background-color: rgba(0, 0, 0, 0.4) !important;
+        }
+
+        @media (max-width: 768px) { 
+            .profile-wrapper { padding: 20px 15px; }
+            .avatar-upload-area { flex-direction: column; align-items: center; text-align: center; }
+            .cropper-modal .cropper-container { padding: 12px; }
+            .cropper-modal .cropper-container .cropper-footer .cropper-hint { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader"></header>
+
+    <main>
+        <div class="profile-wrapper">
+            <a href="profile.html" class="back-home">← بازگشت به پروفایل</a>
+            <h2>✏️ ویرایش پروفایل</h2>
+
+            <div class="auth-message" id="message"></div>
+
+            <form id="editProfileForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>آواتار (انتخاب کنید)</label>
+                    <div class="avatar-selector" id="avatarSelector">
+                        <span class="avatar-option" data-avatar="😊">😊</span>
+                        <span class="avatar-option" data-avatar="😎">😎</span>
+                        <span class="avatar-option" data-avatar="🤩">🤩</span>
+                        <span class="avatar-option" data-avatar="🦊">🦊</span>
+                        <span class="avatar-option" data-avatar="🐱">🐱</span>
+                        <span class="avatar-option" data-avatar="🐶">🐶</span>
+                        <span class="avatar-option" data-avatar="🐼">🐼</span>
+                        <span class="avatar-option" data-avatar="🐨">🐨</span>
+                        <span class="avatar-option" data-avatar="🦁">🦁</span>
+                        <span class="avatar-option" data-avatar="🐯">🐯</span>
+                        <span class="avatar-option" data-avatar="🐮">🐮</span>
+                        <span class="avatar-option" data-avatar="🐷">🐷</span>
+                        <span class="avatar-option" data-avatar="🐵">🐵</span>
+                        <span class="avatar-option" data-avatar="🐧">🐧</span>
+                        <span class="avatar-option" data-avatar="🐦">🐦</span>
+                        <span class="avatar-option" data-avatar="🦆">🦆</span>
+                        <span class="avatar-option" data-avatar="🦅">🦅</span>
+                        <span class="avatar-option" data-avatar="🦉">🦉</span>
+                        <span class="avatar-option" data-avatar="🐴">🐴</span>
+                        <span class="avatar-option" data-avatar="🐺">🐺</span>
+                        <span class="avatar-option" data-avatar="🐗">🐗</span>
+                        <span class="avatar-option" data-avatar="🐭">🐭</span>
+                        <span class="avatar-option" data-avatar="🐹">🐹</span>
+                        <span class="avatar-option" data-avatar="🐰">🐰</span>
+                        <span class="avatar-option" data-avatar="🐻">🐻</span>
+                        <span class="avatar-option" data-avatar="🐾">🐾</span>
+                    </div>
+                    <input type="hidden" id="selectedAvatar" value="">
+                    <div class="input-hint">روی آواتار مورد نظر کلیک کنید</div>
+                </div>
+
+                <div class="form-group">
+                    <label>📸 آپلود عکس پروفایل</label>
+                    <div class="avatar-upload-area">
+                        <div class="current-avatar" id="currentAvatarDisplay">
+                            <span class="emoji">👤</span>
+                        </div>
+                        <div class="upload-info">
+                            <button type="button" class="upload-btn" id="uploadAvatarBtn">📂 انتخاب عکس</button>
+                            <span class="file-name" id="fileName">هیچ فایلی انتخاب نشده</span>
+                            <span class="file-size" id="fileSize"></span>
+                            <button type="button" class="remove-avatar" id="removeAvatarBtn">🗑️ حذف عکس</button>
+                        </div>
+                        <input type="file" id="avatarFile" accept="image/*" />
+                    </div>
+                    <div class="input-hint">فرمت‌های مجاز: JPG, PNG, GIF, WebP • حداکثر ۵ مگابایت • پس از انتخاب عکس، می‌توانید آن را برش دهید</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">بیوگرافی</label>
+                    <textarea id="bio" placeholder="درباره خودتان بنویسید... (حداکثر ۵۰۰ کاراکتر)"></textarea>
+                    <div class="input-hint" id="bioCount">۰/۵۰۰ کاراکتر</div>
+                </div>
+
+                <button type="submit" class="auth-btn" id="saveBtn">💾 ذخیره تغییرات</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- ============================================================
+    Cropper Modal
+    ============================================================ -->
+    <div class="cropper-modal" id="cropperModal">
+        <div class="cropper-container">
+            <div class="cropper-header">
+                <h3>✂️ برش عکس پروفایل</h3>
+                <button class="close-cropper" id="closeCropper">✕</button>
+            </div>
+            <div class="image-box">
+                <img id="cropperImage" src="" alt="تصویر برای برش" />
+            </div>
+            <div class="cropper-footer">
+                <span class="cropper-hint">🔄 دایره را جابجا کنید • برای بزرگ/کوچک کردن از چرخ ماوس استفاده کنید</span>
+                <button class="cropper-btn btn-cancel-cropper" id="cancelCropper">❌ انصراف</button>
+                <button class="cropper-btn btn-apply" id="applyCropper">✅ اعمال برش</button>
+            </div>
+        </div>
+    </div>
+
+    <footer id="mainFooter"></footer>
+
+    <!-- ============================================================
+    Scripts
+    ============================================================ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js">
+    </script>
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            if (!NovinixAuth.isLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const form = document.getElementById('editProfileForm');
+            const messageEl = document.getElementById('message');
+            const saveBtn = document.getElementById('saveBtn');
+            const bioInput = document.getElementById('bio');
+            const bioCount = document.getElementById('bioCount');
+            const avatarSelector = document.getElementById('avatarSelector');
+            const selectedAvatar = document.getElementById('selectedAvatar');
+            const avatarFile = document.getElementById('avatarFile');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const currentAvatarDisplay = document.getElementById('currentAvatarDisplay');
+            const uploadProgress = document.getElementById('uploadProgress');
+            const progressBar = document.getElementById('progressBar');
+
+            // Cropper
+            const cropperModal = document.getElementById('cropperModal');
+            const cropperImage = document.getElementById('cropperImage');
+            const closeCropper = document.getElementById('closeCropper');
+            const cancelCropper = document.getElementById('cancelCropper');
+            const applyCropper = document.getElementById('applyCropper');
+
+            let currentUser = null;
+            let uploadedFile = null;
+            let isUploading = false;
+            let cropper = null;
+            let croppedFile = null;
+
+            async function loadProfile() {
+                currentUser = await NovinixAuth.getCurrentUser();
+                if (!currentUser) { window.location.href = 'login.html'; return; }
+
+                bioInput.value = currentUser.bio || '';
+
+                const currentAvatar = currentUser.avatar || '😊';
+                document.querySelectorAll('.avatar-option').forEach(el => {
+                    el.classList.toggle('selected', el.dataset.avatar === currentAvatar);
+                });
+                selectedAvatar.value = currentAvatar;
+
+                updateAvatarDisplay();
+                updateBioCount();
+            }
+
+            function updateAvatarDisplay() {
+                if (currentUser && currentUser.profile_image) {
+                    currentAvatarDisplay.innerHTML = `<img src="${currentUser.profile_image}?t=${Date.now()}" alt="آواتار" />`;
+                } else {
+                    const avatar = selectedAvatar.value || '😊';
+                    currentAvatarDisplay.innerHTML = `<span class="emoji">${avatar}</span>`;
+                }
+            }
+
+            function updateBioCount() {
+                const count = bioInput.value.length;
+                bioCount.textContent = `${count}/۵۰۰ کاراکتر`;
+                bioCount.style.color = count > 480 ? '#f87171' : 'rgba(255, 255, 255, 0.3)';
+            }
+
+            // ============================================================
+            // انتخاب آواتار
+            // ============================================================
+            avatarSelector.addEventListener('click', function(e) {
+                const option = e.target.closest('.avatar-option');
+                if (!option) return;
+                document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedAvatar.value = option.dataset.avatar;
+                if (!uploadedFile) {
+                    currentAvatarDisplay.innerHTML = `<span class="emoji">${option.dataset.avatar}</span>`;
+                    if (currentUser && currentUser.profile_image) {
+                        currentUser.profile_image = null;
+                    }
+                }
+            });
+
+            // ============================================================
+            // آپلود عکس و باز کردن Cropper
+            // ============================================================
+            document.getElementById('uploadAvatarBtn').addEventListener('click', function() {
+                avatarFile.click();
+            });
+
+            avatarFile.addEventListener('change', function() {
+                const file = this.files[0];
+                if (!file) return;
+
+                // بررسی حجم (حداکثر ۵ مگابایت برای آپلود، اما برش می‌خورند)
+                if (file.size > 5 * 1024 * 1024) {
+                    showMessage('❌ حجم فایل نباید بیشتر از ۵ مگابایت باشد.', 'error');
+                    this.value = '';
+                    return;
+                }
+
+                if (!file.type.startsWith('image/')) {
+                    showMessage('❌ لطفاً یک فایل تصویری انتخاب کنید.', 'error');
+                    this.value = '';
+                    return;
+                }
+
+                uploadedFile = file;
+                fileName.textContent = file.name;
+                fileSize.textContent = `(${(file.size / 1024).toFixed(1)} KB)`;
+
+                // پاک کردن انتخاب آواتار ایموجی
+                document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+                selectedAvatar.value = '';
+
+                // باز کردن Cropper
+                openCropper(file);
+            });
+
+            // ============================================================
+            // Cropper Functions
+            // ============================================================
+            function openCropper(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    cropperImage.src = e.target.result;
+                    cropperModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+
+                    // اگر قبلاً cropper وجود داشت، آن را از بین ببر
+                    if (cropper) {
+                        cropper.destroy();
+                        cropper = null;
+                    }
+
+                    // ایجاد Cropper جدید با تنظیمات دایره‌ای
+                    setTimeout(() => {
+                        cropper = new Cropper(cropperImage, {
+                            aspectRatio: 1,
+                            viewMode: 1,
+                            dragMode: 'move',
+                            autoCropArea: 0.8,
+                            cropBoxResizable: true,
+                            cropBoxMovable: true,
+                            background: false,
+                            zoomable: true,
+                            wheelZoomRatio: 0.1,
+                            minCropBoxWidth: 50,
+                            minCropBoxHeight: 50,
+                            guides: true,
+                            center: true,
+                            highlight: true,
+                            crop: function(event) {
+                                // می‌توانید اطلاعات برش را در اینجا دریافت کنید
+                            }
+                        });
+                    }, 100);
+                };
+                reader.readAsDataURL(file);
+            }
+
+            function closeCropperModal() {
+                cropperModal.classList.remove('active');
+                document.body.style.overflow = '';
+                if (cropper) {
+                    cropper.destroy();
+                    cropper = null;
+                }
+                // پاک کردن فایل انتخاب شده اگر کاربر انصراف داد
+                avatarFile.value = '';
+            }
+
+            function applyCropperCrop() {
+                if (!cropper) return;
+
+                try {
+                    // دریافت تصویر برش‌خورده به صورت دایره‌ای (با پس‌زمینه شفاف)
+                    const canvas = cropper.getCroppedCanvas({
+                        width: 400,
+                        height: 400,
+                        imageSmoothingEnabled: true,
+                        imageSmoothingQuality: 'high',
+                    });
+
+                    // برش دایره‌ای روی Canvas
+                    const circleCanvas = document.createElement('canvas');
+                    circleCanvas.width = 400;
+                    circleCanvas.height = 400;
+                    const ctx = circleCanvas.getContext('2d');
+
+                    // ایجاد کلیپ دایره‌ای
+                    ctx.beginPath();
+                    ctx.arc(200, 200, 200, 0, Math.PI * 2);
+                    ctx.closePath();
+                    ctx.clip();
+
+                    // رسم تصویر برش‌خورده
+                    ctx.drawImage(canvas, 0, 0, 400, 400);
+
+                    // تبدیل به فایل
+                    circleCanvas.toBlob(function(blob) {
+                        if (!blob) {
+                            showMessage('❌ خطا در ایجاد تصویر.', 'error');
+                            return;
+                        }
+
+                        // ایجاد فایل جدید با نام مناسب
+                        const fileName = `avatar_${currentUser.username}_${Date.now()}.png`;
+                        croppedFile = new File([blob], fileName, { type: 'image/png' });
+
+                        // نمایش پیش‌نمایش
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            currentAvatarDisplay.innerHTML =
+                                `<img src="${e.target.result}" alt="پیش‌نمایش آواتار" />`;
+                        };
+                        reader.readAsDataURL(croppedFile);
+
+                        // به‌روزرسانی اطلاعات فایل
+                        fileName.textContent = croppedFile.name;
+                        fileSize.textContent = `(${(croppedFile.size / 1024).toFixed(1)} KB)`;
+
+                        // بستن مودال
+                        closeCropperModal();
+
+                        showMessage('✅ عکس با موفقیت برش داده شد. برای ذخیره روی "ذخیره تغییرات" کلیک کنید.', 'success');
+
+                    }, 'image/png', 0.9);
+
+                } catch (error) {
+                    console.error('Cropper error:', error);
+                    showMessage('❌ خطا در برش تصویر: ' + error.message, 'error');
+                }
+            }
+
+            // ============================================================
+            // رویدادهای Cropper Modal
+            // ============================================================
+            closeCropper.addEventListener('click', closeCropperModal);
+            cancelCropper.addEventListener('click', closeCropperModal);
+            applyCropper.addEventListener('click', applyCropperCrop);
+
+            // بستن با کلیک روی پس‌زمینه
+            cropperModal.addEventListener('click', function(e) {
+                if (e.target === this) closeCropperModal();
+            });
+
+            // ESC برای بستن
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && cropperModal.classList.contains('active')) {
+                    closeCropperModal();
+                }
+            });
+
+            // ============================================================
+            // حذف عکس
+            // ============================================================
+            document.getElementById('removeAvatarBtn').addEventListener('click', function() {
+                if (!currentUser || !currentUser.profile_image) {
+                    showMessage('ℹ️ هیچ عکسی برای حذف وجود ندارد.', 'info');
+                    return;
+                }
+
+                if (confirm('آیا مطمئن هستید که می‌خواهید عکس پروفایل را حذف کنید؟')) {
+                    const defaultAvatar = '😊';
+                    document.querySelectorAll('.avatar-option').forEach(el => {
+                        el.classList.toggle('selected', el.dataset.avatar === defaultAvatar);
+                    });
+                    selectedAvatar.value = defaultAvatar;
+                    uploadedFile = null;
+                    croppedFile = null;
+                    fileName.textContent = 'هیچ فایلی انتخاب نشده';
+                    fileSize.textContent = '';
+                    avatarFile.value = '';
+                    currentUser.profile_image = null;
+                    currentAvatarDisplay.innerHTML = `<span class="emoji">${defaultAvatar}</span>`;
+                    showMessage('✅ عکس پروفایل حذف شد. برای ذخیره روی "ذخیره تغییرات" کلیک کنید.', 'success');
+                }
+            });
+
+            // ============================================================
+            // بیوگرافی
+            // ============================================================
+            bioInput.addEventListener('input', function() {
+                updateBioCount();
+                if (this.value.length > 500) {
+                    this.value = this.value.substring(0, 500);
+                    updateBioCount();
+                }
+            });
+
+            // ============================================================
+            // ارسال فرم
+            // ============================================================
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const bio = bioInput.value.trim();
+                const avatar = selectedAvatar.value || '😊';
+
+                messageEl.className = 'auth-message';
+                saveBtn.disabled = true;
+                saveBtn.textContent = '⏳ در حال ذخیره...';
+
+                try {
+                    let result;
+
+                    // اگر عکس برش‌خورده وجود دارد، آپلود کن
+                    if (croppedFile) {
+                        const formData = new FormData();
+                        formData.append('avatar_file', croppedFile);
+                        formData.append('username', currentUser.username);
+
+                        uploadProgress.classList.add('active');
+                        progressBar.style.width = '30%';
+
+                        const uploadResult = await NovinixAuth.uploadAvatar(formData);
+                        progressBar.style.width = '70%';
+
+                        if (uploadResult.success) {
+                            progressBar.style.width = '100%';
+                            currentUser = uploadResult.data;
+                            updateAvatarDisplay();
+                            result = { success: true, message: uploadResult.message };
+                            // بعد از آپلود موفق، فایل رو پاک کن
+                            croppedFile = null;
+                            uploadedFile = null;
+                            avatarFile.value = '';
+                            fileName.textContent = 'هیچ فایلی انتخاب نشده';
+                            fileSize.textContent = '';
+                        } else {
+                            result = { success: false, message: uploadResult.message };
+                        }
+
+                        setTimeout(() => {
+                            uploadProgress.classList.remove('active');
+                            progressBar.style.width = '0%';
+                        }, 500);
+                    } else {
+                        // فقط متن (بیو و آواتار)
+                        result = await NovinixAuth.updateProfile(currentUser.username, {
+                            bio: bio,
+                            avatar: avatar
+                        });
+                    }
+
+                    if (result.success) {
+                        showMessage('✅ ' + result.message, 'success');
+                        setTimeout(() => {
+                            window.location.href = 'profile.html';
+                        }, 1000);
+                    } else {
+                        showMessage('❌ ' + result.message, 'error');
+                        saveBtn.disabled = false;
+                        saveBtn.textContent = '💾 ذخیره تغییرات';
+                    }
+                } catch (error) {
+                    showMessage('❌ خطا: ' + error.message, 'error');
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = '💾 ذخیره تغییرات';
+                    uploadProgress.classList.remove('active');
+                    progressBar.style.width = '0%';
+                }
+            });
+
+            function showMessage(message, type) {
+                messageEl.textContent = message;
+                messageEl.className = 'auth-message visible ' + type;
+                if (type === 'success' || type === 'error') {
+                    setTimeout(() => {
+                        messageEl.className = 'auth-message';
+                    }, 5000);
+                }
+            }
+
+            loadProfile();
+        })();
+    </script>
+</body>
+</html>

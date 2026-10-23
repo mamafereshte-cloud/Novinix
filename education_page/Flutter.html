@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>آموزش Flutter | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+    <link rel="stylesheet" href="../assets/css/education.css" />
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar"></aside>
+        <main class="main-content" id="mainContent"></main>
+    </div>
+
+    <script>
+        // ================================================================
+        // 📱 Flutter Course Data
+        // ================================================================
+
+        const lessons = [{
+            id: 'flutter-intro',
+            title: 'معرفی Flutter',
+            section: 'مقدمات',
+            order: 1,
+            badge: null,
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">📱 آموزش Flutter / <span>مقدمات</span></div>
+                        <h1>معرفی <span>Flutter</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۰ دقیقه</span>
+                            <span>📊 سطح: مبتدی</span>
+                            <span>⭐ ۴.۹ (۱,۱۰۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>Flutter چیست؟</h2>
+                        <p>
+                            <strong>Flutter</strong> یک فریمورک متن‌باز (Open Source) برای
+                            توسعه اپلیکیشن‌های موبایل، وب و دسکتاپ است که توسط
+                            <strong>Google</strong> ساخته شده است. Flutter از زبان
+                            <strong>Dart</strong> برای نوشتن کد استفاده می‌کند.
+                        </p>
+
+                        <div class="note-box">
+                            <strong>💡 نکته:</strong>
+                            <p>با Flutter می‌توانید با <strong>یک کد</strong> برای
+                            اندروید، iOS، وب و دسکتاپ اپلیکیشن بسازید.</p>
+                        </div>
+
+                        <h3>مزایای Flutter</h3>
+                        <ul>
+                            <li>📱 <strong>کراس پلتفرم</strong> – یک کد برای همه پلتفرم‌ها</li>
+                            <li>⚡ <strong>عملکرد بالا</strong> – کامپایل مستقیم به کد ماشین</li>
+                            <li>🎨 <strong>ویجت‌های غنی</strong> – رابط‌های کاربری زیبا و سفارشی</li>
+                            <li>🔧 <strong>Hot Reload</strong> – مشاهده تغییرات در لحظه</li>
+                            <li>📚 <strong>کتابخانه‌های کامل</strong> – پکیج‌های متنوع</li>
+                            <li>🧪 <strong>تست‌پذیری</strong> – ابزارهای تست قدرتمند</li>
+                        </ul>
+
+                        <h3>اولین برنامه Flutter</h3>
+                        <p>یک برنامه ساده که "Hello, World!" را نمایش می‌دهد:</p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="dart">Dart</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="dart">
+                                    <pre><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;
+
+<span class="keyword">void</span> <span class="function">main</span>() {
+    <span class="function">runApp</span>(<span class="function">MyApp</span>());
+}
+
+<span class="keyword">class</span> <span class="class">MyApp</span> <span class="keyword">extends</span> <span class="flutter-widget">StatelessWidget</span> {
+    <span class="keyword">@override</span>
+    <span class="flutter-widget">Widget</span> <span class="function">build</span>(<span class="flutter-widget">BuildContext</span> context) {
+        <span class="keyword">return</span> <span class="flutter-widget">MaterialApp</span>(
+            home: <span class="flutter-widget">Scaffold</span>(
+                appBar: <span class="flutter-widget">AppBar</span>(
+                    title: <span class="flutter-widget">Text</span>(<span class="string">'Hello Flutter'</span>),
+                ),
+                body: <span class="flutter-widget">Center</span>(
+                    child: <span class="flutter-widget">Text</span>(
+                        <span class="string">'Hello, World!'</span>,
+                        style: <span class="flutter-widget">TextStyle</span>(
+                            fontSize: <span class="number">24</span>,
+                            fontWeight: <span class="flutter-widget">FontWeight</span>.bold,
+                            color: <span class="flutter-widget">Colors</span>.blue,
+                        ),
+                    ),
+                ),
+            ),
+        );
+    }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'flutter-widgets',
+            title: 'ویجت‌های Flutter',
+            section: 'مقدمات',
+            order: 2,
+            badge: null,
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">📱 آموزش Flutter / <span>مقدمات</span></div>
+                        <h1>ویجت‌های <span>Flutter</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۵ دقیقه</span>
+                            <span>📊 سطح: مبتدی</span>
+                            <span>⭐ ۴.۸ (۹۵۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>ویجت‌ها در Flutter</h2>
+                        <p>
+                            در Flutter، <strong>همه چیز یک ویجت (Widget)</strong> است.
+                            ویجت‌ها بلوک‌های سازنده رابط کاربری هستند. هر ویجت می‌تواند
+                            شامل ویجت‌های دیگر باشد.
+                        </p>
+
+                        <div class="warning-box">
+                            <strong>⚠️ توجه:</strong>
+                            <p>ویجت‌ها در Flutter به دو دسته تقسیم می‌شوند:
+                            <strong>StatelessWidget</strong> (غیرقابل تغییر) و
+                            <strong>StatefulWidget</strong> (قابل تغییر).</p>
+                        </div>
+
+                        <h3>ویجت‌های محبوب</h3>
+                        <ul>
+                            <li><strong>Container</strong> – کانتینر برای چیدمان</li>
+                            <li><strong>Row & Column</strong> – چیدمان افقی و عمودی</li>
+                            <li><strong>Stack</strong> – قرار دادن ویجت‌ها روی هم</li>
+                            <li><strong>ListView</strong> – لیست‌های اسکرول‌شونده</li>
+                            <li><strong>GridView</strong> – نمایش گرید</li>
+                            <li><strong>Card</strong> – کارت‌های زیبا</li>
+                            <li><strong>Text</strong> – متن</li>
+                            <li><strong>Image</strong> – تصویر</li>
+                            <li><strong>Button</strong> – دکمه‌ها</li>
+                            <li><strong>TextField</strong> – ورودی متن</li>
+                        </ul>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="dart">Dart</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="dart">
+                                    <pre><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;
+
+<span class="keyword">class</span> <span class="class">WidgetDemo</span> <span class="keyword">extends</span> <span class="flutter-widget">StatelessWidget</span> {
+    <span class="keyword">@override</span>
+    <span class="flutter-widget">Widget</span> <span class="function">build</span>(<span class="flutter-widget">BuildContext</span> context) {
+        <span class="keyword">return</span> <span class="flutter-widget">Scaffold</span>(
+            appBar: <span class="flutter-widget">AppBar</span>(
+                title: <span class="flutter-widget">Text</span>(<span class="string">'Widget Demo'</span>),
+            ),
+            body: <span class="flutter-widget">Padding</span>(
+                padding: <span class="flutter-widget">EdgeInsets</span>.all(<span class="number">20</span>),
+                child: <span class="flutter-widget">Column</span>(
+                    children: [
+                        <span class="flutter-widget">Container</span>(
+                            height: <span class="number">100</span>,
+                            width: <span class="number">200</span>,
+                            color: <span class="flutter-widget">Colors</span>.blue,
+                            child: <span class="flutter-widget">Center</span>(
+                                child: <span class="flutter-widget">Text</span>(
+                                    <span class="string">'Container'</span>,
+                                    style: <span class="flutter-widget">TextStyle</span>(
+                                        color: <span class="flutter-widget">Colors</span>.white,
+                                        fontSize: <span class="number">18</span>,
+                                    ),
+                                ),
+                            ),
+                        ),
+                        <span class="flutter-widget">SizedBox</span>(height: <span class="number">20</span>),
+                        <span class="flutter-widget">Row</span>(
+                            mainAxisAlignment: <span class="flutter-widget">MainAxisAlignment</span>.spaceEvenly,
+                            children: [
+                                <span class="flutter-widget">ElevatedButton</span>(
+                                    onPressed: <span class="keyword">null</span>,
+                                    child: <span class="flutter-widget">Text</span>(<span class="string">'Button 1'</span>),
+                                ),
+                                <span class="flutter-widget">ElevatedButton</span>(
+                                    onPressed: <span class="keyword">null</span>,
+                                    child: <span class="flutter-widget">Text</span>(<span class="string">'Button 2'</span>),
+                                ),
+                            ],
+                        ),
+                        <span class="flutter-widget">SizedBox</span>(height: <span class="number">20</span>),
+                        <span class="flutter-widget">Card</span>(
+                            child: <span class="flutter-widget">Padding</span>(
+                                padding: <span class="flutter-widget">EdgeInsets</span>.all(<span class="number">16</span>),
+                                child: <span class="flutter-widget">Text</span>(
+                                    <span class="string">'This is a Card widget'</span>,
+                                    style: <span class="flutter-widget">TextStyle</span>(
+                                        fontSize: <span class="number">16</span>,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ],
+                ),
+            ),
+        );
+    }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'flutter-state',
+            title: 'مدیریت State',
+            section: 'پیشرفته',
+            order: 1,
+            badge: 'hot',
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">📱 آموزش Flutter / <span>پیشرفته</span></div>
+                        <h1>مدیریت <span>State</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۳۰ دقیقه</span>
+                            <span>📊 سطح: متوسط</span>
+                            <span>⭐ ۴.۹ (۸۰۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>State در Flutter</h2>
+                        <p>
+                            <strong>State</strong> داده‌هایی هستند که در طول زمان تغییر می‌کنند
+                            و باعث بازسازی (rebuild) ویجت‌ها می‌شوند. Flutter دو نوع ویجت
+                            برای مدیریت State ارائه می‌دهد:
+                        </p>
+
+                        <ul>
+                            <li><strong>StatelessWidget</strong> – ویجت‌های بدون State</li>
+                            <li><strong>StatefulWidget</strong> – ویجت‌های با State</li>
+                        </ul>
+
+                        <div class="note-box">
+                            <strong>💡 نکته:</strong>
+                            <p>برای مدیریت State پیچیده‌تر، می‌توانید از ابزارهایی مثل
+                            <strong>Provider</strong>، <strong>Riverpod</strong> یا
+                            <strong>BLoC</strong> استفاده کنید.</p>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="dart">Dart</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="dart">
+                                    <pre><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;
+
+<span class="keyword">class</span> <span class="class">CounterApp</span> <span class="keyword">extends</span> <span class="flutter-widget">StatefulWidget</span> {
+    <span class="keyword">@override</span>
+    <span class="flutter-widget">_CounterAppState</span> <span class="function">createState</span>() => <span class="function">_CounterAppState</span>();
+}
+
+<span class="keyword">class</span> <span class="class">_CounterAppState</span> <span class="keyword">extends</span> <span class="flutter-widget">State</span>&lt;<span class="flutter-widget">CounterApp</span>&gt; {
+    <span class="type">int</span> _counter = <span class="number">0</span>;
+
+    <span class="keyword">void</span> <span class="function">_incrementCounter</span>() {
+        <span class="function">setState</span>(() {
+            _counter++;
+        });
+    }
+
+    <span class="keyword">void</span> <span class="function">_decrementCounter</span>() {
+        <span class="function">setState</span>(() {
+            <span class="keyword">if</span> (_counter > <span class="number">0</span>) {
+                _counter--;
+            }
+        });
+    }
+
+    <span class="keyword">@override</span>
+    <span class="flutter-widget">Widget</span> <span class="function">build</span>(<span class="flutter-widget">BuildContext</span> context) {
+        <span class="keyword">return</span> <span class="flutter-widget">Scaffold</span>(
+            appBar: <span class="flutter-widget">AppBar</span>(
+                title: <span class="flutter-widget">Text</span>(<span class="string">'Counter App'</span>),
+            ),
+            body: <span class="flutter-widget">Center</span>(
+                child: <span class="flutter-widget">Column</span>(
+                    mainAxisAlignment: <span class="flutter-widget">MainAxisAlignment</span>.center,
+                    children: [
+                        <span class="flutter-widget">Text</span>(
+                            <span class="string">'You have pushed the button this many times:'</span>,
+                        ),
+                        <span class="flutter-widget">Text</span>(
+                            <span class="string">'$_counter'</span>,
+                            style: <span class="flutter-widget">Theme</span>.of(context).textTheme.<span class="flutter-widget">headlineMedium</span>,
+                        ),
+                        <span class="flutter-widget">Row</span>(
+                            mainAxisAlignment: <span class="flutter-widget">MainAxisAlignment</span>.center,
+                            children: [
+                                <span class="flutter-widget">ElevatedButton</span>(
+                                    onPressed: _incrementCounter,
+                                    child: <span class="flutter-widget">Text</span>(<span class="string">'+'</span>),
+                                ),
+                                <span class="flutter-widget">SizedBox</span>(width: <span class="number">20</span>),
+                                <span class="flutter-widget">ElevatedButton</span>(
+                                    onPressed: _decrementCounter,
+                                    child: <span class="flutter-widget">Text</span>(<span class="string">'-'</span>),
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+            ),
+        );
+    }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'flutter-navigation',
+            title: 'Navigation و Routing',
+            section: 'پیشرفته',
+            order: 2,
+            badge: 'new',
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">📱 آموزش Flutter / <span>پیشرفته</span></div>
+                        <h1>Navigation و <span>Routing</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۵ دقیقه</span>
+                            <span>📊 سطح: متوسط</span>
+                            <span>⭐ ۴.۷ (۷۲۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>Navigation در Flutter</h2>
+                        <p>
+                            Navigation به شما امکان می‌دهد بین صفحات (سکرین‌ها) در
+                            اپلیکیشن جابجا شوید. Flutter از <strong>Navigator</strong>
+                            برای مدیریت مسیریابی استفاده می‌کند.
+                        </p>
+
+                        <h3>روش‌های Navigation</h3>
+                        <ul>
+                            <li><strong>Navigator.push()</strong> – رفتن به صفحه جدید</li>
+                            <li><strong>Navigator.pop()</strong> – بازگشت به صفحه قبلی</li>
+                            <li><strong>Navigator.pushReplacement()</strong> – جایگزینی صفحه</li>
+                            <li><strong>Named Routes</strong> – مسیریابی با نام</li>
+                        </ul>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="dart">Dart</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="dart">
+                                    <pre><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;
+
+<span class="keyword">class</span> <span class="class">HomePage</span> <span class="keyword">extends</span> <span class="flutter-widget">StatelessWidget</span> {
+    <span class="keyword">@override</span>
+    <span class="flutter-widget">Widget</span> <span class="function">build</span>(<span class="flutter-widget">BuildContext</span> context) {
+        <span class="keyword">return</span> <span class="flutter-widget">Scaffold</span>(
+            appBar: <span class="flutter-widget">AppBar</span>(
+                title: <span class="flutter-widget">Text</span>(<span class="string">'Home'</span>),
+            ),
+            body: <span class="flutter-widget">Center</span>(
+                child: <span class="flutter-widget">ElevatedButton</span>(
+                    onPressed: () {
+                        <span class="flutter-widget">Navigator</span>.push(
+                            context,
+                            <span class="flutter-widget">MaterialPageRoute</span>(
+                                builder: (context) => <span class="function">SecondPage</span>(),
+                            ),
+                        );
+                    },
+                    child: <span class="flutter-widget">Text</span>(<span class="string">'Go to Second Page'</span>),
+                ),
+            ),
+        );
+    }
+}
+
+<span class="keyword">class</span> <span class="class">SecondPage</span> <span class="keyword">extends</span> <span class="flutter-widget">StatelessWidget</span> {
+    <span class="keyword">@override</span>
+    <span class="flutter-widget">Widget</span> <span class="function">build</span>(<span class="flutter-widget">BuildContext</span> context) {
+        <span class="keyword">return</span> <span class="flutter-widget">Scaffold</span>(
+            appBar: <span class="flutter-widget">AppBar</span>(
+                title: <span class="flutter-widget">Text</span>(<span class="string">'Second Page'</span>),
+                backgroundColor: <span class="flutter-widget">Colors</span>.blue,
+            ),
+            body: <span class="flutter-widget">Center</span>(
+                child: <span class="flutter-widget">Column</span>(
+                    mainAxisAlignment: <span class="flutter-widget">MainAxisAlignment</span>.center,
+                    children: [
+                        <span class="flutter-widget">Text</span>(
+                            <span class="string">'Welcome to Second Page!'</span>,
+                            style: <span class="flutter-widget">TextStyle</span>(fontSize: <span class="number">24</span>),
+                        ),
+                        <span class="flutter-widget">SizedBox</span>(height: <span class="number">20</span>),
+                        <span class="flutter-widget">ElevatedButton</span>(
+                            onPressed: () {
+                                <span class="flutter-widget">Navigator</span>.pop(context);
+                            },
+                            child: <span class="flutter-widget">Text</span>(<span class="string">'Go Back'</span>),
+                        ),
+                    ],
+                ),
+            ),
+        );
+    }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }];
+
+        // ================================================================
+        // 🔧 Core Functions
+        // ================================================================
+
+        let currentLessonId = 'flutter-intro';
+
+        function renderSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const sections = {};
+
+            lessons.forEach(lesson => {
+                if (!sections[lesson.section]) sections[lesson.section] = [];
+                sections[lesson.section].push(lesson);
+            });
+
+            let html = '';
+            for (const [sectionName, items] of Object.entries(sections)) {
+                html += `
+                    <div class="sidebar-section">
+                        <div class="section-title">${sectionName}</div>
+                        <ul>
+                `;
+                items.sort((a, b) => a.order - b.order).forEach(item => {
+                    const badge = item.badge ? `<span class="badge ${item.badge}">${item.badge}</span>` : '';
+                    html += `
+                        <li>
+                            <a href="#" data-id="${item.id}" class="${item.id === currentLessonId ? 'active-link' : ''}">
+                                ${item.title} ${badge}
+                            </a>
+                        </li>
+                    `;
+                });
+                html += `</ul></div>`;
+            }
+
+            sidebar.innerHTML = html;
+
+            sidebar.querySelectorAll('a[data-id]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = this.dataset.id;
+                    loadLesson(id);
+                    sidebar.querySelectorAll('a[data-id]').forEach(l => l.classList.remove('active-link'));
+                    this.classList.add('active-link');
+                });
+            });
+        }
+
+        function loadLesson(id) {
+            const lesson = lessons.find(l => l.id === id);
+            if (!lesson) return;
+
+            currentLessonId = id;
+            document.getElementById('mainContent').innerHTML = lesson.content;
+
+            initTabs();
+            renderSidebar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function initTabs() {
+            document.querySelectorAll('.code-container').forEach(container => {
+                const tabs = container.querySelectorAll('.tab');
+                const panels = container.querySelectorAll('.code-panel');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        const tabName = this.dataset.tab;
+                        tabs.forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        panels.forEach(p => p.classList.remove('active'));
+                        const target = container.querySelector(`.code-panel[data-panel="${tabName}"]`);
+                        if (target) target.classList.add('active');
+                    });
+                });
+            });
+        }
+
+        // ================================================================
+        // 📋 Copy Code
+        // ================================================================
+
+        function copyCode(btn) {
+            const container = btn.closest('.code-body');
+            const activePanel = container.querySelector('.code-panel.active');
+            const pre = activePanel ? activePanel.querySelector('pre') : container.querySelector('pre');
+            if (!pre) return;
+
+            const text = pre.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = '✅ Copied';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '📋 Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(() => {
+                const range = document.createRange();
+                range.selectNode(pre);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                document.execCommand('copy');
+                btn.textContent = '✅ Copied';
+                setTimeout(() => { btn.textContent = '📋 Copy'; }, 2000);
+            });
+        }
+
+        // ================================================================
+        // 🚀 Initial Load
+        // ================================================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = `
+                <div class="flutter-hero">
+                    <div class="hero-icon">📱</div>
+                    <h2>📱 آموزش جامع <span>Flutter</span></h2>
+                    <p>توسعه اپلیکیشن‌های موبایل، وب و دسکتاپ با Flutter</p>
+                    <div class="hero-meta">
+                        <span>📚 ۴ فصل</span>
+                        <span>⏱️ ۲۵ ساعت</span>
+                        <span>⭐ ۴.۹ از ۵</span>
+                        <span>👨‍🎓 ۱,۱۰۰ دانشجو</span>
+                    </div>
+                </div>
+                <div style="text-align:center; padding:20px; color:#6b7a8a;">
+                    <p style="font-size:1.1rem;">📚 یک درس را از سایدبار سمت راست انتخاب کنید</p>
+                    <p style="font-size:0.85rem; margin-top:5px;">دروس: مقدمات (۲ درس) | پیشرفته (۲ درس)</p>
+                </div>
+            `;
+
+            renderSidebar();
+            setTimeout(() => {
+                loadLesson('flutter-intro');
+            }, 100);
+        });
+
+        console.log('📱 Flutter learning system ready!');
+    </script>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../auth/header.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/user-panel.js"></script>
+    <script src="../assets/js/settings.js"></script>
+    <script src="../assets/js/seo.js"></script>
+</body>
+</html>

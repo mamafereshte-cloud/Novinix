@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>کدگذاری و رمزگشایی URL آنلاین | ابزار کدگذاری آدرس Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای کدگذاری و رمزگشایی URL. کدگذاری و کدگشایی آدرس‌های اینترنتی، پارامترها و Query String." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/url-encoder" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .mode-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 12px;
+        }
+        .mode-tabs .mode-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #a0b4c8;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+        .mode-tabs .mode-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #e8f5f0;
+        }
+        .mode-tabs .mode-btn.active {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            box-shadow: 0 4px 15px rgba(0, 255, 204, 0.2);
+        }
+
+        .tool-textarea {
+            min-height: 120px;
+        }
+        .tool-textarea.rtl-input {
+            direction: rtl;
+            text-align: right;
+            font-family: inherit;
+        }
+
+        .quick-samples {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 12px 0 16px;
+        }
+        .quick-samples .qs-btn {
+            padding: 4px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            font-size: 0.75rem;
+            color: #a0b4c8;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .quick-samples .qs-btn:hover {
+            border-color: #00ffcc;
+            color: #00ffcc;
+        }
+
+        .result-box {
+            margin-top: 16px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: none;
+        }
+        .result-box.visible {
+            display: block;
+        }
+        .result-box .result-label {
+            font-size: 0.8rem;
+            color: rgba(160, 180, 200, 0.4);
+            font-weight: 500;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .result-box .result-value {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #e8f5f0;
+            word-break: break-all;
+            direction: ltr;
+            text-align: left;
+            line-height: 1.8;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .result-box .result-value.rtl {
+            direction: rtl;
+            text-align: right;
+            font-family: inherit;
+        }
+
+        @media (max-width: 640px) {
+            .mode-tabs {
+                flex-direction: column;
+                gap: 6px;
+            }
+            .mode-tabs .mode-btn {
+                justify-content: center;
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+            .result-box .result-value {
+                font-size: 0.78rem;
+                max-height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">🔗</span>
+                <h2>کدگذاری / رمزگشایی URL</h2>
+                <span class="badge">استاندارد &bull; UTF-8</span>
+            </div>
+
+            <div class="mode-tabs">
+                <button class="mode-btn active" data-mode="encode">🔐 کدگذاری</button>
+                <button class="mode-btn" data-mode="decode">🔓 رمزگشایی</button>
+            </div>
+
+            <!-- کدگذاری -->
+            <div class="tool-section active" id="sectionEncode">
+                <div class="quick-samples">
+                    <button class="qs-btn" data-sample="text">متن ساده</button>
+                    <button class="qs-btn" data-sample="url">آدرس کامل</button>
+                    <button class="qs-btn" data-sample="persian">متن فارسی</button>
+                </div>
+                <textarea class="tool-textarea rtl-input" id="encodeInput" placeholder="متن یا URL مورد نظر برای کدگذاری را وارد کنید...">https://example.com/search?q=سلام دنیا&page=1</textarea>
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="encodeBtn" style="background:linear-gradient(135deg, #00ffcc, #00b4db);color:#0f0c29;">🔐 کدگذاری</button>
+                    <button class="act-btn act-btn-copy" id="copyEncodeResult">📋 کپی</button>
+                    <button class="act-btn act-btn-clear" id="clearEncode">🗑️ پاک</button>
+                </div>
+                <div class="result-box" id="encodeResult">
+                    <span class="result-label">📋 نتیجه کدگذاری:</span>
+                    <div class="result-value" id="encodeOutput"></div>
+                </div>
+                <div class="tool-stats">
+                    <span>📊 طول اصلی: <span class="stat-value" id="encodeOriginalLen">۰</span></span>
+                    <span>📊 طول کدشده: <span class="stat-value changed" id="encodeEncodedLen">۰</span></span>
+                </div>
+            </div>
+
+            <!-- رمزگشایی -->
+            <div class="tool-section" id="sectionDecode">
+                <div class="quick-samples">
+                    <button class="qs-btn" data-sample="encoded">مثال کدشده</button>
+                </div>
+                <textarea class="tool-textarea" id="decodeInput" placeholder="متن کدشده برای کدگشایی را وارد کنید...">https%3A%2F%2Fexample.com%2Fsearch%3Fq%3D%D8%B3%D9%84%D8%A7%D9%85%20%D8%AF%D9%86%DB%8C%D8%A7%26page%3D1</textarea>
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="decodeBtn" style="background:linear-gradient(135deg, #00ffcc, #00b4db);color:#0f0c29;">🔓 رمزگشایی</button>
+                    <button class="act-btn act-btn-copy" id="copyDecodeResult">📋 کپی</button>
+                    <button class="act-btn act-btn-clear" id="clearDecode">🗑️ پاک</button>
+                </div>
+                <div class="result-box" id="decodeResult">
+                    <span class="result-label">📋 نتیجه کدگشایی:</span>
+                    <div class="result-value rtl" id="decodeOutput"></div>
+                </div>
+                <div class="tool-stats">
+                    <span>📊 طول کدشده: <span class="stat-value" id="decodeEncodedLen">۰</span></span>
+                    <span>📊 طول اصلی: <span class="stat-value changed" id="decodeOriginalLen">۰</span></span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            const encodeInput = document.getElementById('encodeInput');
+            const encodeOutput = document.getElementById('encodeOutput');
+            const decodeInput = document.getElementById('decodeInput');
+            const decodeOutput = document.getElementById('decodeOutput');
+
+            function updateStats() {
+                const eText = encodeInput.value;
+                const eOut = encodeOutput.textContent;
+                document.getElementById('encodeOriginalLen').textContent = eText.length;
+                document.getElementById('encodeEncodedLen').textContent = eOut.length;
+
+                const dText = decodeInput.value;
+                const dOut = decodeOutput.textContent;
+                document.getElementById('decodeEncodedLen').textContent = dText.length;
+                document.getElementById('decodeOriginalLen').textContent = dOut.length;
+            }
+
+            function doEncode() {
+                const text = encodeInput.value;
+                if (!text) {
+                    encodeOutput.textContent = '';
+                    document.getElementById('encodeResult').classList.remove('visible');
+                    updateStats();
+                    return;
+                }
+                const encoded = encodeURIComponent(text);
+                encodeOutput.textContent = encoded;
+                document.getElementById('encodeResult').classList.add('visible');
+                updateStats();
+            }
+
+            function doDecode() {
+                const text = decodeInput.value;
+                if (!text) {
+                    decodeOutput.textContent = '';
+                    document.getElementById('decodeResult').classList.remove('visible');
+                    updateStats();
+                    return;
+                }
+                try {
+                    const decoded = decodeURIComponent(text);
+                    decodeOutput.textContent = decoded;
+                    document.getElementById('decodeResult').classList.add('visible');
+                } catch (e) {
+                    decodeOutput.textContent = '❌ خطا: ' + e.message;
+                    document.getElementById('decodeResult').classList.add('visible');
+                }
+                updateStats();
+            }
+
+            // Mode switching
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    document.querySelectorAll('.tool-section').forEach(s => s.classList.remove('active'));
+                    document.getElementById('section' + this.dataset.mode.charAt(0).toUpperCase() + this.dataset
+                        .mode.slice(1)).classList.add('active');
+                });
+            });
+
+            document.getElementById('encodeBtn').addEventListener('click', doEncode);
+            document.getElementById('decodeBtn').addEventListener('click', doDecode);
+
+            document.querySelectorAll('.quick-samples .qs-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const mode = this.closest('.tool-section').id === 'sectionEncode' ? 'encode' : 'decode';
+                    const sample = this.dataset.sample;
+                    if (mode === 'encode') {
+                        const samples = { 'text': 'Hello World!', 'url': 'https://example.com/search?q=hello+world',
+                            'persian': 'سلام دنیا! این یک متن فارسی است.' };
+                        encodeInput.value = samples[sample] || '';
+                        doEncode();
+                    } else {
+                        const samples = { 'encoded': 'Hello%20World%21' };
+                        decodeInput.value = samples[sample] || '';
+                        doDecode();
+                    }
+                });
+            });
+
+            document.getElementById('copyEncodeResult').addEventListener('click', function() {
+                const text = encodeOutput.textContent;
+                if (!text) return;
+                navigator.clipboard.writeText(text).then(() => {
+                    const orig = this.textContent;
+                    this.textContent = '✅ کپی شد!';
+                    this.classList.add('copied');
+                    setTimeout(() => { this.textContent = orig;
+                        this.classList.remove('copied'); }, 1500);
+                });
+            });
+
+            document.getElementById('copyDecodeResult').addEventListener('click', function() {
+                const text = decodeOutput.textContent;
+                if (!text || text.includes('خطا')) return;
+                navigator.clipboard.writeText(text).then(() => {
+                    const orig = this.textContent;
+                    this.textContent = '✅ کپی شد!';
+                    this.classList.add('copied');
+                    setTimeout(() => { this.textContent = orig;
+                        this.classList.remove('copied'); }, 1500);
+                });
+            });
+
+            document.getElementById('clearEncode').addEventListener('click', function() {
+                encodeInput.value = '';
+                encodeOutput.textContent = '';
+                document.getElementById('encodeResult').classList.remove('visible');
+                updateStats();
+            });
+
+            document.getElementById('clearDecode').addEventListener('click', function() {
+                decodeInput.value = '';
+                decodeOutput.textContent = '';
+                document.getElementById('decodeResult').classList.remove('visible');
+                updateStats();
+            });
+
+            encodeInput.addEventListener('input', updateStats);
+            decodeInput.addEventListener('input', updateStats);
+
+            doEncode();
+            doDecode();
+            updateStats();
+            console.log('🔗 URL Encoder/Decoder loaded!');
+        })();
+    </script>
+</body>
+</html>

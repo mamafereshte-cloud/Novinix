@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ماشین‌حساب تاریخ آنلاین | ابزار محاسبه تفاوت و افزودن به تاریخ Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای محاسبه تفاوت بین دو تاریخ، افزودن/کم کردن روزها به تاریخ و نمایش روز هفته." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/date-calculator" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .date-form .form-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .date-form .form-row label {
+            font-size: 0.9rem;
+            color: #a0b4c8;
+            font-weight: 500;
+            min-width: 80px;
+        }
+        .date-form .form-row input,
+        .date-form .form-row select {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px 14px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8f5f0;
+            transition: all 0.25s ease;
+            direction: ltr;
+        }
+        .date-form .form-row input:focus,
+        .date-form .form-row select:focus {
+            border-color: #00ffcc;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.1);
+        }
+        .date-form .form-row select option {
+            background: #0f0c29;
+        }
+        .date-form .form-row .calendar-select {
+            min-width: 100px;
+            flex: 0.5;
+        }
+        .date-result {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            margin-top: 16px;
+        }
+        .date-result .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00ffcc;
+            font-family: 'Courier New', monospace;
+        }
+        .date-result .result-label {
+            font-size: 0.9rem;
+            color: #a0b4c8;
+        }
+        .date-result .result-detail {
+            font-size: 0.85rem;
+            color: rgba(160, 180, 200, 0.4);
+            margin-top: 4px;
+        }
+        .date-result .weekday {
+            display: inline-block;
+            padding: 4px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        .date-result .weekday.workday {
+            background: rgba(0, 255, 204, 0.12);
+            color: #00ffcc;
+        }
+        .date-result .weekday.weekend {
+            background: rgba(251, 191, 36, 0.12);
+            color: #fbbf24;
+        }
+        .act-btn-today {
+            background: rgba(52, 152, 219, 0.12);
+            color: #5fcde6;
+            border: 1px solid rgba(52, 152, 219, 0.15);
+        }
+        .act-btn-today:hover {
+            background: rgba(52, 152, 219, 0.2);
+        }
+        @media (max-width: 768px) {
+            .date-form .form-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .date-form .form-row label {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">📅</span>
+                <h2>ماشین‌حساب تاریخ</h2>
+                <span class="badge">تفاوت &bull; افزودن &bull; روز هفته</span>
+            </div>
+
+            <div class="tool-tabs">
+                <button class="tab-btn active" data-tab="diff">📊 تفاوت دو تاریخ</button>
+                <button class="tab-btn" data-tab="add">➕ افزودن به تاریخ</button>
+                <button class="tab-btn" data-tab="weekday">📅 روز هفته</button>
+            </div>
+
+            <!-- تفاوت -->
+            <div class="tool-section active" id="diff">
+                <div class="date-form">
+                    <div class="form-row">
+                        <label>تاریخ اول:</label>
+                        <select class="calendar-select" id="diffCal1">
+                            <option value="gregorian">🌍 میلادی</option>
+                            <option value="jalali" selected>🇮🇷 شمسی</option>
+                            <option value="islamic">☪️ قمری</option>
+                        </select>
+                        <input type="text" id="diffDate1" placeholder="مثلاً 1404/01/15" />
+                    </div>
+                    <div class="form-row">
+                        <label>تاریخ دوم:</label>
+                        <select class="calendar-select" id="diffCal2">
+                            <option value="gregorian">🌍 میلادی</option>
+                            <option value="jalali" selected>🇮🇷 شمسی</option>
+                            <option value="islamic">☪️ قمری</option>
+                        </select>
+                        <input type="text" id="diffDate2" placeholder="مثلاً 1404/01/20" />
+                    </div>
+                </div>
+                <div class="date-result">
+                    <div class="result-label">تفاوت بین دو تاریخ</div>
+                    <div class="result-value" id="diffResult">۰ روز</div>
+                    <div class="result-detail" id="diffDetail">—</div>
+                </div>
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="calcDiffBtn" style="background:linear-gradient(135deg, #00ffcc, #00b4db);color:#0f0c29;">🧮 محاسبه</button>
+                    <button class="act-btn act-btn-today" id="todayDiffBtn">📅 امروز</button>
+                    <button class="act-btn act-btn-copy" id="copyDiffBtn">📋 کپی</button>
+                    <button class="act-btn act-btn-clear" id="clearDiffBtn">🗑️ پاک</button>
+                </div>
+            </div>
+
+            <!-- افزودن -->
+            <div class="tool-section" id="add">
+                <div class="date-form">
+                    <div class="form-row">
+                        <label>تاریخ پایه:</label>
+                        <select class="calendar-select" id="addCal">
+                            <option value="gregorian">🌍 میلادی</option>
+                            <option value="jalali" selected>🇮🇷 شمسی</option>
+                            <option value="islamic">☪️ قمری</option>
+                        </select>
+                        <input type="text" id="addBaseDate" placeholder="مثلاً 1404/01/15" />
+                    </div>
+                    <div class="form-row">
+                        <label>تعداد:</label>
+                        <input type="number" id="addAmount" value="7" min="1" />
+                    </div>
+                    <div class="form-row">
+                        <label>واحد:</label>
+                        <select id="addUnit">
+                            <option value="days">روز</option>
+                            <option value="weeks">هفته</option>
+                            <option value="months">ماه</option>
+                            <option value="years">سال</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label>عملیات:</label>
+                        <select id="addOperation">
+                            <option value="add">➕ افزودن</option>
+                            <option value="subtract">➖ کم کردن</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="date-result">
+                    <div class="result-label">تاریخ جدید</div>
+                    <div class="result-value" id="addResult">—</div>
+                    <div class="result-detail" id="addDetail">—</div>
+                </div>
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="calcAddBtn" style="background:linear-gradient(135deg, #00ffcc, #00b4db);color:#0f0c29;">🧮 محاسبه</button>
+                    <button class="act-btn act-btn-today" id="todayAddBtn">📅 امروز</button>
+                    <button class="act-btn act-btn-copy" id="copyAddBtn">📋 کپی</button>
+                    <button class="act-btn act-btn-clear" id="clearAddBtn">🗑️ پاک</button>
+                </div>
+            </div>
+
+            <!-- روز هفته -->
+            <div class="tool-section" id="weekday">
+                <div class="date-form">
+                    <div class="form-row">
+                        <label>تاریخ:</label>
+                        <select class="calendar-select" id="weekdayCal">
+                            <option value="gregorian">🌍 میلادی</option>
+                            <option value="jalali" selected>🇮🇷 شمسی</option>
+                            <option value="islamic">☪️ قمری</option>
+                        </select>
+                        <input type="text" id="weekdayDate" placeholder="مثلاً 1404/01/15" />
+                    </div>
+                </div>
+                <div class="date-result">
+                    <div class="result-label">روز هفته</div>
+                    <div class="result-value" id="weekdayResult" style="font-size:1.8rem;">—</div>
+                    <div class="result-detail" id="weekdayDetail">—</div>
+                    <div class="weekday" id="weekdayBadge" style="display:none;">—</div>
+                </div>
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="calcWeekdayBtn" style="background:linear-gradient(135deg, #00ffcc, #00b4db);color:#0f0c29;">🧮 محاسبه</button>
+                    <button class="act-btn act-btn-today" id="todayWeekdayBtn">📅 امروز</button>
+                    <button class="act-btn act-btn-copy" id="copyWeekdayBtn">📋 کپی</button>
+                    <button class="act-btn act-btn-clear" id="clearWeekdayBtn">🗑️ پاک</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+    <script src="moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-hijri/2.1.0/moment-hijri.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-jalaali/0.9.2/moment-jalaali.min.js"></script>
+
+    <script>
+        (function() {
+            moment.locale('fa');
+
+            function getTodayInCalendar(cal) {
+                const now = new Date();
+                if (cal === 'gregorian') return moment(now).format('YYYY/MM/DD');
+                if (cal === 'jalali') return moment(now).format('jYYYY/jMM/jDD');
+                if (cal === 'islamic') return moment(now).format('iYYYY/iMM/iDD');
+                return '';
+            }
+
+            function parseDate(str, cal) {
+                if (!str || str.trim() === '') return null;
+                str = str.trim().replace(/[^\d\/\-]/g, '');
+                if (cal === 'gregorian') { const m = moment(str, 'YYYY/MM/DD', true); return m.isValid() ? m.toDate() :
+                    null; }
+                if (cal === 'jalali') { const m = moment(str, 'jYYYY/jMM/jDD', true); return m.isValid() ? m.toDate() :
+                    null; }
+                if (cal === 'islamic') { const m = moment(str, 'iYYYY/iMM/iDD', true); return m.isValid() ? m.toDate() :
+                    null; }
+                return null;
+            }
+
+            function formatPersian(date) {
+                if (!date || isNaN(date.getTime())) return 'نامعتبر';
+                const m = moment(date);
+                const weekdays = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه', 'شنبه'];
+                const months = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+                return `${m.jDate()} ${months[m.jMonth()]} ${m.jYear()}`;
+            }
+
+            function getWeekday(date) {
+                if (!date || isNaN(date.getTime())) return 'نامعتبر';
+                const weekdays = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه', 'شنبه'];
+                return weekdays[date.getDay()];
+            }
+
+            function isWeekend(date) {
+                if (!date || isNaN(date.getTime())) return false;
+                return date.getDay() === 5 || date.getDay() === 6;
+            }
+
+            function copyToClipboard(text, btn) {
+                if (!text || text === '—' || text.includes('⚠️') || text.includes('نامعتبر')) {
+                    alert('متن برای کپی وجود ندارد.');
+                    return;
+                }
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text)
+                        .then(() => { btn.textContent = '✅ کپی شد';
+                            btn.classList.add('copied');
+                            setTimeout(() => { btn.textContent = btn.dataset.original || '📋 کپی';
+                                btn.classList.remove('copied'); }, 2000); })
+                        .catch(() => fallbackCopy(text, btn));
+                } else { fallbackCopy(text, btn); }
+            }
+
+            function fallbackCopy(text, btn) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try { document.execCommand('copy');
+                    btn.textContent = '✅ کپی شد';
+                    setTimeout(() => { btn.textContent = btn.dataset.original || '📋 کپی'; }, 2000); } catch (_) { alert(
+                        'کپی نشد.'); }
+                document.body.removeChild(textarea);
+            }
+
+            // Tab switching
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    document.querySelectorAll('.tool-section').forEach(s => s.classList.remove('active'));
+                    document.getElementById(this.dataset.tab).classList.add('active');
+                });
+            });
+
+            // Diff
+            const diffDate1 = document.getElementById('diffDate1');
+            const diffDate2 = document.getElementById('diffDate2');
+            const diffCal1 = document.getElementById('diffCal1');
+            const diffCal2 = document.getElementById('diffCal2');
+            const diffResult = document.getElementById('diffResult');
+            const diffDetail = document.getElementById('diffDetail');
+
+            function calcDiff() {
+                const d1 = parseDate(diffDate1.value, diffCal1.value);
+                const d2 = parseDate(diffDate2.value, diffCal2.value);
+                if (!d1 || !d2) { diffResult.textContent = '⚠️ تاریخ نامعتبر';
+                    diffDetail.textContent = '—'; return; }
+                const diffTime = Math.abs(d2 - d1);
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                diffResult.textContent = `${diffDays.toLocaleString('fa-IR')} روز`;
+                diffDetail.textContent = `${formatPersian(d1)} — ${formatPersian(d2)} (${diffDays} روز)`;
+            }
+
+            document.getElementById('calcDiffBtn').addEventListener('click', calcDiff);
+            document.getElementById('todayDiffBtn').addEventListener('click', function() {
+                diffDate1.value = getTodayInCalendar(diffCal1.value);
+                diffDate2.value = getTodayInCalendar(diffCal2.value);
+                calcDiff();
+            });
+            document.getElementById('copyDiffBtn').addEventListener('click', function() { copyToClipboard(diffResult.textContent,
+                    this); });
+            document.getElementById('clearDiffBtn').addEventListener('click', function() {
+                diffDate1.value = '';
+                diffDate2.value = '';
+                diffResult.textContent = '۰ روز';
+                diffDetail.textContent = '—';
+            });
+            diffDate1.addEventListener('change', calcDiff);
+            diffDate2.addEventListener('change', calcDiff);
+            diffCal1.addEventListener('change', calcDiff);
+            diffCal2.addEventListener('change', calcDiff);
+
+            // Add
+            const addBaseDate = document.getElementById('addBaseDate');
+            const addCal = document.getElementById('addCal');
+            const addAmount = document.getElementById('addAmount');
+            const addUnit = document.getElementById('addUnit');
+            const addOperation = document.getElementById('addOperation');
+            const addResult = document.getElementById('addResult');
+            const addDetail = document.getElementById('addDetail');
+
+            function calcAdd() {
+                const base = parseDate(addBaseDate.value, addCal.value);
+                if (!base) { addResult.textContent = '⚠️ تاریخ نامعتبر';
+                    addDetail.textContent = '—'; return; }
+                const amount = parseInt(addAmount.value) || 0;
+                const unit = addUnit.value;
+                const operation = addOperation.value;
+                const sign = operation === 'add' ? 1 : -1;
+                const newDate = new Date(base);
+                switch (unit) {
+                    case 'days':
+                        newDate.setDate(base.getDate() + (sign * amount));
+                        break;
+                    case 'weeks':
+                        newDate.setDate(base.getDate() + (sign * amount * 7));
+                        break;
+                    case 'months':
+                        newDate.setMonth(base.getMonth() + (sign * amount));
+                        break;
+                    case 'years':
+                        newDate.setFullYear(base.getFullYear() + (sign * amount));
+                        break;
+                }
+                let resultStr = '';
+                if (addCal.value === 'gregorian') resultStr = moment(newDate).format('YYYY/MM/DD');
+                else if (addCal.value === 'jalali') resultStr = moment(newDate).format('jYYYY/jMM/jDD');
+                else if (addCal.value === 'islamic') resultStr = moment(newDate).format('iYYYY/iMM/iDD');
+                addResult.textContent = resultStr;
+                const opText = operation === 'add' ? 'افزودن' : 'کم کردن';
+                const unitText = unit === 'days' ? 'روز' : unit === 'weeks' ? 'هفته' : unit === 'months' ? 'ماه' : 'سال';
+                addDetail.textContent = `${opText} ${amount} ${unitText} → ${formatPersian(newDate)}`;
+            }
+
+            document.getElementById('calcAddBtn').addEventListener('click', calcAdd);
+            document.getElementById('todayAddBtn').addEventListener('click', function() {
+                addBaseDate.value = getTodayInCalendar(addCal.value);
+                calcAdd();
+            });
+            document.getElementById('copyAddBtn').addEventListener('click', function() { copyToClipboard(addResult.textContent,
+                    this); });
+            document.getElementById('clearAddBtn').addEventListener('click', function() {
+                addBaseDate.value = '';
+                addResult.textContent = '—';
+                addDetail.textContent = '—';
+            });
+            addBaseDate.addEventListener('change', calcAdd);
+            addAmount.addEventListener('input', calcAdd);
+            addUnit.addEventListener('change', calcAdd);
+            addOperation.addEventListener('change', calcAdd);
+            addCal.addEventListener('change', calcAdd);
+
+            // Weekday
+            const weekdayDate = document.getElementById('weekdayDate');
+            const weekdayCal = document.getElementById('weekdayCal');
+            const weekdayResult = document.getElementById('weekdayResult');
+            const weekdayDetail = document.getElementById('weekdayDetail');
+            const weekdayBadge = document.getElementById('weekdayBadge');
+
+            function calcWeekday() {
+                const date = parseDate(weekdayDate.value, weekdayCal.value);
+                if (!date) { weekdayResult.textContent = '⚠️ تاریخ نامعتبر';
+                    weekdayDetail.textContent = '—';
+                    weekdayBadge.style.display = 'none'; return; }
+                const weekday = getWeekday(date);
+                const isWeekendDay = isWeekend(date);
+                weekdayResult.textContent = weekday;
+                weekdayDetail.textContent = formatPersian(date);
+                weekdayBadge.textContent = isWeekendDay ? '🎉 تعطیل' : '💼 روز کاری';
+                weekdayBadge.className = `weekday ${isWeekendDay ? 'weekend' : 'workday'}`;
+                weekdayBadge.style.display = 'inline-block';
+            }
+
+            document.getElementById('calcWeekdayBtn').addEventListener('click', calcWeekday);
+            document.getElementById('todayWeekdayBtn').addEventListener('click', function() {
+                weekdayDate.value = getTodayInCalendar(weekdayCal.value);
+                calcWeekday();
+            });
+            document.getElementById('copyWeekdayBtn').addEventListener('click', function() { copyToClipboard(weekdayResult
+                    .textContent, this); });
+            document.getElementById('clearWeekdayBtn').addEventListener('click', function() {
+                weekdayDate.value = '';
+                weekdayResult.textContent = '—';
+                weekdayDetail.textContent = '—';
+                weekdayBadge.style.display = 'none';
+            });
+            weekdayDate.addEventListener('change', calcWeekday);
+            weekdayCal.addEventListener('change', calcWeekday);
+
+            // Init - set today
+            diffDate1.value = getTodayInCalendar('jalali');
+            diffDate2.value = getTodayInCalendar('jalali');
+            addBaseDate.value = getTodayInCalendar('jalali');
+            weekdayDate.value = getTodayInCalendar('jalali');
+
+            setTimeout(() => { calcDiff();
+                calcAdd();
+                calcWeekday(); }, 100);
+            console.log('📅 Date Calculator loaded!');
+        })();
+    </script>
+</body>
+</html>

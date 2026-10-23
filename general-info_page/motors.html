@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>موتورسیکلت‌ها | نوینیکس</title>
+    <meta name="description" content="معرفی و اطلاعات کامل انواع موتورسیکلت‌های اسپورت، کروزر، آفرود، نیکد، اسکوتر، کلاسیک و تورینگ" />
+    <link rel="canonical" href="https://novinix.ir/pages/general-info/motors.html" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <style>
+        .motorcycles-hero {
+            background: linear-gradient(135deg, #1a1a2e, #2d1b69, #6c2eb7);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(108, 46, 183, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .motorcycles-hero::before { content: '🏍️'; position: absolute; font-size: 10rem; opacity: 0.05; right: -30px; bottom: -30px; transform: rotate(10deg); }
+        .motorcycles-hero h2 { font-size: 2rem; margin-bottom: 10px; position: relative; z-index: 1; }
+        .motorcycles-hero h2 span { color: #ff6b9d; }
+        .motorcycles-hero p { opacity: 0.85; font-size: 1.05rem; position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+        .category-filter { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
+        .cat-tag { background: rgba(255, 255, 255, 0.05); padding: 8px 20px; border-radius: 30px; font-size: 0.85rem; color: #a0b4c8; cursor: pointer; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.06); font-weight: 500; user-select: none; }
+        .cat-tag:hover { border-color: #00ffcc; transform: translateY(-2px); color: #00ffcc; }
+        .cat-tag.active { background: linear-gradient(135deg, #00ffcc, #00b4db); color: #0f0c29; border-color: #00ffcc; }
+        .motorcycle-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 10px; }
+        .motorcycle-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 18px; padding: 20px; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+        .motorcycle-card:hover { transform: translateY(-5px); border-color: #00ffcc; box-shadow: 0 12px 40px rgba(0, 255, 204, 0.1); }
+        .motorcycle-card .motorcycle-image { width: 100%; height: 200px; border-radius: 12px; overflow: hidden; margin-bottom: 15px; background: rgba(255, 255, 255, 0.03); display: flex; align-items: center; justify-content: center; position: relative; }
+        .motorcycle-card .motorcycle-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .motorcycle-card:hover .motorcycle-image img { transform: scale(1.05); }
+        .motorcycle-card .motorcycle-image .emoji-placeholder { font-size: 4rem; opacity: 0.3; }
+        .motorcycle-card .motorcycle-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .motorcycle-card .motorcycle-name { font-size: 1.2rem; font-weight: 700; color: #e8f5f0; }
+        .motorcycle-card .motorcycle-name-en { font-size: 0.9rem; font-weight: 400; color: #a0b4c8; display: block; }
+        .motorcycle-card .category-badge { font-size: 0.6rem; padding: 3px 12px; border-radius: 20px; font-weight: 700; white-space: nowrap; margin-top: 2px; }
+        .category-badge.sport { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+        .category-badge.cruiser { background: rgba(52, 152, 219, 0.2); color: #3498db; }
+        .category-badge.adventure { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .category-badge.naked { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+        .category-badge.scooter { background: rgba(155, 89, 182, 0.2); color: #9b59b6; }
+        .category-badge.classic { background: rgba(243, 156, 18, 0.2); color: #f39c12; }
+        .category-badge.tour { background: rgba(85, 239, 196, 0.2); color: #55efc4; }
+        .category-badge.offroad { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+        .motorcycle-card .motorcycle-description { font-size: 0.85rem; color: #a0b4c8; line-height: 1.6; flex-grow: 1; }
+        .motorcycle-card .motorcycle-description p { margin-bottom: 6px; }
+        .motorcycle-card .motorcycle-description p:last-child { margin-bottom: 0; }
+        .motorcycle-card { opacity: 0; animation: fadeInUp 0.5s ease forwards; }
+        .motorcycle-card:nth-child(1) { animation-delay: 0.03s; }
+        .motorcycle-card:nth-child(2) { animation-delay: 0.06s; }
+        .motorcycle-card:nth-child(3) { animation-delay: 0.09s; }
+        .motorcycle-card:nth-child(4) { animation-delay: 0.12s; }
+        .motorcycle-card:nth-child(5) { animation-delay: 0.15s; }
+        .motorcycle-card:nth-child(6) { animation-delay: 0.18s; }
+        .motorcycle-card:nth-child(7) { animation-delay: 0.21s; }
+        .motorcycle-card:nth-child(8) { animation-delay: 0.24s; }
+        .motorcycle-card:nth-child(9) { animation-delay: 0.27s; }
+        .motorcycle-card:nth-child(10) { animation-delay: 0.30s; }
+        .motorcycle-card:nth-child(11) { animation-delay: 0.33s; }
+        .motorcycle-card:nth-child(12) { animation-delay: 0.36s; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .no-results { text-align: center; padding: 50px 20px; color: #a0b4c8; display: none; }
+        .no-results .big-icon { font-size: 4rem; display: block; margin-bottom: 15px; }
+        .no-results h3 { color: #e8f5f0; margin-bottom: 5px; }
+        @media (max-width: 768px) {
+            .motorcycles-hero { padding: 25px 20px; }
+            .motorcycles-hero h2 { font-size: 1.5rem; }
+            .motorcycle-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .motorcycle-card .motorcycle-image { height: 150px; }
+            .cat-tag { font-size: 0.75rem; padding: 6px 14px; }
+        }
+        @media (max-width: 480px) {
+            .motorcycle-grid { grid-template-columns: 1fr; }
+            .motorcycle-card .motorcycle-image { height: 180px; }
+            .motorcycle-card .motorcycle-name { font-size: 1rem; }
+            .motorcycles-hero h2 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader"></header>
+
+    <main>
+        <div class="motorcycles-hero">
+            <h2>🏍️ موتورسیکلت‌های <span>جهان</span></h2>
+            <p>دنیای شگفت‌انگیز موتورسیکلت‌ها از اسپورت تا آفرود</p>
+        </div>
+
+        <div class="category-filter">
+            <span class="cat-tag active" data-cat="all">همه</span>
+            <span class="cat-tag" data-cat="sport">🏎️ اسپورت</span>
+            <span class="cat-tag" data-cat="cruiser">🛣️ کروزر</span>
+            <span class="cat-tag" data-cat="adventure">⛰️ آفرود-ماجراجو</span>
+            <span class="cat-tag" data-cat="naked">🟥 نیکِد</span>
+            <span class="cat-tag" data-cat="scooter">🛵 اسکوتر</span>
+            <span class="cat-tag" data-cat="classic">🕰️ کلاسیک</span>
+            <span class="cat-tag" data-cat="tour">🧳 تورینگ</span>
+            <span class="cat-tag" data-cat="offroad">🏜️ آفرود</span>
+        </div>
+
+        <div class="motorcycle-grid" id="motorcycleGrid"></div>
+
+        <div class="no-results" id="noResults">
+            <span class="big-icon">🔍</span>
+            <h3>نتیجه‌ای یافت نشد</h3>
+            <p>در دسته‌بندی انتخاب شده موتورسیکلتی وجود ندارد</p>
+        </div>
+    </main>
+
+    <footer id="mainFooter"></footer>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        const motorcyclesData = [
+            { id: 'cbr1000rr', nameFa: 'هوندا CBR1000RR', nameEn: 'Honda CBR1000RR', category: 'sport', image: 'cbr1000rr.jpg', emoji: '🏎️', description: ['هوندا CBR1000RR یکی از معروف‌ترین موتورسیکلت‌های اسپورت با عملکرد بالا است.', 'CBR1000RR به عنوان یکی از بهترین سوپراسپورت‌های هوندا شناخته می‌شود.'] },
+            { id: 'yamaha_r1', nameFa: 'یاماها R1', nameEn: 'Yamaha YZF-R1', category: 'sport', image: 'yamaha_r1.jpg', emoji: '🏎️', description: ['یاماها R1 یکی از پرافتخارترین موتورسیکلت‌های اسپورت با طراحی و عملکرد استثنایی است.', 'یاماها R1 به عنوان یکی از بهترین سوپراسپورت‌های جهان شناخته می‌شود.'] },
+            { id: 'kawasaki_ninja_h2', nameFa: 'کاوازاکی نینجا H2', nameEn: 'Kawasaki Ninja H2', category: 'sport', image: 'kawasaki_ninja_h2.jpg', emoji: '🏎️', description: ['کاوازاکی نینجا H2 یک سوپراسپورت با توربوشارژ و قدرت ۳۱۰ اسب‌بخار است.', 'نینجا H2 به عنوان یکی از سریع‌ترین موتورسیکلت‌های جهان شناخته می‌شود.'] },
+            { id: 'ducati_panigale_v4', nameFa: 'دوکاتی پانیگاله V4', nameEn: 'Ducati Panigale V4', category: 'sport', image: 'ducati_panigale_v4.jpg', emoji: '🏎️', description: ['دوکاتی پانیگاله V4 یک سوپراسپورت ایتالیایی با موتور V4 و طراحی خیره‌کننده است.', 'پانیگاله V4 به عنوان یکی از بهترین سوپراسپورت‌های دوکاتی شناخته می‌شود.'] },
+            { id: 'harley_davidson_iron_883', nameFa: 'هارلی دیویدسون آیرون ۸۸۳', nameEn: 'Harley-Davidson Iron 883', category: 'cruiser', image: 'harley_davidson_iron_883.jpg', emoji: '🛣️', description: ['هارلی دیویدسون آیرون ۸۸۳ یک کروزر کلاسیک با طراحی مینیمال و صدای افسانه‌ای است.', 'آیرون ۸۸۳ به عنوان یکی از محبوب‌ترین کروزرهای هارلی دیویدسون شناخته می‌شود.'] },
+            { id: 'harley_davidson_road_king', nameFa: 'هارلی دیویدسون رود کینگ', nameEn: 'Harley-Davidson Road King', category: 'cruiser', image: 'harley_davidson_road_king.jpg', emoji: '🛣️', description: ['هارلی دیویدسون رود کینگ یک کروزر کلاسیک با طراحی جاده‌ای و کیسه‌های جانبی است.', 'رود کینگ به عنوان یکی از بهترین کروزرهای هارلی دیویدسون برای سفرهای طولانی شناخته می‌شود.'] },
+            { id: 'yamaha_vmax', nameFa: 'یاماها VMAX', nameEn: 'Yamaha VMAX', category: 'cruiser', image: 'yamaha_vmax.jpg', emoji: '🛣️', description: ['یاماها VMAX یک کروزر قدرت‌مطلق با موتور V4 و طراحی عضلانی است.', 'VMAX به عنوان "پادشاه کروزرها" در جهان شناخته می‌شود.'] },
+            { id: 'bmw_gs1250', nameFa: 'بی‌ام‌و GS1250', nameEn: 'BMW R1250GS', category: 'adventure', image: 'bmw_gs1250.jpg', emoji: '⛰️', description: ['بی‌ام‌و GS1250 یکی از معروف‌ترین موتورسیکلت‌های آفرود-ماجراجو با توانایی سفرهای طولانی است.', 'GS1250 به عنوان یکی از بهترین موتورسیکلت‌های ماجراجو در جهان شناخته می‌شود.'] },
+            { id: 'yamaha_mt_09', nameFa: 'یاماها MT-09', nameEn: 'Yamaha MT-09', category: 'naked', image: 'yamaha_mt_09.jpg', emoji: '🟥', description: ['یاماها MT-09 یک موتورسیکلت نیکد با طراحی جسورانه و موتور سه سیلندر است.', 'MT-09 به عنوان یکی از بهترین موتورسیکلت‌های نیکد در جهان شناخته می‌شود.'] },
+            { id: 'ducati_monster', nameFa: 'دوکاتی مونستر', nameEn: 'Ducati Monster', category: 'naked', image: 'ducati_monster.jpg', emoji: '🟥', description: ['دوکاتی مونستر یک موتورسیکلت نیکد ایتالیایی با طراحی مینیمال و موتور L2 است.', 'مونستر به عنوان یکی از نمادین‌ترین موتورسیکلت‌های نیکد جهان شناخته می‌شود.'] },
+            { id: 'vespa_sprint', nameFa: 'وسپا اسپرینت', nameEn: 'Vespa Sprint', category: 'scooter', image: 'vespa_sprint.jpg', emoji: '🛵', description: ['وسپا اسپرینت یک اسکوتر کلاسیک ایتالیایی با طراحی زیبا و شاسی فولادی است.', 'وسپا اسپرینت به عنوان یکی از محبوب‌ترین اسکوترهای جهان شناخته می‌شود.'] },
+            { id: 'triumph_bonneville', nameFa: 'تریومف بانویل', nameEn: 'Triumph Bonneville', category: 'classic', image: 'triumph_bonneville.jpg', emoji: '🕰️', description: ['تریومف بانویل یک موتورسیکلت کلاسیک با طراحی خاطره‌انگیز و موتور دو سیلندر است.', 'بانویل به عنوان یکی از نمادین‌ترین موتورسیکلت‌های کلاسیک جهان شناخته می‌شود.'] },
+            { id: 'royal_enfield_continental_gt', nameFa: 'رویال انفیلد کانتیننتال GT', nameEn: 'Royal Enfield Continental GT', category: 'classic', image: 'royal_enfield_continental_gt.jpg', emoji: '🕰️', description: ['رویال انفیلد کانتیننتال GT یک موتورسیکلت کلاسیک با طراحی کافه‌ریس و موتور ۶۵۰ سی‌سی است.', 'کانتیننتال GT به عنوان یکی از بهترین موتورسیکلت‌های کلاسیک رویال انفیلد شناخته می‌شود.'] },
+            { id: 'honda_gold_wing', nameFa: 'هوندا گلد وینگ', nameEn: 'Honda Gold Wing', category: 'tour', image: 'honda_gold_wing.jpg', emoji: '🧳', description: ['هوندا گلد وینگ یکی از معروف‌ترین موتورسیکلت‌های تورینگ با فضای داخلی جادار است.', 'گلد وینگ به عنوان "پادشاه موتورسیکلت‌های تورینگ" شناخته می‌شود.'] },
+            { id: 'ktm_300_exc', nameFa: 'کی‌تی‌ام ۳۰۰ EXC', nameEn: 'KTM 300 EXC', category: 'offroad', image: 'ktm_300_exc.jpg', emoji: '🏜️', description: ['کی‌تی‌ام ۳۰۰ EXC یک موتورسیکلت آفرود با موتور دو زمانه و طراحی سبک است.', '۳۰۰ EXC به عنوان یکی از بهترین موتورسیکلت‌های آفرود کی‌تی‌ام شناخته می‌شود.'] },
+            { id: 'yamaha_yz450f', nameFa: 'یاماها YZ450F', nameEn: 'Yamaha YZ450F', category: 'offroad', image: 'yamaha_yz450f.jpg', emoji: '🏜️', description: ['یاماها YZ450F یک موتورسیکلت آفرود و موتورکراس با موتور ۴۵۰ سی‌سی است.', 'YZ450F به عنوان یکی از بهترین موتورسیکلت‌های موتورکراس یاماها شناخته می‌شود.'] }
+        ];
+
+        function renderMotorcycles(data, filterCategory = 'all') {
+            const grid = document.getElementById('motorcycleGrid');
+            const noResults = document.getElementById('noResults');
+            let html = '';
+            let count = 0;
+
+            data.forEach(item => {
+                if (filterCategory !== 'all' && item.category !== filterCategory) return;
+                count++;
+                const imagePath = `motorcycles_ph/${item.image}`;
+                const catLabels = { sport: '🏎️ اسپورت', cruiser: '🛣️ کروزر', adventure: '⛰️ آفرود-ماجراجو', naked: '🟥 نیکِد', scooter: '🛵 اسکوتر', classic: '🕰️ کلاسیک', tour: '🧳 تورینگ', offroad: '🏜️ آفرود' };
+                const catClasses = { sport: 'sport', cruiser: 'cruiser', adventure: 'adventure', naked: 'naked', scooter: 'scooter', classic: 'classic', tour: 'tour', offroad: 'offroad' };
+
+                html += `
+                    <div class="motorcycle-card" data-category="${item.category}">
+                        <div class="motorcycle-image">
+                            <img src="${imagePath}" alt="${item.nameFa}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                            <span class="emoji-placeholder" style="display:none;">${item.emoji || '🏍️'}</span>
+                        </div>
+                        <div class="motorcycle-header">
+                            <div>
+                                <div class="motorcycle-name">${item.nameFa}</div>
+                                <span class="motorcycle-name-en">${item.nameEn}</span>
+                            </div>
+                            <span class="category-badge ${catClasses[item.category]}">${catLabels[item.category]}</span>
+                        </div>
+                        <div class="motorcycle-description">${item.description.map(p => `<p>${p}</p>`).join('')}</div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+            if (count === 0) noResults.style.display = 'block';
+            else noResults.style.display = 'none';
+
+            const cards = grid.querySelectorAll('.motorcycle-card');
+            cards.forEach((card, index) => {
+                card.style.animation = 'none';
+                card.offsetHeight;
+                card.style.animation = `fadeInUp 0.5s ease forwards`;
+                card.style.animationDelay = `${(index % 12) * 0.03 + 0.03}s`;
+            });
+        }
+
+        document.querySelectorAll('.cat-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                document.querySelectorAll('.cat-tag').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                renderMotorcycles(motorcyclesData, this.dataset.cat);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMotorcycles(motorcyclesData, 'all');
+        });
+    </script>
+</body>
+</html>

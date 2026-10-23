@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>آموزش ها | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+
+    <!-- ===== CSS فایل‌های جداگانه ===== -->
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+
+    <style>
+        /* ===== استایل‌های اختصاصی آموزش‌ها ===== */
+        .programming-hero {
+            background: linear-gradient(135deg, #0d1117, #161b22, #1c2333);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .programming-hero::before {
+            content: '💻';
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.03;
+            right: -30px;
+            bottom: -30px;
+            transform: rotate(10deg);
+        }
+
+        .programming-hero h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .programming-hero h2 span {
+            color: #58a6ff;
+        }
+
+        .programming-hero p {
+            opacity: 0.7;
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: #00ffcc;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-right: 4px solid #00ffcc;
+            padding-right: 15px;
+        }
+
+        .section-title span {
+            font-size: 1.8rem;
+        }
+
+        .programming-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .code-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .code-card:hover {
+            transform: translateY(-5px);
+            border-color: #58a6ff;
+            box-shadow: 0 12px 40px rgba(88, 166, 255, 0.12);
+        }
+
+        .code-card .icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .code-card h3 {
+            color: #e8f5f0;
+            margin-bottom: 5px;
+            font-size: 1.05rem;
+        }
+
+        .code-card .lang-tag {
+            display: inline-block;
+            background: rgba(88, 166, 255, 0.15);
+            color: #58a6ff;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin: 5px 0 10px;
+        }
+
+        .code-card p {
+            color: #a0b4c8;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .code-card .btn-code {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 25px;
+            background: #0d1117;
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .code-card .btn-code:hover {
+            background: #58a6ff;
+            color: #0d1117;
+            box-shadow: 0 6px 20px rgba(88, 166, 255, 0.3);
+        }
+
+        .code-card .badge {
+            display: inline-block;
+            font-size: 0.55rem;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .badge.popular { background: #e74c3c; color: white; }
+        .badge.new { background: #2ecc71; color: white; }
+        .badge.hot { background: #e67e22; color: white; }
+        .badge.updated { background: #3498db; color: white; }
+
+        @media (max-width: 768px) {
+            .programming-hero h2 { font-size: 1.5rem; }
+            .programming-grid { grid-template-columns: 1fr 1fr; }
+            .code-card { padding: 20px; }
+            .section-title { font-size: 1.3rem; }
+        }
+
+        @media (max-width: 480px) {
+            .programming-grid { grid-template-columns: 1fr; }
+            .section-title { font-size: 1.1rem; padding-right: 10px; }
+            .section-title span { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER توسط header.js ساخته می‌شود ===== -->
+
+    <main>
+        <div class="programming-hero">
+            <h2>💻 آموزش ها <span>نوینیکس</span></h2>
+            <p>آموزش‌ها، اسنیپت‌های کد، ابزارهای توسعه و منابع یادگیری</p>
+        </div>
+
+        <div class="section-title">
+            <span>💻</span> برنامه نویسی
+        </div>
+
+        <div class="programming-grid">
+            <div class="code-card">
+                <span class="badge hot">داغ</span>
+                <span class="icon">🐍</span>
+                <h3>Python</h3>
+                <span class="lang-tag">Python</span>
+                <p>آموزش ها پایتون برای علوم داده، هوش مصنوعی و وب</p>
+                <a href="../education_page/py.html" class="btn-code">مشاهده دوره</a>
+            </div>
+
+            <div class="code-card">
+                <span class="badge popular">محبوب</span>
+                <span class="icon">⚛️</span>
+                <h3>React.js</h3>
+                <span class="lang-tag">JavaScript</span>
+                <p>آموزش جامع React از مقدماتی تا پیشرفته با پروژه‌های عملی</p>
+                <a href="../education_page/React.html" class="btn-code">مشاهده دوره</a>
+            </div>
+
+            <div class="code-card">
+                <span class="badge new">جدید</span>
+                <span class="icon">☕</span>
+                <h3>Java</h3>
+                <span class="lang-tag">Java</span>
+                <p>آموزش جاوا برای توسعه اپلیکیشن‌های اندروید و سازمانی</p>
+                <a href="../education_page/Java.html" class="btn-code">مشاهده دوره</a>
+            </div>
+
+            <div class="code-card">
+                <span class="icon">📱</span>
+                <h3>Flutter</h3>
+                <span class="lang-tag">Dart</span>
+                <p>توسعه اپلیکیشن‌های کراس پلتفرم با فلاتر و دارت</p>
+                <a href="../education_page/Flutter.html" class="btn-code">مشاهده دوره</a>
+            </div>
+
+            <div class="code-card">
+                <span class="badge updated">به‌روز</span>
+                <span class="icon">🟦</span>
+                <h3>TypeScript</h3>
+                <span class="lang-tag">TypeScript</span>
+                <p>جاوااسکریپت تایپ‌شده برای پروژه‌های بزرگ و مقیاس‌پذیر</p>
+                <a href="../education_page/TypeScript.html" class="btn-code">مشاهده دوره</a>
+            </div>
+
+            <div class="code-card">
+                <span class="icon">🗄️</span>
+                <h3>SQL</h3>
+                <span class="lang-tag">SQL</span>
+                <p>آموزش پایگاه داده، کوئری‌نویسی و بهینه‌سازی</p>
+                <a href="../education_page/SQL.html" class="btn-code">مشاهده دوره</a>
+            </div>
+
+
+        </div>
+    </main>
+
+    <!-- ===== FOOTER توسط footer.js ساخته می‌شود ===== -->
+
+    <!-- ===== اسکریپت‌ها ===== -->
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+</body>
+</html>

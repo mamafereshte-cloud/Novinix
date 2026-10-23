@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>انتخاب رنگ آنلاین | ابزار پالت رنگی حرفه‌ای Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای انتخاب رنگ با پالت‌های آماده، کدهای HEX، RGB، HSL و نمایش پیش‌نمایش زنده." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/color-picker" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .color-preview-wrap {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .color-preview-box {
+            width: 120px;
+            height: 120px;
+            border-radius: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+        .color-info .color-hex-display {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #e8f5f0;
+            font-family: 'Courier New', monospace;
+            direction: ltr;
+        }
+        .color-info .color-rgb-display,
+        .color-info .color-hsl-display {
+            font-size: 0.95rem;
+            color: #a0b4c8;
+            direction: ltr;
+        }
+        .color-input-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .color-input-group input[type="color"] {
+            width: 60px;
+            height: 60px;
+            padding: 2px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.04);
+            flex-shrink: 0;
+        }
+        .color-input-group input[type="color"]:hover {
+            border-color: #00ffcc;
+        }
+        .color-input-group .color-input-text {
+            flex: 1;
+            min-width: 150px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .color-input-group .color-input-text input {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Courier New', monospace;
+            direction: ltr;
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8f5f0;
+            transition: all 0.25s ease;
+        }
+        .color-input-group .color-input-text input:focus {
+            border-color: #00ffcc;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.1);
+        }
+        .color-input-group .color-input-text .apply-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .color-input-group .color-input-text .apply-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 255, 204, 0.3);
+        }
+        .color-codes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            padding: 16px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 20px;
+        }
+        .color-codes .code-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .color-codes .code-item .code-label {
+            font-size: 0.75rem;
+            color: rgba(160, 180, 200, 0.4);
+            font-weight: 600;
+            min-width: 40px;
+        }
+        .color-codes .code-item .code-value {
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+            color: #e8f5f0;
+            direction: ltr;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 4px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            flex: 1;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .color-codes .code-item .code-value:hover {
+            border-color: #00ffcc;
+            background: rgba(0, 255, 204, 0.04);
+        }
+        .color-codes .code-item .code-value.copied {
+            border-color: #00ffcc;
+            background: rgba(0, 255, 204, 0.1);
+        }
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+        }
+        .palette-grid .p-color {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+        .palette-grid .p-color:hover {
+            transform: scale(1.08);
+            border-color: #e8f5f0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+        .palette-grid .p-color:active {
+            transform: scale(0.92);
+        }
+        .palette-grid .p-color .check {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+        }
+        .palette-grid .p-color.active .check {
+            opacity: 1;
+        }
+        @media (max-width: 640px) {
+            .color-preview-wrap {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .color-preview-box {
+                width: 100px;
+                height: 100px;
+            }
+            .color-info .color-hex-display {
+                font-size: 1.5rem;
+            }
+            .color-input-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            .color-input-group .color-input-text {
+                width: 100%;
+            }
+            .palette-grid {
+                grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            }
+            .color-codes {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">🎨</span>
+                <h2>انتخاب رنگ</h2>
+                <span class="badge">HEX &bull; RGB &bull; HSL</span>
+            </div>
+
+            <div class="color-preview-wrap">
+                <div class="color-preview-box" id="colorPreview" style="background:#1abc9c;"></div>
+                <div class="color-info">
+                    <div class="color-hex-display" id="hexDisplay">#1ABC9C</div>
+                    <div class="color-rgb-display" id="rgbDisplay">RGB: 26, 188, 156</div>
+                    <div class="color-hsl-display" id="hslDisplay">HSL: 168°, 76%, 42%</div>
+                </div>
+            </div>
+
+            <div class="color-input-group">
+                <input type="color" id="colorPicker" value="#1abc9c" />
+                <div class="color-input-text">
+                    <input type="text" id="hexInput" placeholder="#HEX" value="#1abc9c" />
+                    <button class="apply-btn" id="applyColorBtn">اعمال</button>
+                </div>
+            </div>
+
+            <div class="color-codes">
+                <div class="code-item"><span class="code-label">HEX</span><span class="code-value" id="hexCode" data-copy="#1abc9c">#1abc9c</span></div>
+                <div class="code-item"><span class="code-label">RGB</span><span class="code-value" id="rgbCode" data-copy="rgb(26, 188, 156)">rgb(26, 188, 156)</span></div>
+                <div class="code-item"><span class="code-label">HSL</span><span class="code-value" id="hslCode" data-copy="hsl(168, 76%, 42%)">hsl(168, 76%, 42%)</span></div>
+                <div class="code-item"><span class="code-label">CMYK</span><span class="code-value" id="cmykCode" data-copy="cmyk(86%, 0%, 17%, 26%)">cmyk(86%, 0%, 17%, 26%)</span></div>
+            </div>
+
+            <div>
+                <span style="font-size:0.85rem;color:#a0b4c8;font-weight:600;display:block;margin-bottom:10px;">🎨 پالت‌های رنگی آماده</span>
+                <div class="palette-grid" id="paletteGrid"></div>
+            </div>
+        </div>
+    </main>
+
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            const palettes = [
+                '#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff6bd6',
+                '#ff9f43', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff',
+                '#00d2d3', '#01a3a4', '#f368e0', '#ff9f43', '#00d2d3',
+                '#1abc9c', '#2ecc71', '#3498db', '#9b59b6', '#e67e22',
+                '#e74c3c', '#f1c40f', '#2ecc71', '#1abc9c', '#3498db'
+            ];
+
+            const preview = document.getElementById('colorPreview');
+            const hexDisplay = document.getElementById('hexDisplay');
+            const rgbDisplay = document.getElementById('rgbDisplay');
+            const hslDisplay = document.getElementById('hslDisplay');
+            const colorPicker = document.getElementById('colorPicker');
+            const hexInput = document.getElementById('hexInput');
+            const hexCode = document.getElementById('hexCode');
+            const rgbCode = document.getElementById('rgbCode');
+            const hslCode = document.getElementById('hslCode');
+            const cmykCode = document.getElementById('cmykCode');
+
+            function hexToRgb(hex) {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
+            }
+
+            function rgbToHsl(r, g, b) {
+                r /= 255;
+                g /= 255;
+                b /= 255;
+                const max = Math.max(r, g, b),
+                    min = Math.min(r, g, b);
+                let h, s, l = (max + min) / 2;
+                if (max === min) { h = s = 0; } else {
+                    const d = max - min;
+                    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                    if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+                    else if (max === g) h = ((b - r) / d + 2) / 6;
+                    else h = ((r - g) / d + 4) / 6;
+                }
+                return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+            }
+
+            function rgbToCmyk(r, g, b) {
+                const c = 1 - r / 255,
+                    m = 1 - g / 255,
+                    y = 1 - b / 255,
+                    k = Math.min(c, m, y);
+                return {
+                    c: Math.round((c - k) / (1 - k) * 100) || 0,
+                    m: Math.round((m - k) / (1 - k) * 100) || 0,
+                    y: Math.round((y - k) / (1 - k) * 100) || 0,
+                    k: Math.round(k * 100) || 0
+                };
+            }
+
+            function updateColor(hex) {
+                if (!hex.startsWith('#')) hex = '#' + hex;
+                if (!/^#[0-9a-fA-F]{6}$/.test(hex)) return;
+                preview.style.background = hex;
+                hexDisplay.textContent = hex.toUpperCase();
+                const rgb = hexToRgb(hex);
+                if (rgb) {
+                    rgbDisplay.textContent = `RGB: ${rgb.r}, ${rgb.g}, ${rgb.b}`;
+                    const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+                    hslDisplay.textContent = `HSL: ${hsl.h}°, ${hsl.s}%, ${hsl.l}%`;
+                    hexCode.textContent = hex.toLowerCase();
+                    hexCode.dataset.copy = hex.toLowerCase();
+                    rgbCode.textContent = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+                    rgbCode.dataset.copy = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+                    hslCode.textContent = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+                    hslCode.dataset.copy = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+                    const cmyk = rgbToCmyk(rgb.r, rgb.g, rgb.b);
+                    cmykCode.textContent = `cmyk(${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%)`;
+                    cmykCode.dataset.copy = `cmyk(${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%)`;
+                    colorPicker.value = hex;
+                    hexInput.value = hex;
+                }
+            }
+
+            colorPicker.addEventListener('input', function() { updateColor(this.value); });
+
+            hexInput.addEventListener('input', function() {
+                const val = this.value.trim();
+                if (/^#[0-9a-fA-F]{6}$/.test(val) || /^[0-9a-fA-F]{6}$/.test(val)) updateColor(val);
+            });
+
+            document.getElementById('applyColorBtn').addEventListener('click', function() {
+                const val = hexInput.value.trim();
+                if (/^#[0-9a-fA-F]{6}$/.test(val) || /^[0-9a-fA-F]{6}$/.test(val)) updateColor(val);
+                else alert('لطفاً یک کد HEX معتبر وارد کنید. (مثال: #1abc9c)');
+            });
+
+            // Palette
+            const grid = document.getElementById('paletteGrid');
+            palettes.forEach(color => {
+                const el = document.createElement('div');
+                el.className = 'p-color';
+                el.style.background = color;
+                el.innerHTML = `<span class="check">✓</span>`;
+                el.addEventListener('click', function() {
+                    document.querySelectorAll('.p-color').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    updateColor(color);
+                });
+                grid.appendChild(el);
+            });
+
+            // Copy
+            document.querySelectorAll('.code-value').forEach(el => {
+                el.addEventListener('click', function() {
+                    const text = this.dataset.copy || this.textContent;
+                    navigator.clipboard.writeText(text).then(() => {
+                        this.classList.add('copied');
+                        setTimeout(() => this.classList.remove('copied'), 1000);
+                    });
+                });
+            });
+
+            updateColor('#1abc9c');
+            console.log('🎨 Color Picker loaded!');
+        })();
+    </script>
+</body>
+</html>

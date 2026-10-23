@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>حذف خطوط تکراری آنلاین | ابزار پاک‌سازی متن Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای حذف خطوط تکراری از متن. مرتب‌سازی، نمایش تعداد تکراری‌ها و پاک‌سازی داده‌ها." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/duplicate-line-remover" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .dup-settings {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin: 12px 0;
+            align-items: center;
+        }
+        .dup-settings label {
+            font-size: 0.82rem;
+            color: #a0b4c8;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .dup-settings input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #00ffcc;
+            cursor: pointer;
+        }
+        .tool-textarea {
+            min-height: 300px;
+        }
+        .stat-value.danger {
+            color: #f87171;
+        }
+        @media (max-width: 820px) {
+            .tool-textarea {
+                min-height: 200px;
+            }
+            .dup-settings {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">📋</span>
+                <h2>حذف خطوط تکراری</h2>
+                <span class="badge">پاک‌سازی &bull; مرتب‌سازی &bull; فایل</span>
+            </div>
+
+            <div class="toolbar">
+                <button class="tb-btn upload" id="uploadBtn">📂 آپلود فایل</button>
+                <button class="tb-btn primary" id="processBtn">🔄 پردازش</button>
+                <span class="tb-divider"></span>
+                <button class="tb-btn" id="sampleBtn">📄 نمونه</button>
+                <button class="tb-btn danger" id="clearBtn">🗑️ پاک</button>
+            </div>
+
+            <div class="drop-zone" id="fileDropZone">
+                <span class="dz-icon">📂</span>
+                <span class="dz-text">برای آپلود فایل <strong>کلیک کنید</strong> یا فایل را <strong>بکشید</strong> و رها کنید</span>
+                <span class="dz-hint">پسوندهای مجاز: .txt, .csv, .log • حداکثر حجم: ۱۰ مگابایت</span>
+                <input type="file" id="fileInput" accept=".txt,.csv,.log" />
+            </div>
+
+            <div class="file-info" id="fileInfo" style="display:none;">
+                <span class="fi-icon">📄</span>
+                <span class="fi-name" id="fileName">file.txt</span>
+                <span class="fi-size" id="fileSize">۰ KB</span>
+                <span class="fi-remove" id="removeFileBtn">✕ حذف فایل</span>
+            </div>
+
+            <div class="tool-status" id="dupStatus"></div>
+
+            <div class="dup-settings">
+                <label><input type="checkbox" id="caseSensitive" /> حساس به بزرگی/کوچکی حروف</label>
+                <label><input type="checkbox" id="sortLines" checked /> مرتب‌سازی خطوط</label>
+                <label><input type="checkbox" id="trimLines" checked /> حذف فاصله‌های اضافی</label>
+                <label><input type="checkbox" id="removeEmptyLines" checked /> حذف خطوط خالی</label>
+            </div>
+
+            <div class="two-col-layout">
+                <div>
+                    <div class="panel-header"><span>📥 ورودی</span></div>
+                    <textarea class="tool-textarea" id="dupInput" placeholder="خطوط را اینجا وارد کنید..."></textarea>
+                </div>
+                <div>
+                    <div class="panel-header"><span>📤 خروجی</span></div>
+                    <textarea class="tool-textarea output" id="dupOutput" placeholder="نتیجه در اینجا نمایش داده می‌شود..." readonly></textarea>
+                </div>
+            </div>
+
+            <div class="tool-stats">
+                <span>📊 خطوط ورودی: <span class="stat-value" id="inputLines">۰</span></span>
+                <span>📊 خطوط خروجی: <span class="stat-value changed" id="outputLines">۰</span></span>
+                <span>📉 حذف شده: <span class="stat-value danger" id="removedLines">۰</span></span>
+                <span>📈 نرخ حذف: <span class="stat-value" id="removalRate">۰%</span></span>
+            </div>
+
+            <div class="tool-actions">
+                <button class="act-btn act-btn-copy" id="processDupBtn" style="background:linear-gradient(135deg, #00ffcc, #00b4db);color:#0f0c29;">🔄 پردازش</button>
+                <button class="act-btn act-btn-copy" id="copyDupBtn">📋 کپی خروجی</button>
+                <button class="act-btn act-btn-copy" id="copyInputBtn">📋 کپی ورودی</button>
+                <button class="act-btn act-btn-clear" id="clearDupBtn">🗑️ پاک کردن</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            const input = document.getElementById('dupInput');
+            const output = document.getElementById('dupOutput');
+            const caseSensitive = document.getElementById('caseSensitive');
+            const sortLines = document.getElementById('sortLines');
+            const trimLines = document.getElementById('trimLines');
+            const removeEmptyLines = document.getElementById('removeEmptyLines');
+            const processBtn = document.getElementById('processBtn');
+            const processDupBtn = document.getElementById('processDupBtn');
+            const sampleBtn = document.getElementById('sampleBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const copyDupBtn = document.getElementById('copyDupBtn');
+            const copyInputBtn = document.getElementById('copyInputBtn');
+            const clearDupBtn = document.getElementById('clearDupBtn');
+            const dupStatus = document.getElementById('dupStatus');
+
+            const fileDropZone = document.getElementById('fileDropZone');
+            const fileInput = document.getElementById('fileInput');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const removeFileBtn = document.getElementById('removeFileBtn');
+            const uploadBtn = document.getElementById('uploadBtn');
+
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' B';
+                if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+                return (bytes / 1048576).toFixed(1) + ' MB';
+            }
+
+            function handleFile(file) {
+                if (!file) return;
+                if (file.size > 10 * 1024 * 1024) {
+                    showStatus('⚠️ حجم فایل نباید بیشتر از ۱۰ مگابایت باشد.', 'error');
+                    return;
+                }
+                const ext = file.name.split('.').pop().toLowerCase();
+                if (!['txt', 'csv', 'log'].includes(ext)) {
+                    showStatus('⚠️ پسوند فایل باید .txt, .csv یا .log باشد.', 'error');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    input.value = e.target.result;
+                    fileName.textContent = file.name;
+                    fileSize.textContent = formatFileSize(file.size);
+                    fileInfo.style.display = 'flex';
+                    showStatus(`📂 فایل "${file.name}" با موفقیت بارگذاری شد.`, 'success');
+                    updateStats();
+                    setTimeout(processLines, 200);
+                };
+                reader.onerror = function() { showStatus('❌ خطا در خواندن فایل.', 'error'); };
+                reader.readAsText(file, 'UTF-8');
+            }
+
+            function removeFile() {
+                fileInput.value = '';
+                fileInfo.style.display = 'none';
+                showStatus('🗑️ فایل حذف شد.', 'info');
+            }
+
+            fileDropZone.addEventListener('click', function() { fileInput.click(); });
+            fileDropZone.addEventListener('dragover', function(e) { e.preventDefault();
+                this.classList.add('dragover'); });
+            fileDropZone.addEventListener('dragleave', function(e) { e.preventDefault();
+                this.classList.remove('dragover'); });
+            fileDropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+            });
+            fileInput.addEventListener('change', function() { if (this.files.length > 0) handleFile(this.files[0]); });
+            removeFileBtn.addEventListener('click', removeFile);
+            uploadBtn.addEventListener('click', function() { fileInput.click(); });
+
+            function showStatus(message, type) {
+                dupStatus.textContent = message;
+                dupStatus.className = `tool-status visible ${type}`;
+                setTimeout(() => { dupStatus.className = 'tool-status'; }, 4000);
+            }
+
+            function processLines() {
+                const text = input.value;
+                if (!text) { output.value = '';
+                    updateStats(); return; }
+                let lines = text.split('\n');
+                const caseSens = caseSensitive.checked;
+                const sort = sortLines.checked;
+                const trim = trimLines.checked;
+                const removeEmpty = removeEmptyLines.checked;
+                if (trim) lines = lines.map(l => l.trim());
+                if (removeEmpty) lines = lines.filter(l => l.trim() !== '');
+                const seen = new Set();
+                const result = [];
+                lines.forEach(line => {
+                    const key = caseSens ? line : line.toLowerCase();
+                    if (!seen.has(key)) { seen.add(key);
+                        result.push(line); }
+                });
+                if (sort) result.sort((a, b) => a.localeCompare(b));
+                output.value = result.join('\n');
+                updateStats();
+                const removed = (lines.length - result.length);
+                if (removed > 0) showStatus(`✅ ${removed} خط تکراری حذف شد. (${result.length} خط باقی ماند)`, 'success');
+                else showStatus('ℹ️ هیچ خط تکراری یافت نشد.', 'info');
+            }
+
+            function updateStats() {
+                const inText = input.value;
+                const outText = output.value;
+                const inLines = inText ? inText.split('\n').filter(l => l.trim() !== '').length : 0;
+                const outLines = outText ? outText.split('\n').filter(l => l.trim() !== '').length : 0;
+                document.getElementById('inputLines').textContent = inLines.toLocaleString('fa-IR');
+                document.getElementById('outputLines').textContent = outLines.toLocaleString('fa-IR');
+                const removed = inLines - outLines;
+                document.getElementById('removedLines').textContent = removed.toLocaleString('fa-IR');
+                const rate = inLines > 0 ? ((removed / inLines) * 100).toFixed(1) : 0;
+                document.getElementById('removalRate').textContent = rate + '%';
+            }
+
+            const SAMPLE_TEXT = `apple\nbanana\napple\norange\ngrape\nbanana\napple\nkiwi\norange\nmango\ngrape\nkiwi\nstrawberry\nbanana\napple\npineapple\nmango\nstrawberry\norange\nkiwi`;
+
+            function loadSample() {
+                input.value = SAMPLE_TEXT;
+                removeFile();
+                updateStats();
+                setTimeout(processLines, 100);
+                showStatus('📄 نمونه متن بارگذاری شد.', 'info');
+            }
+
+            function copyToClipboard(text, btn) {
+                if (!text) { showStatus('⚠️ متنی برای کپی وجود ندارد.', 'error'); return; }
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text)
+                        .then(() => { btn.textContent = '✅ کپی شد';
+                            btn.classList.add('copied');
+                            setTimeout(() => { btn.textContent = btn.dataset.original || '📋 کپی خروجی';
+                                btn.classList.remove('copied'); }, 2000); })
+                        .catch(() => fallbackCopy(text, btn));
+                } else { fallbackCopy(text, btn); }
+            }
+
+            function fallbackCopy(text, btn) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try { document.execCommand('copy');
+                    btn.textContent = '✅ کپی شد';
+                    setTimeout(() => { btn.textContent = btn.dataset.original || '📋 کپی خروجی'; }, 2000); } catch (_) { showStatus(
+                        '❌ کپی نشد.', 'error'); }
+                document.body.removeChild(textarea);
+            }
+
+            function clearAll() {
+                input.value = '';
+                output.value = '';
+                removeFile();
+                updateStats();
+                showStatus('🗑️ همه چیز پاک شد.', 'info');
+                input.focus();
+            }
+
+            processBtn.addEventListener('click', processLines);
+            processDupBtn.addEventListener('click', processLines);
+            sampleBtn.addEventListener('click', loadSample);
+            clearBtn.addEventListener('click', clearAll);
+            copyDupBtn.addEventListener('click', function() { copyToClipboard(output.value, this); });
+            copyInputBtn.addEventListener('click', function() { copyToClipboard(input.value, this); });
+            clearDupBtn.addEventListener('click', clearAll);
+
+            document.querySelectorAll('.dup-settings input').forEach(el => {
+                el.addEventListener('change', function() { if (input.value.trim()) processLines(); });
+            });
+
+            input.addEventListener('input', updateStats);
+            input.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault();
+                    processLines(); }
+            });
+
+            loadSample();
+            setTimeout(processLines, 300);
+            console.log('📋 Duplicate Line Remover loaded!');
+        })();
+    </script>
+</body>
+</html>

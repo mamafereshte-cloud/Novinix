@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تولید هش MD5، SHA-1، SHA-256 | ابزار هش فایل و متن Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای تولید هش MD5، SHA-1، SHA-256، SHA-384 و SHA-512 برای متن و فایل." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/hash-generator" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .algo-selector {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .algo-selector label {
+            font-weight: 600;
+            color: #a0b4c8;
+            font-size: 0.95rem;
+        }
+        .algo-selector select {
+            padding: 10px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8f5f0;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            min-width: 180px;
+        }
+        .algo-selector select:focus {
+            border-color: #00ffcc;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.1);
+        }
+        .algo-selector select option {
+            background: #0f0c29;
+        }
+        .algo-selector .algo-info {
+            font-size: 0.75rem;
+            color: rgba(160, 180, 200, 0.4);
+        }
+        .tool-textarea {
+            min-height: 120px;
+            font-family: inherit;
+        }
+        .hash-result-box {
+            margin-top: 20px;
+            display: none;
+            animation: fadeSlideIn 0.3s ease;
+        }
+        .hash-result-box.visible {
+            display: block;
+        }
+        .hash-result-box .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px 0 14px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 12px;
+        }
+        .hash-result-box .result-header .source {
+            font-size: 0.85rem;
+            color: #a0b4c8;
+        }
+        .hash-result-box .result-header .source strong {
+            color: #e8f5f0;
+        }
+        .hash-result-box .result-header .algo-label {
+            font-weight: 700;
+            color: #00ffcc;
+            font-size: 1rem;
+        }
+        .hash-result-box .hash-output {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            direction: ltr;
+            text-align: left;
+            overflow-x: auto;
+        }
+        .hash-result-box .hash-output pre {
+            color: #e8f5f0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            min-height: 40px;
+        }
+        .hash-result-box .hash-output .placeholder {
+            color: rgba(160, 180, 200, 0.3);
+        }
+        .hash-result-box .result-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+        .hash-result-box .result-actions .ra-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .hash-result-box .result-actions .ra-btn:hover {
+            transform: translateY(-1px);
+        }
+        .ra-btn-copy {
+            background: rgba(255, 255, 255, 0.06);
+            color: #a0b4c8;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .ra-btn-copy:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #00ffcc;
+        }
+        .ra-btn-copy.copied {
+            background: rgba(0, 255, 204, 0.12);
+            color: #00ffcc;
+        }
+        .hash-progress {
+            display: none;
+            padding: 12px 16px;
+            background: rgba(0, 255, 204, 0.04);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 204, 0.08);
+            margin-top: 10px;
+            align-items: center;
+            gap: 12px;
+        }
+        .hash-progress.visible {
+            display: flex;
+        }
+        .hash-progress .progress-spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(0, 255, 204, 0.1);
+            border-top-color: #00ffcc;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .hash-progress .progress-text {
+            color: #a0b4c8;
+            font-size: 0.9rem;
+        }
+        .hash-message {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: none;
+        }
+        .hash-message.visible {
+            display: block;
+        }
+        .hash-message.success {
+            background: rgba(0, 255, 204, 0.08);
+            color: #00ffcc;
+            border: 1px solid rgba(0, 255, 204, 0.1);
+        }
+        .hash-message.error {
+            background: rgba(248, 113, 113, 0.08);
+            color: #f87171;
+            border: 1px solid rgba(248, 113, 113, 0.1);
+        }
+        .hash-message.info {
+            background: rgba(52, 152, 219, 0.08);
+            color: #5fcde6;
+            border: 1px solid rgba(52, 152, 219, 0.1);
+        }
+        @media (max-width: 640px) {
+            .algo-selector {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .algo-selector select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">🔐</span>
+                <h2>تولید هش</h2>
+                <span class="badge">MD5 &bull; SHA &bull; فایل</span>
+            </div>
+
+            <div class="tool-tabs">
+                <button class="tab-btn active" data-tab="text">📝 متن</button>
+                <button class="tab-btn" data-tab="file">📂 فایل</button>
+            </div>
+
+            <div class="algo-selector">
+                <label for="algoSelect">🔐 الگوریتم هش:</label>
+                <select id="algoSelect">
+                    <option value="MD5">MD5 (۱۲۸ بیت)</option>
+                    <option value="SHA1">SHA-1 (۱۶۰ بیت)</option>
+                    <option value="SHA256" selected>SHA-256 (۲۵۶ بیت) ⭐</option>
+                    <option value="SHA384">SHA-384 (۳۸۴ بیت)</option>
+                    <option value="SHA512">SHA-512 (۵۱۲ بیت)</option>
+                </select>
+                <span class="algo-info" id="algoInfo">امنیت بالا، استاندارد رایج</span>
+            </div>
+
+            <!-- تب متن -->
+            <div class="tool-section active" id="tabText">
+                <textarea class="tool-textarea" id="hashInput" placeholder="متن مورد نظر برای هش کردن را وارد کنید...">سلام! این یک متن نمونه برای تست هش است.</textarea>
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="hashTextBtn" style="background:linear-gradient(135deg, #00ffcc, #00b4db);color:#0f0c29;">🔐 هش کردن</button>
+                    <button class="act-btn act-btn-copy" id="copyResultBtn" disabled>📋 کپی نتیجه</button>
+                    <button class="act-btn act-btn-clear" id="clearTextBtn">🗑️ پاک کردن</button>
+                </div>
+            </div>
+
+            <!-- تب فایل -->
+            <div class="tool-section" id="tabFile">
+                <div class="drop-zone" id="fileDropZone">
+                    <span class="dz-icon">📂</span>
+                    <span class="dz-text">برای آپلود فایل <strong>کلیک کنید</strong> یا فایل را <strong>بکشید</strong> و رها کنید</span>
+                    <span class="dz-hint">حداکثر حجم: ۵۰ مگابایت</span>
+                    <input type="file" id="fileInput" />
+                </div>
+
+                <div class="file-info" id="fileInfo" style="display:none;">
+                    <span class="fi-icon">📄</span>
+                    <span class="fi-name" id="fileName">file.bin</span>
+                    <span class="fi-size" id="fileSize">۰ KB</span>
+                    <span class="fi-remove" id="removeFileBtn">✕ حذف فایل</span>
+                </div>
+
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="hashFileBtn" style="background:linear-gradient(135deg, #00ffcc, #00b4db);color:#0f0c29;">🔐 هش کردن فایل</button>
+                    <button class="act-btn act-btn-copy" id="copyFileResultBtn" disabled>📋 کپی نتیجه</button>
+                    <button class="act-btn act-btn-clear" id="clearFileBtn">🗑️ حذف فایل</button>
+                </div>
+            </div>
+
+            <div class="hash-progress" id="hashProgress">
+                <div class="progress-spinner"></div>
+                <span class="progress-text" id="progressText">⏳ در حال پردازش...</span>
+            </div>
+
+            <div class="hash-message" id="hashMessage"></div>
+
+            <div class="hash-result-box" id="hashResultBox">
+                <div class="result-header">
+                    <span class="source">📋 منبع: <strong id="resultSource">متن</strong></span>
+                    <span class="algo-label" id="resultAlgoLabel">SHA-256</span>
+                </div>
+                <div class="hash-output">
+                    <pre id="hashValue"><span class="placeholder">هش در اینجا نمایش داده می‌شود...</span></pre>
+                </div>
+                <div class="result-actions">
+                    <button class="ra-btn ra-btn-copy" id="copyHashBtn">📋 کپی هش</button>
+                    <button class="ra-btn act-btn-clear" id="clearResultBtn">🗑️ پاک کردن نتیجه</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+    <script src="crypto-js.min.js"></script>
+
+    <script>
+        (function() {
+            const algoSelect = document.getElementById('algoSelect');
+            const algoInfo = document.getElementById('algoInfo');
+            const hashInput = document.getElementById('hashInput');
+            const hashTextBtn = document.getElementById('hashTextBtn');
+            const clearTextBtn = document.getElementById('clearTextBtn');
+            const copyResultBtn = document.getElementById('copyResultBtn');
+            const fileDropZone = document.getElementById('fileDropZone');
+            const fileInput = document.getElementById('fileInput');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const removeFileBtn = document.getElementById('removeFileBtn');
+            const hashFileBtn = document.getElementById('hashFileBtn');
+            const clearFileBtn = document.getElementById('clearFileBtn');
+            const copyFileResultBtn = document.getElementById('copyFileResultBtn');
+            const hashProgress = document.getElementById('hashProgress');
+            const progressText = document.getElementById('progressText');
+            const hashMessage = document.getElementById('hashMessage');
+            const hashResultBox = document.getElementById('hashResultBox');
+            const hashValue = document.getElementById('hashValue');
+            const resultSource = document.getElementById('resultSource');
+            const resultAlgoLabel = document.getElementById('resultAlgoLabel');
+            const copyHashBtn = document.getElementById('copyHashBtn');
+            const clearResultBtn = document.getElementById('clearResultBtn');
+            const tabBtns = document.querySelectorAll('.tab-btn');
+
+            let currentFile = null;
+            let isHashing = false;
+            let lastHashResult = '';
+
+            const ALGO_INFO = {
+                'MD5': { label: 'MD5', bits: 128, desc: 'سریع، اما برای امنیت توصیه نمی‌شود' },
+                'SHA1': { label: 'SHA-1', bits: 160, desc: 'سریع، اما ضعیف‌تر از SHA-2' },
+                'SHA256': { label: 'SHA-256', bits: 256, desc: '⭐ استاندارد امنیتی رایج' },
+                'SHA384': { label: 'SHA-384', bits: 384, desc: 'امنیت بالاتر' },
+                'SHA512': { label: 'SHA-512', bits: 512, desc: 'امن‌ترین گزینه' }
+            };
+
+            function hashWithCryptoJS(text, algorithm) {
+                const fnMap = { 'MD5': CryptoJS.MD5, 'SHA1': CryptoJS.SHA1, 'SHA256': CryptoJS.SHA256, 'SHA384': CryptoJS
+                        .SHA384, 'SHA512': CryptoJS.SHA512 };
+                const hashFn = fnMap[algorithm];
+                if (!hashFn) throw new Error('الگوریتم ناشناخته: ' + algorithm);
+                return hashFn(text).toString(CryptoJS.enc.Hex);
+            }
+
+            function hashFileWithCryptoJS(file, algorithm) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const wordArray = CryptoJS.lib.WordArray.create(e.target.result);
+                            const fnMap = { 'MD5': CryptoJS.MD5, 'SHA1': CryptoJS.SHA1, 'SHA256': CryptoJS
+                                    .SHA256, 'SHA384': CryptoJS.SHA384, 'SHA512': CryptoJS.SHA512 };
+                            const hashFn = fnMap[algorithm];
+                            if (!hashFn) { reject(new Error('الگوریتم ناشناخته: ' + algorithm)); return; }
+                            resolve(hashFn(wordArray).toString(CryptoJS.enc.Hex));
+                        } catch (err) { reject(err); }
+                    };
+                    reader.onerror = function() { reject(new Error('خطا در خواندن فایل')); };
+                    reader.readAsArrayBuffer(file);
+                });
+            }
+
+            async function hashTextHandler() {
+                const text = hashInput.value.trim();
+                if (!text) { showMessage('⚠️ لطفاً متنی برای هش کردن وارد کنید.', 'error'); return; }
+                if (isHashing) return;
+                isHashing = true;
+                showProgress(true, '⏳ در حال محاسبه هش...');
+                try {
+                    const algorithm = algoSelect.value;
+                    const start = performance.now();
+                    const hash = hashWithCryptoJS(text, algorithm);
+                    const time = (performance.now() - start).toFixed(1);
+                    lastHashResult = hash;
+                    displayResult(hash, 'متن', algorithm, time);
+                    showMessage(`✅ هش ${ALGO_INFO[algorithm].label} با موفقیت تولید شد (${time}ms)`, 'success');
+                    copyResultBtn.disabled = false;
+                    copyFileResultBtn.disabled = false;
+                } catch (err) {
+                    showMessage('❌ خطا در تولید هش: ' + err.message, 'error');
+                } finally { isHashing = false;
+                    showProgress(false); }
+            }
+
+            async function hashFileHandler() {
+                if (!currentFile) { showMessage('⚠️ لطفاً ابتدا یک فایل انتخاب کنید.', 'error'); return; }
+                if (isHashing) return;
+                isHashing = true;
+                showProgress(true, `⏳ در حال خواندن فایل "${currentFile.name}"...`);
+                try {
+                    const algorithm = algoSelect.value;
+                    const start = performance.now();
+                    const hash = await hashFileWithCryptoJS(currentFile, algorithm);
+                    const time = (performance.now() - start).toFixed(1);
+                    lastHashResult = hash;
+                    displayResult(hash, currentFile.name, algorithm, time);
+                    showMessage(`✅ هش فایل "${currentFile.name}" با موفقیت تولید شد (${time}ms)`, 'success');
+                    copyResultBtn.disabled = false;
+                    copyFileResultBtn.disabled = false;
+                } catch (err) {
+                    showMessage('❌ خطا در هش کردن فایل: ' + err.message, 'error');
+                } finally { isHashing = false;
+                    showProgress(false); }
+            }
+
+            function displayResult(hash, source, algorithm, time) {
+                const info = ALGO_INFO[algorithm];
+                resultSource.textContent = source;
+                resultAlgoLabel.textContent = `${info.label} (${info.bits} بیت) • ${time}ms`;
+                hashValue.textContent = hash || '⚠️ خطا';
+                hashResultBox.classList.add('visible');
+                hashResultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            function clearResult() {
+                hashResultBox.classList.remove('visible');
+                hashValue.textContent = 'هش در اینجا نمایش داده می‌شود...';
+                lastHashResult = '';
+                copyResultBtn.disabled = true;
+                copyFileResultBtn.disabled = true;
+                hideMessage();
+            }
+
+            function showMessage(text, type) {
+                hashMessage.textContent = text;
+                hashMessage.className = 'hash-message visible ' + type;
+            }
+
+            function hideMessage() { hashMessage.className = 'hash-message';
+                hashMessage.textContent = ''; }
+
+            function showProgress(show, message) {
+                hashProgress.classList.toggle('visible', show);
+                if (message) progressText.textContent = message;
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' B';
+                if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+                if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + ' MB';
+                return (bytes / 1073741824).toFixed(2) + ' GB';
+            }
+
+            function handleFile(file) {
+                if (!file) return;
+                if (file.size > 50 * 1024 * 1024) {
+                    showMessage('⚠️ حجم فایل نباید بیشتر از ۵۰ مگابایت باشد.', 'error');
+                    return;
+                }
+                currentFile = file;
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+                fileInfo.style.display = 'flex';
+                clearResult();
+                showMessage(`📁 فایل "${file.name}" انتخاب شد. (${formatFileSize(file.size)})`, 'info');
+                setTimeout(hideMessage, 3000);
+            }
+
+            function removeFile() {
+                currentFile = null;
+                fileInfo.style.display = 'none';
+                fileInput.value = '';
+                clearResult();
+                copyFileResultBtn.disabled = true;
+            }
+
+            function copyHash() {
+                if (!lastHashResult) { showMessage('⚠️ ابتدا یک هش تولید کنید.', 'error'); return; }
+                copyToClipboard(lastHashResult, copyHashBtn);
+            }
+
+            function copyToClipboard(text, btn) {
+                if (!text) return;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text)
+                        .then(() => { btn.textContent = '✅ کپی شد';
+                            btn.classList.add('copied');
+                            setTimeout(() => { btn.textContent = btn.dataset.original || '📋 کپی هش';
+                                btn.classList.remove('copied'); }, 2000); })
+                        .catch(() => fallbackCopy(text, btn));
+                } else { fallbackCopy(text, btn); }
+            }
+
+            function fallbackCopy(text, btn) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try { document.execCommand('copy');
+                    btn.textContent = '✅ کپی شد';
+                    setTimeout(() => { btn.textContent = btn.dataset.original || '📋 کپی هش'; }, 2000); } catch (_) { alert(
+                        'کپی نشد.'); }
+                document.body.removeChild(textarea);
+            }
+
+            function switchTab(tabId) {
+                tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+                document.querySelectorAll('.tool-section').forEach(s => s.classList.toggle('active', s.id === 'tab' + tabId
+                    .charAt(0).toUpperCase() + tabId.slice(1)));
+                clearResult();
+                hideMessage();
+            }
+
+            algoSelect.addEventListener('change', function() {
+                const info = ALGO_INFO[this.value];
+                algoInfo.textContent = info ? info.desc : '';
+            });
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() { switchTab(this.dataset.tab); });
+            });
+
+            hashTextBtn.addEventListener('click', hashTextHandler);
+            hashInput.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault();
+                    hashTextHandler(); }
+            });
+            copyResultBtn.addEventListener('click', copyHash);
+            copyFileResultBtn.addEventListener('click', copyHash);
+            copyHashBtn.addEventListener('click', copyHash);
+            clearResultBtn.addEventListener('click', clearResult);
+            clearTextBtn.addEventListener('click', function() { hashInput.value = '';
+                clearResult();
+                hashInput.focus(); });
+            clearFileBtn.addEventListener('click', removeFile);
+
+            fileDropZone.addEventListener('click', function() { fileInput.click(); });
+            fileDropZone.addEventListener('dragover', function(e) { e.preventDefault();
+                this.classList.add('dragover'); });
+            fileDropZone.addEventListener('dragleave', function(e) { e.preventDefault();
+                this.classList.remove('dragover'); });
+            fileDropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+            });
+            fileInput.addEventListener('change', function() { if (this.files.length > 0) handleFile(this.files[0]); });
+            removeFileBtn.addEventListener('click', removeFile);
+            hashFileBtn.addEventListener('click', hashFileHandler);
+
+            algoInfo.textContent = ALGO_INFO['SHA256'].desc;
+            setTimeout(hashTextHandler, 400);
+            console.log('🔐 Hash Generator loaded!');
+        })();
+    </script>
+</body>
+</html>

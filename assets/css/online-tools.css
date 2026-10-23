@@ -1,0 +1,560 @@
+/* ============================================================
+   استایل‌های مشترک ابزارهای آنلاین Novinix
+   ============================================================ */
+
+/* --- پایه --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0f0c29;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #e8f5f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    width: 100%;
+}
+
+/* --- Wrapper ابزارها --- */
+.tool-wrapper {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 35px 30px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.6);
+}
+
+.tool-wrapper .tool-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.tool-wrapper .tool-header .icon {
+    font-size: 2.4rem;
+}
+
+.tool-wrapper .tool-header h2 {
+    font-size: 1.4rem;
+    color: #e8f5f0;
+    margin: 0;
+}
+
+.tool-wrapper .tool-header .badge {
+    background: rgba(0, 255, 204, 0.12);
+    color: #00ffcc;
+    font-size: 0.65rem;
+    padding: 2px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+    border: 1px solid rgba(0, 255, 204, 0.15);
+    margin-right: auto;
+}
+
+/* --- Toolbar --- */
+.toolbar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 16px;
+    align-items: center;
+}
+
+.toolbar .tb-btn {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #a0b4c8;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.toolbar .tb-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #e8f5f0;
+}
+
+.toolbar .tb-btn:active {
+    transform: scale(0.94);
+}
+
+.toolbar .tb-btn.primary {
+    background: rgba(0, 255, 204, 0.12);
+    color: #00ffcc;
+}
+
+.toolbar .tb-btn.primary:hover {
+    background: rgba(0, 255, 204, 0.2);
+}
+
+.toolbar .tb-btn.danger {
+    background: rgba(248, 113, 113, 0.1);
+    color: #f87171;
+}
+
+.toolbar .tb-btn.danger:hover {
+    background: rgba(248, 113, 113, 0.2);
+}
+
+.toolbar .tb-btn.upload {
+    background: rgba(52, 152, 219, 0.12);
+    color: #5fcde6;
+}
+
+.toolbar .tb-btn.upload:hover {
+    background: rgba(52, 152, 219, 0.2);
+}
+
+.toolbar .tb-divider {
+    width: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    margin: 4px 4px;
+    height: 28px;
+}
+
+.toolbar .tb-btn .shortcut {
+    font-size: 0.6rem;
+    color: rgba(160, 180, 200, 0.3);
+    font-weight: 400;
+}
+
+/* --- Textarea --- */
+.tool-textarea {
+    width: 100%;
+    min-height: 180px;
+    padding: 14px 16px;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    font-size: 0.92rem;
+    font-family: 'Courier New', monospace;
+    background: rgba(255, 255, 255, 0.04);
+    color: #e8f5f0;
+    transition: all 0.25s ease;
+    resize: vertical;
+    box-sizing: border-box;
+    line-height: 1.8;
+    direction: ltr;
+    text-align: left;
+}
+
+.tool-textarea:focus {
+    border-color: #00ffcc;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.1);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.tool-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.15);
+    font-family: inherit;
+    direction: rtl;
+}
+
+.tool-textarea.output {
+    background: rgba(0, 255, 204, 0.04);
+    border-color: rgba(0, 255, 204, 0.08);
+}
+
+/* --- Layout دو ستونه --- */
+.two-col-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* --- Stats --- */
+.tool-stats {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 12px;
+    font-size: 0.82rem;
+    color: #a0b4c8;
+}
+
+.tool-stats .stat-value {
+    font-weight: 600;
+    color: #e8f5f0;
+}
+
+.tool-stats .stat-value.changed {
+    color: #00ffcc;
+}
+
+/* --- Actions --- */
+.tool-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 2px solid rgba(255, 255, 255, 0.05);
+}
+
+.tool-actions .act-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tool-actions .act-btn:hover {
+    transform: translateY(-1px);
+}
+
+.act-btn-copy {
+    background: rgba(255, 255, 255, 0.06);
+    color: #a0b4c8;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.act-btn-copy:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #00ffcc;
+}
+
+.act-btn-copy.copied {
+    background: rgba(0, 255, 204, 0.12);
+    color: #00ffcc;
+}
+
+.act-btn-download {
+    background: linear-gradient(135deg, #00ffcc, #00b4db);
+    color: #0f0c29;
+}
+
+.act-btn-download:hover {
+    box-shadow: 0 4px 16px rgba(0, 255, 204, 0.3);
+}
+
+.act-btn-clear {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+.act-btn-clear:hover {
+    background: rgba(239, 68, 68, 0.25);
+}
+
+.act-btn-swap {
+    background: rgba(251, 191, 36, 0.1);
+    color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, 0.15);
+}
+
+.act-btn-swap:hover {
+    background: rgba(251, 191, 36, 0.2);
+}
+
+.act-btn-upload {
+    background: rgba(52, 152, 219, 0.15);
+    color: #5fcde6;
+    border: 1px solid rgba(52, 152, 219, 0.15);
+}
+
+.act-btn-upload:hover {
+    background: rgba(52, 152, 219, 0.25);
+}
+
+/* --- Drop Zone --- */
+.drop-zone {
+    border: 2px dashed rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.drop-zone:hover {
+    border-color: rgba(0, 255, 204, 0.2);
+    background: rgba(0, 255, 204, 0.02);
+}
+
+.drop-zone.dragover {
+    border-color: #00ffcc;
+    background: rgba(0, 255, 204, 0.05);
+}
+
+.drop-zone .dz-icon {
+    font-size: 1.8rem;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.drop-zone .dz-text {
+    color: #a0b4c8;
+    font-size: 0.9rem;
+}
+
+.drop-zone .dz-text strong {
+    color: #00ffcc;
+}
+
+.drop-zone .dz-hint {
+    color: rgba(160, 180, 200, 0.3);
+    font-size: 0.75rem;
+    margin-top: 4px;
+}
+
+.drop-zone input[type="file"] {
+    display: none;
+}
+
+/* --- File Info --- */
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    background: rgba(0, 255, 204, 0.04);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 255, 204, 0.08);
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.file-info .fi-icon {
+    font-size: 1.2rem;
+}
+
+.file-info .fi-name {
+    color: #00ffcc;
+    font-weight: 600;
+    font-size: 0.85rem;
+    word-break: break-all;
+}
+
+.file-info .fi-size {
+    color: #a0b4c8;
+    font-size: 0.75rem;
+}
+
+.file-info .fi-remove {
+    color: #f87171;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+    margin-right: auto;
+}
+
+.file-info .fi-remove:hover {
+    color: #ef4444;
+    transform: scale(1.1);
+}
+
+/* --- Status --- */
+.tool-status {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    display: none;
+}
+
+.tool-status.visible {
+    display: block;
+}
+
+.tool-status.success {
+    background: rgba(0, 255, 204, 0.08);
+    color: #00ffcc;
+    border: 1px solid rgba(0, 255, 204, 0.1);
+}
+
+.tool-status.error {
+    background: rgba(248, 113, 113, 0.08);
+    color: #f87171;
+    border: 1px solid rgba(248, 113, 113, 0.1);
+}
+
+.tool-status.info {
+    background: rgba(52, 152, 219, 0.08);
+    color: #5fcde6;
+    border: 1px solid rgba(52, 152, 219, 0.1);
+}
+
+/* --- Tabs --- */
+.tool-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.tool-tabs .tab-btn {
+    padding: 10px 22px;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #a0b4c8;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+}
+
+.tool-tabs .tab-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #e8f5f0;
+}
+
+.tool-tabs .tab-btn.active {
+    background: linear-gradient(135deg, #00ffcc, #00b4db);
+    color: #0f0c29;
+    box-shadow: 0 4px 15px rgba(0, 255, 204, 0.2);
+}
+
+.tool-section {
+    display: none;
+    animation: fadeSlideIn 0.3s ease;
+}
+
+.tool-section.active {
+    display: block;
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Panel Header --- */
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 4px 10px;
+    font-size: 0.85rem;
+    color: #a0b4c8;
+    font-weight: 500;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.panel-header .panel-stats {
+    font-size: 0.75rem;
+    color: rgba(160, 180, 200, 0.4);
+    font-weight: 400;
+}
+
+/* --- Responsive --- */
+@media (max-width: 820px) {
+    .two-col-layout {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .tool-wrapper {
+        padding: 20px 14px;
+    }
+
+    .tool-wrapper .tool-header .badge {
+        margin-right: 0;
+    }
+
+    .toolbar {
+        padding: 8px 10px;
+        gap: 4px;
+    }
+
+    .toolbar .tb-btn {
+        font-size: 0.75rem;
+        padding: 4px 10px;
+    }
+
+    .toolbar .tb-btn .shortcut {
+        display: none;
+    }
+
+    .tool-actions {
+        flex-direction: column;
+    }
+
+    .tool-actions .act-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .file-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .file-info .fi-remove {
+        margin-right: 0;
+    }
+
+    .drop-zone {
+        padding: 14px 10px;
+    }
+
+    .drop-zone .dz-icon {
+        font-size: 1.4rem;
+    }
+
+    .tool-textarea {
+        min-height: 120px;
+        font-size: 0.82rem;
+    }
+
+    .tool-stats {
+        flex-direction: column;
+        gap: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tool-tabs .tab-btn {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+    }
+
+    .tool-wrapper .tool-header h2 {
+        font-size: 1.1rem;
+    }
+}

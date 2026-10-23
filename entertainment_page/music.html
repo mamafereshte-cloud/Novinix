@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<script src="../auth/auth.js"></script>
+<script src="../auth/header.js"></script>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>موسیقی روز | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0c29;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e8f5f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER - SAME AS OTHER PAGES ===== */
+        header {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #00ffcc;
+            text-shadow: 0 0 30px rgba(0, 255, 204, 0.15);
+        }
+        .logo h1 span {
+            color: #a0b4c8;
+            font-weight: 300;
+            font-size: 0.7rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 3px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav ul li a {
+            color: #a0b4c8;
+            text-decoration: none;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            font-weight: 500;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.08);
+            color: #00ffcc;
+        }
+
+        nav ul li a.active {
+            background: rgba(0, 255, 204, 0.12);
+            border-color: rgba(0, 255, 204, 0.2);
+            color: #00ffcc;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .btn-login {
+            background: rgba(255, 255, 255, 0.06);
+            color: #a0b4c8;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 4px 14px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #00ffcc;
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            padding: 4px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 15px rgba(0, 255, 204, 0.15);
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 255, 204, 0.25);
+        }
+
+        /* ===== MAIN ===== */
+        main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            width: 100%;
+        }
+
+        /* ===== HERO ===== */
+        .music-hero {
+            background: linear-gradient(135deg, #1a1a2e, #2d1b69, #6c2eb7);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(108, 46, 183, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .music-hero::before {
+            content: '🎵';
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.05;
+            right: -30px;
+            bottom: -30px;
+            transform: rotate(10deg);
+        }
+
+        .music-hero h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .music-hero h2 span {
+            color: #ffd93d;
+        }
+
+        .music-hero p {
+            opacity: 0.85;
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== SEARCH ===== */
+        .search-box {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px 14px 50px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e8f5f0;
+            font-family: inherit;
+        }
+
+        .search-box input:focus {
+            border-color: #00ffcc;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .search-box .clear-search {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: none;
+            background: none;
+            border: none;
+        }
+
+        .search-box .clear-search.visible {
+            display: block;
+        }
+
+        .search-box .clear-search:hover {
+            color: #e74c3c;
+        }
+
+        /* ===== CATEGORIES ===== */
+        .music-categories {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .category-tag {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #a0b4c8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            font-weight: 500;
+        }
+
+        .category-tag:hover {
+            border-color: #00ffcc;
+            transform: translateY(-2px);
+            color: #00ffcc;
+        }
+
+        .category-tag.active {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            border-color: #00ffcc;
+        }
+
+        /* ===== MUSIC GRID ===== */
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 10px;
+        }
+
+        .music-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .music-card:hover {
+            transform: translateY(-5px);
+            border-color: #6c2eb7;
+            box-shadow: 0 12px 40px rgba(108, 46, 183, 0.15);
+        }
+
+        .music-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .music-card .icon {
+            font-size: 2.2rem;
+            line-height: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .music-card:hover .icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .music-card .genre-badge {
+            display: inline-block;
+            font-size: 0.6rem;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            background: rgba(0, 255, 204, 0.15);
+            color: #00ffcc;
+        }
+
+        .music-card h3 {
+            color: #e8f5f0;
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+        }
+
+        .music-card .artist {
+            color: #a0b4c8;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        .music-card .description {
+            color: #a0b4c8;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            flex: 1;
+            margin-bottom: 12px;
+        }
+
+        .music-card .music-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            margin-top: auto;
+        }
+
+        .music-card .music-meta .info {
+            display: flex;
+            gap: 15px;
+            font-size: 0.7rem;
+            color: rgba(160, 180, 200, 0.5);
+        }
+
+        .music-card .music-meta .play-btn {
+            color: #00ffcc;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            padding: 5px 16px;
+            border-radius: 30px;
+            background: rgba(0, 255, 204, 0.08);
+            border: 1px solid rgba(0, 255, 204, 0.15);
+        }
+
+        .music-card .music-meta .play-btn:hover {
+            background: rgba(0, 255, 204, 0.15);
+            transform: translateX(-5px);
+        }
+
+        .music-card .badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            font-size: 0.55rem;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+
+        .badge.new {
+            background: #00ffcc;
+            color: #0f0c29;
+        }
+
+        .badge.popular {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .badge.hot {
+            background: #e67e22;
+            color: white;
+        }
+
+        /* ===== FEATURED TRACK ===== */
+        .featured-track {
+            background: linear-gradient(135deg, rgba(0, 255, 204, 0.05), rgba(0, 180, 219, 0.05));
+            border: 1px solid rgba(0, 255, 204, 0.15);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0 40px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-track::before {
+            content: '⭐';
+            position: absolute;
+            font-size: 6rem;
+            opacity: 0.05;
+            left: -20px;
+            bottom: -20px;
+            transform: rotate(-15deg);
+        }
+
+        .featured-track .featured-icon {
+            font-size: 3.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .featured-track .featured-info {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .featured-track .featured-info .label {
+            font-size: 0.7rem;
+            color: #00ffcc;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .featured-track .featured-info h3 {
+            font-size: 1.3rem;
+            color: #e8f5f0;
+            margin-bottom: 2px;
+        }
+
+        .featured-track .featured-info .artist {
+            color: #a0b4c8;
+            font-size: 0.9rem;
+        }
+
+        .featured-track .featured-btn {
+            padding: 12px 35px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 255, 204, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .featured-track .featured-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 35px rgba(0, 255, 204, 0.3);
+        }
+
+        /* ===== NO RESULTS ===== */
+        .no-results {
+            text-align: center;
+            padding: 50px 20px;
+            color: #a0b4c8;
+            display: none;
+        }
+
+        .no-results .big-icon {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .no-results h3 {
+            color: #e8f5f0;
+            margin-bottom: 5px;
+        }
+
+        /* ===== STATS ===== */
+        .music-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00ffcc;
+            display: block;
+        }
+
+        .stat-item .label {
+            font-size: 0.8rem;
+            color: #a0b4c8;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            color: rgba(160, 180, 200, 0.4);
+            font-size: 0.8rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 8px 12px;
+            }
+            .logo h1 {
+                text-align: center;
+                font-size: 1rem;
+            }
+            nav ul {
+                justify-content: center;
+            }
+            nav ul li a {
+                font-size: 0.6rem;
+                padding: 3px 8px;
+            }
+            .auth-buttons {
+                justify-content: center;
+            }
+            .btn-login, .btn-register {
+                font-size: 0.6rem;
+                padding: 3px 10px;
+            }
+            .music-hero {
+                padding: 25px 20px;
+            }
+            .music-hero h2 {
+                font-size: 1.5rem;
+            }
+            .music-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+            .music-card {
+                padding: 16px;
+            }
+            .featured-track {
+                padding: 20px;
+                flex-direction: column;
+                text-align: center;
+            }
+            .featured-track .featured-icon {
+                font-size: 3rem;
+            }
+            .music-stats {
+                gap: 15px;
+                padding: 12px 15px;
+            }
+            .stat-item .number {
+                font-size: 1.2rem;
+            }
+            .category-tag {
+                font-size: 0.75rem;
+                padding: 6px 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .music-grid {
+                grid-template-columns: 1fr;
+            }
+            .music-card {
+                padding: 14px;
+            }
+            .music-hero h2 {
+                font-size: 1.3rem;
+            }
+            .music-hero p {
+                font-size: 0.9rem;
+            }
+            .music-card .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            .music-card .music-meta {
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+            }
+            .music-card .music-meta .play-btn {
+                width: 100%;
+                text-align: center;
+            }
+            .search-box input {
+                padding: 12px 16px 12px 40px;
+                font-size: 0.9rem;
+            }
+            .music-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .featured-track .featured-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>نوینیکس <span>Novinix</span></h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../main.html">خانه</a></li>
+                <li><a href="../pages/online-tools.html">ابزارها</a></li>
+                <li><a href="../pages/calculator.html">ماشین‌حساب</a></li>
+                <li><a href="../pages/games.html">بازی‌ها</a></li>
+                                <li><a href="../pages/education.html">آموزش ها</a></li>
+                <li><a href="../pages/blog.html">وبلاگ</a></li>
+                <li><a href="../pages/entertainment.html" class="active">سرگرمی</a></li>
+                <li><a href="../pages/general-info.html">اطلاعات عمومی</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <a href="../auth/login.html" class="btn-login">ورود</a>
+            <a href="../auth/register.html" class="btn-register">ثبت نام</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="music-hero">
+            <h2>🎵 موسیقی <span>روز</span></h2>
+            <p>جدیدترین آهنگ‌های پاپ، الکترونیک، راک و سنتی</p>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="searchMusic" placeholder="جستجو در آهنگ‌ها..." onkeyup="filterMusic()">
+            <button class="clear-search" id="clearSearch" onclick="clearSearch()">✕</button>
+        </div>
+
+        <div class="music-categories">
+            <span class="category-tag active" data-category="all" onclick="filterCategory('all', this)">همه</span>
+            <span class="category-tag" data-category="pop" onclick="filterCategory('pop', this)">🎤 پاپ</span>
+            <span class="category-tag" data-category="electronic" onclick="filterCategory('electronic', this)">🎛️ الکترونیک</span>
+            <span class="category-tag" data-category="rock" onclick="filterCategory('rock', this)">🎸 راک</span>
+            <span class="category-tag" data-category="traditional" onclick="filterCategory('traditional', this)">🎻 سنتی</span>
+            <span class="category-tag" data-category="jazz" onclick="filterCategory('jazz', this)">🎷 جز</span>
+        </div>
+
+        <div class="featured-track">
+            <div class="featured-icon">🎧</div>
+            <div class="featured-info">
+                <span class="label">⭐ آهنگ برگزیده روز</span>
+                <h3>شب بی‌ستاره</h3>
+                <span class="artist">مریم صدری | پاپ</span>
+            </div>
+            <a href="#" class="featured-btn">پخش →</a>
+        </div>
+
+        <div class="music-grid" id="musicGrid">
+            <div class="music-card" data-category="pop">
+                <span class="badge hot">🔥 داغ</span>
+                <div class="card-header">
+                    <span class="icon">🎤</span>
+                    <span class="genre-badge">پاپ</span>
+                </div>
+                <h3>دل بی‌قرار</h3>
+                <div class="artist">آرمان صالحی</div>
+                <div class="description">جدیدترین تک‌آهنگ پاپ با ملودی شاد و متن عاشقانه.</div>
+                <div class="music-meta">
+                    <div class="info">
+                        <span>⏱️ ۳:۴۵</span>
+                        <span>📅 ۱۴۰۵/۰۲/۱۵</span>
+                    </div>
+                    <a href="#" class="play-btn">پخش →</a>
+                </div>
+            </div>
+
+            <div class="music-card" data-category="electronic">
+                <span class="badge new">جدید</span>
+                <div class="card-header">
+                    <span class="icon">🎛️</span>
+                    <span class="genre-badge">الکترونیک</span>
+                </div>
+                <h3>پالس شب</h3>
+                <div class="artist">دیجی نیما</div>
+                <div class="description">ترانه‌ی الکترونیک با بیت‌های مدرن و فضای رویایی.</div>
+                <div class="music-meta">
+                    <div class="info">
+                        <span>⏱️ ۴:۱۲</span>
+                        <span>📅 ۱۴۰۵/۰۲/۱۲</span>
+                    </div>
+                    <a href="#" class="play-btn">پخش →</a>
+                </div>
+            </div>
+
+            <div class="music-card" data-category="rock">
+                <span class="badge popular">محبوب</span>
+                <div class="card-header">
+                    <span class="icon">🎸</span>
+                    <span class="genre-badge">راک</span>
+                </div>
+                <h3>طوفان</h3>
+                <div class="artist">گروه آتش</div>
+                <div class="description">قطعه‌ی راک با گیتارهای سنگین و صدای پرانرژی.</div>
+                <div class="music-meta">
+                    <div class="info">
+                        <span>⏱️ ۵:۲۰</span>
+                        <span>📅 ۱۴۰۵/۰۲/۰۸</span>
+                    </div>
+                    <a href="#" class="play-btn">پخش →</a>
+                </div>
+            </div>
+
+            <div class="music-card" data-category="traditional">
+                <div class="card-header">
+                    <span class="icon">🎻</span>
+                    <span class="genre-badge">سنتی</span>
+                </div>
+                <h3>نغمه‌ی آواز</h3>
+                <div class="artist">استاد رضا کریمی</div>
+                <div class="description">آهنگ سنتی ایرانی با صدای دلنشین و سازهای کلاسیک.</div>
+                <div class="music-meta">
+                    <div class="info">
+                        <span>⏱️ ۶:۰۵</span>
+                        <span>📅 ۱۴۰۵/۰۲/۰۵</span>
+                    </div>
+                    <a href="#" class="play-btn">پخش →</a>
+                </div>
+            </div>
+
+            <div class="music-card" data-category="pop">
+                <span class="badge new">جدید</span>
+                <div class="card-header">
+                    <span class="icon">🎤</span>
+                    <span class="genre-badge">پاپ</span>
+                </div>
+                <h3>خاطره‌ها</h3>
+                <div class="artist">سارا احمدی</div>
+                <div class="description">تصنیف پاپ با حال و هوای نوستالژیک و ملودی دلنشین.</div>
+                <div class="music-meta">
+                    <div class="info">
+                        <span>⏱️ ۳:۵۰</span>
+                        <span>📅 ۱۴۰۵/۰۲/۰۳</span>
+                    </div>
+                    <a href="#" class="play-btn">پخش →</a>
+                </div>
+            </div>
+
+            <div class="music-card" data-category="jazz">
+                <div class="card-header">
+                    <span class="icon">🎷</span>
+                    <span class="genre-badge">جز</span>
+                </div>
+                <h3>شب جز</h3>
+                <div class="artist">گروه ماهان</div>
+                <div class="description">قطعه‌ی جز آرامش‌بخش با ساکسفون و پیانو.</div>
+                <div class="music-meta">
+                    <div class="info">
+                        <span>⏱️ ۴:۳۰</span>
+                        <span>📅 ۱۴۰۵/۰۱/۲۸</span>
+                    </div>
+                    <a href="#" class="play-btn">پخش →</a>
+                </div>
+            </div>
+
+            <div class="music-card" data-category="electronic">
+                <span class="badge hot">🔥 داغ</span>
+                <div class="card-header">
+                    <span class="icon">🎛️</span>
+                    <span class="genre-badge">الکترونیک</span>
+                </div>
+                <h3>نور و سایه</h3>
+                <div class="artist">امیر حسینی</div>
+                <div class="description">ترک الکترونیک با افکت‌های صوتی خلاقانه و ریتم تند.</div>
+                <div class="music-meta">
+                    <div class="info">
+                        <span>⏱️ ۳:۲۰</span>
+                        <span>📅 ۱۴۰۵/۰۱/۲۵</span>
+                    </div>
+                    <a href="#" class="play-btn">پخش →</a>
+                </div>
+            </div>
+
+            <div class="music-card" data-category="rock">
+                <div class="card-header">
+                    <span class="icon">🎸</span>
+                    <span class="genre-badge">راک</span>
+                </div>
+                <h3>رگبار</h3>
+                <div class="artist">گروه باران</div>
+                <div class="description">راک روان با تم طبیعت و انرژی مثبت.</div>
+                <div class="music-meta">
+                    <div class="info">
+                        <span>⏱️ ۴:۵۰</span>
+                        <span>📅 ۱۴۰۵/۰۱/۲۰</span>
+                    </div>
+                    <a href="#" class="play-btn">پخش →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="no-results" id="noResults">
+            <span class="big-icon">🔍</span>
+            <h3>نتیجه‌ای یافت نشد</h3>
+            <p>آهنگ مورد نظر را با عبارت دیگری جستجو کنید</p>
+        </div>
+
+        <div class="music-stats">
+            <div class="stat-item">
+                <span class="number">⭐</span>
+                <span class="label">آهنگ ویژه</span>
+            </div>
+            <div class="stat-item">
+                <span class="number">🎵</span>
+                <span class="label">به‌روزرسانی روزانه</span>
+            </div>
+        </div>
+    </main>
+
+<script src="../assets/js/footer.js"></script>
+
+    <script>
+        function filterMusic() {
+            const input = document.getElementById('searchMusic');
+            if (!input) return;
+            const filter = input.value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.music-card');
+            const clearBtn = document.getElementById('clearSearch');
+            let visibleCount = 0;
+
+            if (clearBtn) {
+                clearBtn.classList.toggle('visible', filter.length > 0);
+            }
+
+            cards.forEach(card => {
+                const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                const artist = card.querySelector('.artist')?.textContent.toLowerCase() || '';
+                const desc = card.querySelector('.description')?.textContent.toLowerCase() || '';
+                const category = card.dataset.category || '';
+                const match = title.includes(filter) || artist.includes(filter) || desc.includes(filter) || category.includes(filter);
+                card.style.display = match ? 'flex' : 'none';
+                if (match) visibleCount++;
+            });
+
+            const noResults = document.getElementById('noResults');
+            if (noResults) {
+                noResults.style.display = (visibleCount === 0 && filter.length > 0) ? 'block' : 'none';
+            }
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('searchMusic');
+            if (input) {
+                input.value = '';
+                filterMusic();
+                input.focus();
+            }
+        }
+
+        function filterCategory(category, element) {
+            document.querySelectorAll('.category-tag').forEach(tag => tag.classList.remove('active'));
+            if (element) element.classList.add('active');
+
+            const cards = document.querySelectorAll('.music-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const cardCategory = card.dataset.category;
+                const match = category === 'all' || cardCategory === category;
+                card.style.display = match ? 'flex' : 'none';
+                if (match) visibleCount++;
+            });
+
+            const searchInput = document.getElementById('searchMusic');
+            const clearBtn = document.getElementById('clearSearch');
+            if (searchInput) searchInput.value = '';
+            if (clearBtn) clearBtn.classList.remove('visible');
+
+            const noResults = document.getElementById('noResults');
+            if (noResults) noResults.style.display = 'none';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') clearSearch();
+        });
+    </script>
+<script src="../assets/js/seo.js"></script>
+</body>
+</html>

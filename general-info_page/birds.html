@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پرندگان | نوینیکس</title>
+    <meta name="description" content="معرفی و اطلاعات کامل انواع پرندگان از شکاری تا آوازخوان، طوطی‌سانان و پنگوئن‌ها" />
+    <link rel="canonical" href="https://novinix.ir/pages/general-info/birds.html" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <style>
+        .birds-hero {
+            background: linear-gradient(135deg, #0f3460, #1a1a2e, #16213e);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(15, 52, 96, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .birds-hero::before { content: '🦅'; position: absolute; font-size: 10rem; opacity: 0.05; right: -30px; bottom: -30px; transform: rotate(10deg); }
+        .birds-hero h2 { font-size: 2rem; margin-bottom: 10px; position: relative; z-index: 1; }
+        .birds-hero h2 span { color: #f1c40f; }
+        .birds-hero p { opacity: 0.85; font-size: 1.05rem; position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+        .category-filter { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
+        .cat-tag { background: rgba(255, 255, 255, 0.05); padding: 8px 20px; border-radius: 30px; font-size: 0.85rem; color: #a0b4c8; cursor: pointer; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.06); font-weight: 500; user-select: none; }
+        .cat-tag:hover { border-color: #00ffcc; transform: translateY(-2px); color: #00ffcc; }
+        .cat-tag.active { background: linear-gradient(135deg, #00ffcc, #00b4db); color: #0f0c29; border-color: #00ffcc; }
+        .bird-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 10px; }
+        .bird-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 18px; padding: 20px; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+        .bird-card:hover { transform: translateY(-5px); border-color: #00ffcc; box-shadow: 0 12px 40px rgba(0, 255, 204, 0.1); }
+        .bird-card .bird-image { width: 100%; height: 200px; border-radius: 12px; overflow: hidden; margin-bottom: 15px; background: rgba(255, 255, 255, 0.03); display: flex; align-items: center; justify-content: center; position: relative; }
+        .bird-card .bird-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .bird-card:hover .bird-image img { transform: scale(1.05); }
+        .bird-card .bird-image .emoji-placeholder { font-size: 4rem; opacity: 0.3; }
+        .bird-card .bird-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .bird-card .bird-name { font-size: 1.2rem; font-weight: 700; color: #e8f5f0; }
+        .bird-card .bird-name-en { font-size: 0.9rem; font-weight: 400; color: #a0b4c8; display: block; }
+        .bird-card .category-badge { font-size: 0.6rem; padding: 3px 12px; border-radius: 20px; font-weight: 700; white-space: nowrap; margin-top: 2px; }
+        .category-badge.raptor { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+        .category-badge.water { background: rgba(52, 152, 219, 0.2); color: #3498db; }
+        .category-badge.songbird { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .category-badge.parrot { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+        .category-badge.penguin { background: rgba(155, 89, 182, 0.2); color: #9b59b6; }
+        .category-badge.owl { background: rgba(142, 68, 173, 0.2); color: #8e44ad; }
+        .category-badge.game { background: rgba(243, 156, 18, 0.2); color: #f39c12; }
+        .bird-card .bird-description { font-size: 0.85rem; color: #a0b4c8; line-height: 1.6; flex-grow: 1; }
+        .bird-card .bird-description p { margin-bottom: 6px; }
+        .bird-card .bird-description p:last-child { margin-bottom: 0; }
+        .bird-card { opacity: 0; animation: fadeInUp 0.5s ease forwards; }
+        .bird-card:nth-child(1) { animation-delay: 0.03s; }
+        .bird-card:nth-child(2) { animation-delay: 0.06s; }
+        .bird-card:nth-child(3) { animation-delay: 0.09s; }
+        .bird-card:nth-child(4) { animation-delay: 0.12s; }
+        .bird-card:nth-child(5) { animation-delay: 0.15s; }
+        .bird-card:nth-child(6) { animation-delay: 0.18s; }
+        .bird-card:nth-child(7) { animation-delay: 0.21s; }
+        .bird-card:nth-child(8) { animation-delay: 0.24s; }
+        .bird-card:nth-child(9) { animation-delay: 0.27s; }
+        .bird-card:nth-child(10) { animation-delay: 0.30s; }
+        .bird-card:nth-child(11) { animation-delay: 0.33s; }
+        .bird-card:nth-child(12) { animation-delay: 0.36s; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .no-results { text-align: center; padding: 50px 20px; color: #a0b4c8; display: none; }
+        .no-results .big-icon { font-size: 4rem; display: block; margin-bottom: 15px; }
+        .no-results h3 { color: #e8f5f0; margin-bottom: 5px; }
+        @media (max-width: 768px) {
+            .birds-hero { padding: 25px 20px; }
+            .birds-hero h2 { font-size: 1.5rem; }
+            .bird-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .bird-card .bird-image { height: 150px; }
+            .cat-tag { font-size: 0.75rem; padding: 6px 14px; }
+        }
+        @media (max-width: 480px) {
+            .bird-grid { grid-template-columns: 1fr; }
+            .bird-card .bird-image { height: 180px; }
+            .bird-card .bird-name { font-size: 1rem; }
+            .birds-hero h2 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader"></header>
+
+    <main>
+        <div class="birds-hero">
+            <h2>🦅 پرندگان <span>جهان</span></h2>
+            <p>دنیای رنگارنگ پرندگان از آسمان تا دریا</p>
+        </div>
+
+        <div class="category-filter">
+            <span class="cat-tag active" data-cat="all">همه</span>
+            <span class="cat-tag" data-cat="raptor">🦅 شکاری</span>
+            <span class="cat-tag" data-cat="water">🌊 آبزی</span>
+            <span class="cat-tag" data-cat="songbird">🎵 آوازخوان</span>
+            <span class="cat-tag" data-cat="parrot">🦜 طوطی‌سانان</span>
+            <span class="cat-tag" data-cat="penguin">🐧 پنگوئن</span>
+            <span class="cat-tag" data-cat="owl">🦉 جغد</span>
+            <span class="cat-tag" data-cat="game">🏹 شکار</span>
+        </div>
+
+        <div class="bird-grid" id="birdGrid"></div>
+
+        <div class="no-results" id="noResults">
+            <span class="big-icon">🔍</span>
+            <h3>نتیجه‌ای یافت نشد</h3>
+            <p>در دسته‌بندی انتخاب شده پرنده‌ای وجود ندارد</p>
+        </div>
+    </main>
+
+    <footer id="mainFooter"></footer>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        const birdsData = [
+            { id: 'eagle', nameFa: 'عقاب', nameEn: 'Eagle', category: 'raptor', image: 'eagle.jpg', emoji: '🦅', description: ['عقاب یکی از قدرتمندترین و باشکوه‌ترین پرندگان شکاری با دید بسیار قوی است.', 'عقاب طلایی یکی از معروف‌ترین گونه‌هاست و در بسیاری از فرهنگ‌ها نماد قدرت است.'] },
+            { id: 'falcon', nameFa: 'شاهین', nameEn: 'Falcon', category: 'raptor', image: 'falcon.jpg', emoji: '🦅', description: ['شاهین سریع‌ترین پرنده جهان با سرعت شیرجه ۳۹۰ کیلومتر بر ساعت است.', 'شاهین شاهین یکی از مشهورترین گونه‌های این خانواده است.'] },
+            { id: 'vulture', nameFa: 'کرکس', nameEn: 'Vulture', category: 'raptor', image: 'vulture.jpg', emoji: '🦅', description: ['کرکس پرنده‌ای لاشه‌خوار با سر و گردن بدون پر و منقار قلاب‌شده است.', 'کرکس‌ها در آفریقا، آسیا و اروپا زندگی می‌کنند و در خطر انقراض هستند.'] },
+            { id: 'penguin', nameFa: 'پنگوئن', nameEn: 'Penguin', category: 'water', image: 'penguin.jpg', emoji: '🐧', description: ['پنگوئن پرنده‌ای دریایی و بدون پرواز است که در نیم‌کره جنوبی زندگی می‌کند.', 'پنگوئن امپراتور بزرگ‌ترین گونه پنگوئن با ارتفاع ۱۲۰ سانتی‌متر است.'] },
+            { id: 'pelican', nameFa: 'پلیکان', nameEn: 'Pelican', category: 'water', image: 'pelican.jpg', emoji: '🦢', description: ['پلیکان پرنده‌ای آبزی با منقار بلند و کیسه گلوی بزرگ برای صید ماهی است.', 'پلیکان سفید بزرگ از گونه‌های معروف این خانواده است.'] },
+            { id: 'flamingo', nameFa: 'فلامینگو', nameEn: 'Flamingo', category: 'water', image: 'flamingo.jpg', emoji: '🦩', description: ['فلامینگو پرنده‌ای با پاهای بلند، گردن دراز و پرهای صورتی است.', 'فلامینگوها به خاطر رنگ صورتی خود که از مواد غذایی به دست می‌آید معروف هستند.'] },
+            { id: 'duck', nameFa: 'اردک', nameEn: 'Duck', category: 'water', image: 'duck.jpg', emoji: '🦆', description: ['اردک پرنده‌ای آبزی با منقار پهن و پاهای پرده‌دار برای شنا است.', 'اردک‌ها به خاطر رفتار اجتماعی و مهاجرت‌های طولانی معروف هستند.'] },
+            { id: 'swan', nameFa: 'قو', nameEn: 'Swan', category: 'water', image: 'swan.jpg', emoji: '🦢', description: ['قو پرنده‌ای آبزی با گردن دراز و پرهای سفید و زیبا است.', 'قوها در بسیاری از فرهنگ‌ها نماد عشق و وفاداری هستند.'] },
+            { id: 'nightingale', nameFa: 'بلبل', nameEn: 'Nightingale', category: 'songbird', image: 'nightingale.jpg', emoji: '🐦', description: ['بلبل پرنده‌ای کوچک با آوازی بسیار زیبا و دلنشین است.', 'بلبل در ادبیات فارسی و عربی نماد عشق و شور است.'] },
+            { id: 'canary', nameFa: 'قناری', nameEn: 'Canary', category: 'songbird', image: 'canary.jpg', emoji: '🐦', description: ['قناری پرنده‌ای کوچک با پرهای زرد و آواز شیرین است.', 'قناری در گذشته در معادن برای هشدار وجود گازهای سمی استفاده می‌شد.'] },
+            { id: 'sparrow', nameFa: 'گنجشک', nameEn: 'Sparrow', category: 'songbird', image: 'sparrow.jpg', emoji: '🐦', description: ['گنجشک پرنده‌ای کوچک و رایج با پرهای قهوه‌ای و خاکستری است.', 'گنجشک در فرهنگ ایرانی نماد ساده‌دلی و زندگی شهری است.'] },
+            { id: 'parrot', nameFa: 'طوطی', nameEn: 'Parrot', category: 'parrot', image: 'parrot.jpg', emoji: '🦜', description: ['طوطی پرنده‌ای باهوش با پرهای رنگارنگ و منقار قلاب‌شده است.', 'طوطی خاکستری آفریقایی یکی از باهوش‌ترین گونه‌های طوطی است.'] },
+            { id: 'macaw', nameFa: 'ماکائو', nameEn: 'Macaw', category: 'parrot', image: 'macaw.jpg', emoji: '🦜', description: ['ماکائو بزرگ‌ترین گونه طوطی با پرهای رنگارنگ و دم بلند است.', 'ماکائو آبی یکی از نادرترین و زیباترین گونه‌ها است.'] },
+            { id: 'owl', nameFa: 'جغد', nameEn: 'Owl', category: 'owl', image: 'owl.jpg', emoji: '🦉', description: ['جغد پرنده‌ای شب‌زی با چشمان درشت و دوربین و پرواز بی‌صدا است.', 'جغد در بسیاری از فرهنگ‌ها نماد خرد و دانش است.'] },
+            { id: 'snowy_owl', nameFa: 'جغد برفی', nameEn: 'Snowy Owl', category: 'owl', image: 'snowy_owl.jpg', emoji: '🦉', description: ['جغد برفی با پرهای سفید و چشمان زرد در مناطق قطبی زندگی می‌کند.', 'جغد برفی یکی از زیباترین گونه‌های جغد است.'] },
+            { id: 'pheasant', nameFa: 'قرقاول', nameEn: 'Pheasant', category: 'game', image: 'pheasant.jpg', emoji: '🦃', description: ['قرقاول پرنده‌ای با پرهای رنگارنگ و دم بلند از خانواده قرقاول‌ها است.', 'قرقاول طلایی یکی از زیباترین گونه‌های قرقاول است.'] },
+            { id: 'partridge', nameFa: 'کبک', nameEn: 'Partridge', category: 'game', image: 'partridge.jpg', emoji: '🦃', description: ['کبک پرنده‌ای با جثه متوسط و پرهای خاکستری-قهوه‌ای است.', 'کبک در فرهنگ ایرانی نماد چابکی و زندگی در کوهستان است.'] }
+        ];
+
+        function renderBirds(data, filterCategory = 'all') {
+            const grid = document.getElementById('birdGrid');
+            const noResults = document.getElementById('noResults');
+            let html = '';
+            let count = 0;
+
+            data.forEach(item => {
+                if (filterCategory !== 'all' && item.category !== filterCategory) return;
+                count++;
+                const imagePath = `birds_ph/${item.image}`;
+                const catLabels = { raptor: '🦅 شکاری', water: '🌊 آبزی', songbird: '🎵 آوازخوان', parrot: '🦜 طوطی‌سانان', penguin: '🐧 پنگوئن', owl: '🦉 جغد', game: '🏹 شکار' };
+                const catClasses = { raptor: 'raptor', water: 'water', songbird: 'songbird', parrot: 'parrot', penguin: 'penguin', owl: 'owl', game: 'game' };
+
+                html += `
+                    <div class="bird-card" data-category="${item.category}">
+                        <div class="bird-image">
+                            <img src="${imagePath}" alt="${item.nameFa}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                            <span class="emoji-placeholder" style="display:none;">${item.emoji || '🐦'}</span>
+                        </div>
+                        <div class="bird-header">
+                            <div>
+                                <div class="bird-name">${item.nameFa}</div>
+                                <span class="bird-name-en">${item.nameEn}</span>
+                            </div>
+                            <span class="category-badge ${catClasses[item.category]}">${catLabels[item.category]}</span>
+                        </div>
+                        <div class="bird-description">${item.description.map(p => `<p>${p}</p>`).join('')}</div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+            if (count === 0) noResults.style.display = 'block';
+            else noResults.style.display = 'none';
+
+            const cards = grid.querySelectorAll('.bird-card');
+            cards.forEach((card, index) => {
+                card.style.animation = 'none';
+                card.offsetHeight;
+                card.style.animation = `fadeInUp 0.5s ease forwards`;
+                card.style.animationDelay = `${(index % 12) * 0.03 + 0.03}s`;
+            });
+        }
+
+        document.querySelectorAll('.cat-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                document.querySelectorAll('.cat-tag').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                renderBirds(birdsData, this.dataset.cat);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderBirds(birdsData, 'all');
+        });
+    </script>
+</body>
+</html>

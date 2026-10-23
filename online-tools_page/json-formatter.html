@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>فرمت‌کننده JSON آنلاین | ابزار اعتبارسنجی و فرمت JSON Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای فرمت و اعتبارسنجی JSON. قابلیت مینی‌فای، جستجو، کپی، دانلود و نمایش درخت‌واره." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/json-formatter" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .json-preview {
+            flex: 1;
+            min-height: 450px;
+            padding: 16px 18px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            overflow-y: auto;
+            line-height: 1.7;
+            direction: ltr;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #e8f5f0;
+        }
+        .json-preview .json-key {
+            color: #fbbf24;
+        }
+        .json-preview .json-string {
+            color: #60e7a0;
+        }
+        .json-preview .json-number {
+            color: #5fcde6;
+        }
+        .json-preview .json-boolean {
+            color: #f87171;
+        }
+        .json-preview .json-null {
+            color: #94a3b8;
+        }
+        .json-preview .json-bracket {
+            color: #c8a0ff;
+        }
+        .json-preview .json-line-number {
+            display: inline-block;
+            width: 30px;
+            color: rgba(160, 180, 200, 0.2);
+            font-size: 0.7rem;
+            user-select: none;
+            margin-right: 8px;
+        }
+        .json-preview .json-error {
+            color: #f87171;
+            background: rgba(248, 113, 113, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .json-preview .placeholder {
+            color: rgba(160, 180, 200, 0.3);
+        }
+        .json-error-msg {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: rgba(248, 113, 113, 0.1);
+            color: #f87171;
+            border-right: 4px solid #f87171;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+        .json-error-msg.visible {
+            display: block;
+        }
+        .json-error-msg .error-detail {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin-top: 4px;
+            color: #f87171;
+            opacity: 0.8;
+        }
+        .tool-textarea {
+            min-height: 450px;
+        }
+        .tool-textarea.error {
+            border-color: #f87171;
+            box-shadow: 0 0 0 4px rgba(248, 113, 113, 0.1);
+        }
+        .tool-textarea.success {
+            border-color: #00ffcc;
+        }
+        .tool-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            min-height: 500px;
+        }
+        @media (max-width: 900px) {
+            .tool-layout {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .tool-textarea {
+                min-height: 250px;
+            }
+            .json-preview {
+                min-height: 250px;
+            }
+        }
+        @media (max-width: 768px) {
+            .tool-textarea {
+                min-height: 180px;
+                font-size: 0.8rem;
+                padding: 10px 12px;
+            }
+            .json-preview {
+                min-height: 180px;
+                padding: 10px 12px;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">📋</span>
+                <h2>فرمت‌کننده JSON</h2>
+                <span class="badge">فرمت &bull; اعتبارسنجی &bull; فایل</span>
+            </div>
+
+            <div class="toolbar">
+                <button class="tb-btn primary" id="formatBtn">🔧 فرمت</button>
+                <button class="tb-btn" id="minifyBtn">📦 مینی‌فای</button>
+                <button class="tb-btn" id="validateBtn">✅ اعتبارسنجی</button>
+                <span class="tb-divider"></span>
+                <button class="tb-btn upload" id="uploadBtn">📂 آپلود فایل</button>
+                <button class="tb-btn" id="sampleBtn">📄 نمونه</button>
+                <span class="tb-divider"></span>
+                <button class="tb-btn danger" id="clearBtn">🗑️ پاک</button>
+            </div>
+
+            <div class="drop-zone" id="fileDropZone">
+                <span class="dz-icon">📂</span>
+                <span class="dz-text">برای آپلود فایل JSON <strong>کلیک کنید</strong> یا فایل را <strong>بکشید</strong> و رها کنید</span>
+                <span class="dz-hint">پسوندهای مجاز: .json • حداکثر حجم: ۵ مگابایت</span>
+                <input type="file" id="fileInput" accept=".json" />
+            </div>
+
+            <div class="file-info" id="fileInfo" style="display:none;">
+                <span class="fi-icon">📄</span>
+                <span class="fi-name" id="fileName">data.json</span>
+                <span class="fi-size" id="fileSize">۰ KB</span>
+                <span class="fi-remove" id="removeFileBtn">✕ حذف فایل</span>
+            </div>
+
+            <div class="tool-layout">
+                <div>
+                    <div class="panel-header">
+                        <span>📝 ورودی JSON</span>
+                        <span class="panel-stats"><span id="inputCharCount">۰</span> کاراکتر • <span id="inputLineCount">۰</span> خط</span>
+                    </div>
+                    <textarea class="tool-textarea" id="jsonInput" placeholder="کد JSON خود را اینجا وارد کنید..."></textarea>
+                </div>
+                <div>
+                    <div class="panel-header">
+                        <span>👁️ خروجی فرمت‌شده</span>
+                        <span class="panel-stats"><span id="outputCharCount">۰</span> کاراکتر • <span id="outputLineCount">۰</span> خط</span>
+                    </div>
+                    <div class="json-preview" id="jsonPreview"><span class="placeholder">خروجی فرمت‌شده در اینجا نمایش داده می‌شود...</span></div>
+                </div>
+            </div>
+
+            <div class="json-error-msg" id="errorMsg">
+                <strong>❌ خطا:</strong> <span id="errorText">JSON نامعتبر است.</span>
+                <div class="error-detail" id="errorDetail"></div>
+            </div>
+
+            <div class="tool-status" id="jsonStatus"></div>
+
+            <div class="tool-actions">
+                <button class="act-btn act-btn-copy" id="copyOutputBtn">📋 کپی خروجی</button>
+                <button class="act-btn act-btn-copy" id="copyInputBtn">📋 کپی ورودی</button>
+                <button class="act-btn act-btn-download" id="downloadJsonBtn">📥 دانلود JSON</button>
+                <button class="act-btn act-btn-clear" id="clearAllBtn">🗑️ پاک کردن همه</button>
+            </div>
+        </div>
+    </main>
+
+    
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            const jsonInput = document.getElementById('jsonInput');
+            const jsonPreview = document.getElementById('jsonPreview');
+            const errorMsg = document.getElementById('errorMsg');
+            const errorText = document.getElementById('errorText');
+            const errorDetail = document.getElementById('errorDetail');
+            const inputCharCount = document.getElementById('inputCharCount');
+            const inputLineCount = document.getElementById('inputLineCount');
+            const outputCharCount = document.getElementById('outputCharCount');
+            const outputLineCount = document.getElementById('outputLineCount');
+            const formatBtn = document.getElementById('formatBtn');
+            const minifyBtn = document.getElementById('minifyBtn');
+            const validateBtn = document.getElementById('validateBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const sampleBtn = document.getElementById('sampleBtn');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const copyOutputBtn = document.getElementById('copyOutputBtn');
+            const copyInputBtn = document.getElementById('copyInputBtn');
+            const downloadJsonBtn = document.getElementById('downloadJsonBtn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            const jsonStatus = document.getElementById('jsonStatus');
+
+            const fileDropZone = document.getElementById('fileDropZone');
+            const fileInput = document.getElementById('fileInput');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const removeFileBtn = document.getElementById('removeFileBtn');
+
+            let currentJson = null;
+
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' B';
+                if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+                return (bytes / 1048576).toFixed(1) + ' MB';
+            }
+
+            function handleFile(file) {
+                if (!file) return;
+                if (file.size > 5 * 1024 * 1024) {
+                    showStatus('⚠️ حجم فایل نباید بیشتر از ۵ مگابایت باشد.', 'error');
+                    return;
+                }
+                const ext = file.name.split('.').pop().toLowerCase();
+                if (ext !== 'json') {
+                    showStatus('⚠️ پسوند فایل باید .json باشد.', 'error');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    jsonInput.value = e.target.result;
+                    fileName.textContent = file.name;
+                    fileSize.textContent = formatFileSize(file.size);
+                    fileInfo.style.display = 'flex';
+                    showStatus(`📂 فایل "${file.name}" با موفقیت بارگذاری شد.`, 'success');
+                    updateStats(jsonInput.value, inputCharCount, inputLineCount);
+                    setTimeout(handleFormat, 200);
+                };
+                reader.onerror = function() { showStatus('❌ خطا در خواندن فایل.', 'error'); };
+                reader.readAsText(file, 'UTF-8');
+            }
+
+            function removeFile() {
+                fileInput.value = '';
+                fileInfo.style.display = 'none';
+                showStatus('🗑️ فایل حذف شد.', 'info');
+            }
+
+            fileDropZone.addEventListener('click', function() { fileInput.click(); });
+            fileDropZone.addEventListener('dragover', function(e) { e.preventDefault();
+                this.classList.add('dragover'); });
+            fileDropZone.addEventListener('dragleave', function(e) { e.preventDefault();
+                this.classList.remove('dragover'); });
+            fileDropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+            });
+            fileInput.addEventListener('change', function() { if (this.files.length > 0) handleFile(this.files[0]); });
+            removeFileBtn.addEventListener('click', removeFile);
+            uploadBtn.addEventListener('click', function() { fileInput.click(); });
+
+            function showStatus(message, type) {
+                jsonStatus.textContent = message;
+                jsonStatus.className = `tool-status visible ${type}`;
+                setTimeout(() => { jsonStatus.className = 'tool-status'; }, 4000);
+            }
+
+            function formatJSON(text, spaces) {
+                try {
+                    const parsed = JSON.parse(text);
+                    currentJson = parsed;
+                    return { success: true, data: JSON.stringify(parsed, null, spaces || 2) };
+                } catch (e) { return { success: false, error: e.message }; }
+            }
+
+            function minifyJSON(text) {
+                try {
+                    const parsed = JSON.parse(text);
+                    currentJson = parsed;
+                    return { success: true, data: JSON.stringify(parsed) };
+                } catch (e) { return { success: false, error: e.message }; }
+            }
+
+            function validateJSON(text) {
+                try { JSON.parse(text); return { success: true, data: '✅ JSON معتبر است.' }; } catch (e) {
+                    const match = e.message.match(/position (\d+)/);
+                    let detail = '';
+                    if (match) {
+                        const pos = parseInt(match[1]);
+                        const lines = text.split('\n');
+                        let charCount = 0,
+                            lineNum = 1,
+                            colNum = 0;
+                        for (const line of lines) {
+                            if (charCount + line.length + 1 > pos) { colNum = pos - charCount; break; }
+                            charCount += line.length + 1;
+                            lineNum++;
+                        }
+                        detail = `📍 خط ${lineNum}, ستون ${colNum}`;
+                    }
+                    return { success: false, error: e.message, detail: detail };
+                }
+            }
+
+            function renderOutput(text, isError) {
+                if (isError) {
+                    jsonPreview.innerHTML = `<span class="json-error">${escapeHtml(text)}</span>`;
+                    return;
+                }
+                jsonPreview.innerHTML = syntaxHighlight(text);
+            }
+
+            function syntaxHighlight(json) {
+                json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const lines = json.split('\n');
+                let result = '';
+                const digits = String(lines.length).length;
+                lines.forEach((line, index) => {
+                    const lineNum = String(index + 1).padStart(digits, ' ');
+                    let escaped = line;
+                    escaped = escaped.replace(/"([^"]+)":/g, (m, p1) =>
+                        `<span class="json-key">"${escapeHtml(p1)}"</span>:`);
+                    escaped = escaped.replace(/: "([^"]*)"/g, (m, p1) =>
+                        `: <span class="json-string">"${escapeHtml(p1)}"</span>`);
+                    escaped = escaped.replace(/: (\d+\.?\d*)/g, (m, p1) => `: <span class="json-number">${p1}</span>`);
+                    escaped = escaped.replace(/: (true|false)/g, (m, p1) =>
+                    `: <span class="json-boolean">${p1}</span>`);
+                    escaped = escaped.replace(/: (null)/g, (m, p1) => `: <span class="json-null">${p1}</span>`);
+                    escaped = escaped.replace(/([\[\]{}])/g, (m, p1) => `<span class="json-bracket">${p1}</span>`);
+                    result += `<div><span class="json-line-number">${lineNum}</span>${escaped}</div>`;
+                });
+                return result;
+            }
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function updateStats(text, charEl, lineEl) {
+                const chars = text.length;
+                const lines = text.split('\n').length;
+                charEl.textContent = chars.toLocaleString('fa-IR');
+                lineEl.textContent = lines.toLocaleString('fa-IR');
+            }
+
+            function showError(message, detail) {
+                errorText.textContent = message;
+                errorDetail.textContent = detail || '';
+                errorMsg.classList.add('visible');
+                jsonInput.classList.add('error');
+                jsonInput.classList.remove('success');
+            }
+
+            function hideError() {
+                errorMsg.classList.remove('visible');
+                jsonInput.classList.remove('error');
+                jsonInput.classList.remove('success');
+            }
+
+            function showSuccess() {
+                jsonInput.classList.remove('error');
+                jsonInput.classList.add('success');
+                setTimeout(() => { jsonInput.classList.remove('success'); }, 2000);
+            }
+
+            function handleFormat() {
+                const text = jsonInput.value.trim();
+                if (!text) { showError('لطفاً کد JSON را وارد کنید یا فایل آپلود کنید.'); return; }
+                hideError();
+                const result = formatJSON(text);
+                if (result.success) {
+                    renderOutput(result.data);
+                    updateStats(result.data, outputCharCount, outputLineCount);
+                    updateStats(text, inputCharCount, inputLineCount);
+                    showSuccess();
+                } else {
+                    showError('JSON نامعتبر است.', result.error);
+                    renderOutput('❌ خطا: ' + result.error, true);
+                    updateStats(text, inputCharCount, inputLineCount);
+                }
+            }
+
+            function handleMinify() {
+                const text = jsonInput.value.trim();
+                if (!text) { showError('لطفاً کد JSON را وارد کنید یا فایل آپلود کنید.'); return; }
+                hideError();
+                const result = minifyJSON(text);
+                if (result.success) {
+                    renderOutput(result.data);
+                    updateStats(result.data, outputCharCount, outputLineCount);
+                    updateStats(text, inputCharCount, inputLineCount);
+                    showSuccess();
+                } else {
+                    showError('JSON نامعتبر است.', result.error);
+                    renderOutput('❌ خطا: ' + result.error, true);
+                    updateStats(text, inputCharCount, inputLineCount);
+                }
+            }
+
+            function handleValidate() {
+                const text = jsonInput.value.trim();
+                if (!text) { showError('لطفاً کد JSON را وارد کنید یا فایل آپلود کنید.'); return; }
+                hideError();
+                const result = validateJSON(text);
+                if (result.success) {
+                    showStatus('✅ JSON معتبر است!', 'success');
+                    showSuccess();
+                } else {
+                    showError('❌ JSON نامعتبر است.', result.detail || result.error);
+                    jsonInput.classList.add('error');
+                }
+            }
+
+            function copyToClipboard(text, btn) {
+                if (!text) { showStatus('⚠️ متنی برای کپی وجود ندارد.', 'error'); return; }
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text)
+                        .then(() => { btn.textContent = '✅ کپی شد';
+                            btn.classList.add('copied');
+                            setTimeout(() => { btn.textContent = btn.dataset.original || '📋 کپی خروجی';
+                                btn.classList.remove('copied'); }, 2000); })
+                        .catch(() => fallbackCopy(text, btn));
+                } else { fallbackCopy(text, btn); }
+            }
+
+            function fallbackCopy(text, btn) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try { document.execCommand('copy');
+                    btn.textContent = '✅ کپی شد';
+                    setTimeout(() => { btn.textContent = btn.dataset.original || '📋 کپی خروجی'; }, 2000); } catch (_) { showStatus(
+                        '❌ کپی نشد.', 'error'); }
+                document.body.removeChild(textarea);
+            }
+
+            function downloadJSON() {
+                const text = jsonPreview.textContent || '';
+                if (!text || text.includes('خروجی فرمت‌شده') || text.includes('خطا')) {
+                    alert('هیچ JSON معتبری برای دانلود وجود ندارد.');
+                    return;
+                }
+                const blob = new Blob([text], { type: 'application/json;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                const name = fileInfo.style.display !== 'none' ? fileName.textContent.replace(/\.[^.]+$/, '') : 'formatted';
+                link.download = `${name}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                showStatus('✅ فایل JSON با موفقیت دانلود شد.', 'success');
+            }
+
+            const SAMPLE_JSON = `{
+  "name": "نوینیکس",
+  "version": "1.0.0",
+  "description": "مجموعه ابزارهای آنلاین",
+  "features": ["فرمت JSON", "اعتبارسنجی", "مینی‌فای"],
+  "stats": {
+    "tools": 20,
+    "games": 8,
+    "isActive": true
+  },
+  "metadata": null
+}`;
+
+            function loadSample() {
+                jsonInput.value = SAMPLE_JSON;
+                removeFile();
+                handleFormat();
+                showStatus('📄 نمونه JSON بارگذاری شد.', 'info');
+            }
+
+            function clearAll() {
+                jsonInput.value = '';
+                jsonPreview.innerHTML = '<span class="placeholder">خروجی فرمت‌شده در اینجا نمایش داده می‌شود...</span>';
+                hideError();
+                removeFile();
+                updateStats('', inputCharCount, inputLineCount);
+                updateStats('', outputCharCount, outputLineCount);
+                currentJson = null;
+                jsonInput.focus();
+            }
+
+            formatBtn.addEventListener('click', handleFormat);
+            minifyBtn.addEventListener('click', handleMinify);
+            validateBtn.addEventListener('click', handleValidate);
+            sampleBtn.addEventListener('click', loadSample);
+            clearBtn.addEventListener('click', clearAll);
+            copyOutputBtn.addEventListener('click', function() {
+                const text = jsonPreview.textContent || '';
+                if (text.includes('خروجی فرمت‌شده') || text.includes('خطا')) { alert('ابتدا JSON را فرمت کنید.'); return; }
+                copyToClipboard(text, this);
+            });
+            copyInputBtn.addEventListener('click', function() { copyToClipboard(jsonInput.value, this); });
+            downloadJsonBtn.addEventListener('click', downloadJSON);
+            clearAllBtn.addEventListener('click', function() {
+                if (confirm('آیا مطمئن هستید؟ همه داده‌ها پاک می‌شوند.')) clearAll();
+            });
+            jsonInput.addEventListener('input', function() {
+                updateStats(this.value, inputCharCount, inputLineCount);
+                if (!this.value.trim()) {
+                    jsonPreview.innerHTML = '<span class="placeholder">خروجی فرمت‌شده در اینجا نمایش داده می‌شود...</span>';
+                    this.classList.remove('error', 'success');
+                    hideError();
+                }
+            });
+            jsonInput.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault();
+                    handleFormat(); }
+            });
+
+            setTimeout(loadSample, 100);
+            console.log('📋 JSON Formatter loaded!');
+        })();
+    </script>
+</body>
+</html>

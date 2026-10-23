@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>خروج | نوینیکس</title>
+    <meta name="description" content="خروج از حساب کاربری نوینیکس" />
+    <link rel="canonical" href="https://novinix.ir/auth/logout.html" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <style>
+        body {
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .logout-wrapper {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 40px 35px;
+            max-width: 420px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+        .logout-wrapper .icon { font-size: 4rem; display: block; margin-bottom: 16px; }
+        .logout-wrapper h2 { color: #e8f5f0; margin-bottom: 8px; font-size: 1.6rem; }
+        .logout-wrapper p { color: #a0b4c8; margin-bottom: 20px; font-size: 0.95rem; }
+        .logout-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .logout-actions .la-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logout-actions .la-btn:hover { transform: translateY(-2px); }
+        .la-btn-logout { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .la-btn-logout:hover { background: rgba(239, 68, 68, 0.25); box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2); }
+        .la-btn-cancel { background: rgba(255, 255, 255, 0.06); color: #a0b4c8; border: 1px solid rgba(255, 255, 255, 0.08); }
+        .la-btn-cancel:hover { background: rgba(255, 255, 255, 0.1); color: #00ffcc; }
+        .la-btn-home { background: linear-gradient(135deg, #00ffcc, #00b4db); color: #0f0c29; }
+        .la-btn-home:hover { box-shadow: 0 4px 16px rgba(0, 255, 204, 0.3); }
+        @media (max-width: 480px) { .logout-wrapper { padding: 25px 20px; } .logout-actions { flex-direction: column; } .logout-actions .la-btn { justify-content: center; } }
+    </style>
+</head>
+<body>
+
+    <div class="logout-wrapper">
+        <span class="icon">🚪</span>
+        <h2>خروج از حساب</h2>
+        <p>آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟</p>
+
+        <div class="logout-actions">
+            <button class="la-btn la-btn-logout" id="confirmLogout">🚪 خروج</button>
+            <a href="profile.html" class="la-btn la-btn-cancel">❌ انصراف</a>
+            <a href="../main.html" class="la-btn la-btn-home">🏠 خانه</a>
+        </div>
+    </div>
+
+    <script src="../auth/auth.js"></script>
+    <script>
+        document.getElementById('confirmLogout').addEventListener('click', async function() {
+            await NovinixAuth.logout();
+            window.location.href = '../main.html';
+        });
+    </script>
+    <script src="../assets/js/seo.js"></script>
+</body>
+</html>

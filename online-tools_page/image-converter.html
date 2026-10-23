@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تبدیل و بهینه‌سازی تصویر آنلاین | ابزار Image Converter Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای تبدیل و بهینه‌سازی تصاویر. پشتیبانی از PNG، JPG، WebP و BMP." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/image-converter" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .img-settings {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin: 16px 0;
+        }
+        .img-settings .setting-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .img-settings .setting-item label {
+            font-size: 0.8rem;
+            color: #a0b4c8;
+            font-weight: 500;
+        }
+        .img-settings .setting-item select,
+        .img-settings .setting-item input[type="number"] {
+            padding: 8px 12px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8f5f0;
+            width: 100%;
+        }
+        .img-settings .setting-item select:focus,
+        .img-settings .setting-item input[type="number"]:focus {
+            border-color: #00ffcc;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 255, 204, 0.1);
+        }
+        .img-settings .setting-item select option {
+            background: #0f0c29;
+        }
+
+        .img-preview {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 16px 0;
+        }
+        .img-preview.visible {
+            display: grid;
+        }
+        .img-preview .preview-box {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .img-preview .preview-box .label {
+            font-size: 0.8rem;
+            color: rgba(160, 180, 200, 0.4);
+            display: block;
+            margin-bottom: 8px;
+        }
+        .img-preview .preview-box img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+        }
+        .img-preview .preview-box .info {
+            font-size: 0.75rem;
+            color: rgba(160, 180, 200, 0.3);
+            margin-top: 8px;
+        }
+
+        .tool-stats .stat-value.success {
+            color: #00ffcc;
+        }
+
+        .act-btn-convert {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+        }
+        .act-btn-convert:hover {
+            box-shadow: 0 6px 20px rgba(0, 255, 204, 0.3);
+        }
+        .act-btn-download-img {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+        }
+        .act-btn-download-img:hover {
+            box-shadow: 0 6px 20px rgba(44, 62, 80, 0.3);
+        }
+
+        @media (max-width: 640px) {
+            .img-preview {
+                grid-template-columns: 1fr;
+            }
+            .img-settings {
+                grid-template-columns: 1fr 1fr;
+                padding: 14px 16px;
+            }
+            .img-preview .preview-box img {
+                max-height: 150px;
+            }
+        }
+        @media (max-width: 480px) {
+            .img-settings {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">🖼️</span>
+                <h2>تبدیل و بهینه‌سازی تصویر</h2>
+                <span class="badge">PNG &bull; JPG &bull; WebP &bull; BMP</span>
+            </div>
+
+            <div class="drop-zone" id="dropZone">
+                <span class="dz-icon">📂</span>
+                <span class="dz-text">تصویر را اینجا بکشید و رها کنید</span>
+                <span class="dz-hint">یا برای انتخاب فایل کلیک کنید</span>
+                <input type="file" id="fileInput" accept="image/*" />
+            </div>
+
+            <div class="img-preview" id="previewContainer">
+                <div class="preview-box">
+                    <span class="label">📥 تصویر اصلی</span>
+                    <img id="originalPreview" src="" alt="Original" />
+                    <div class="info" id="originalInfo">—</div>
+                </div>
+                <div class="preview-box">
+                    <span class="label">📤 تصویر تبدیل‌شده</span>
+                    <img id="convertedPreview" src="" alt="Converted" />
+                    <div class="info" id="convertedInfo">—</div>
+                </div>
+            </div>
+
+            <div class="img-settings">
+                <div class="setting-item">
+                    <label>📐 فرمت خروجی</label>
+                    <select id="formatSelect">
+                        <option value="image/png">PNG</option>
+                        <option value="image/jpeg">JPG</option>
+                        <option value="image/webp">WebP</option>
+                        <option value="image/bmp">BMP</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>📏 کیفیت (۱-۱۰۰)</label>
+                    <input type="number" id="qualityInput" value="90" min="1" max="100" />
+                </div>
+            </div>
+
+            <div class="tool-actions">
+                <button class="act-btn act-btn-convert" id="convertBtn">🔄 تبدیل</button>
+                <button class="act-btn act-btn-download-img" id="downloadBtn" disabled>📥 دانلود</button>
+                <button class="act-btn act-btn-clear" id="clearBtn">🗑️ پاک کردن</button>
+            </div>
+
+            <div class="tool-stats">
+                <span>📊 حجم اصلی: <span class="stat-value" id="originalSize">—</span></span>
+                <span>📊 حجم جدید: <span class="stat-value success" id="newSize">—</span></span>
+            </div>
+        </div>
+    </main>
+
+    
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            let originalFile = null;
+            let convertedDataUrl = null;
+
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            const originalPreview = document.getElementById('originalPreview');
+            const convertedPreview = document.getElementById('convertedPreview');
+            const previewContainer = document.getElementById('previewContainer');
+            const originalInfo = document.getElementById('originalInfo');
+            const convertedInfo = document.getElementById('convertedInfo');
+            const formatSelect = document.getElementById('formatSelect');
+            const qualityInput = document.getElementById('qualityInput');
+            const convertBtn = document.getElementById('convertBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const originalSize = document.getElementById('originalSize');
+            const newSize = document.getElementById('newSize');
+
+            dropZone.addEventListener('click', () => fileInput.click());
+            dropZone.addEventListener('dragover', (e) => { e.preventDefault();
+                dropZone.style.borderColor = '#00ffcc'; });
+            dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = 'rgba(255,255,255,0.08)'; });
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = 'rgba(255,255,255,0.08)';
+                if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+            });
+            fileInput.addEventListener('change', (e) => { if (e.target.files.length) handleFile(e.target.files[0]); });
+
+            function handleFile(file) {
+                if (!file.type.startsWith('image/')) { alert('لطفاً یک فایل تصویری انتخاب کنید.'); return; }
+                originalFile = file;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    originalPreview.src = e.target.result;
+                    originalPreview.style.display = 'block';
+                    originalInfo.textContent = `${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+                    originalSize.textContent = (file.size / 1024).toFixed(1) + ' KB';
+                    previewContainer.classList.add('visible');
+                    convertImage();
+                };
+                reader.readAsDataURL(file);
+            }
+
+            function convertImage() {
+                if (!originalFile) return;
+                const format = formatSelect.value;
+                const quality = parseInt(qualityInput.value) / 100;
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    convertedDataUrl = canvas.toDataURL(format, quality);
+                    convertedPreview.src = convertedDataUrl;
+                    convertedPreview.style.display = 'block';
+                    convertedInfo.textContent = format.split('/')[1].toUpperCase();
+                    const size = Math.round(convertedDataUrl.length * 3 / 4 / 1024);
+                    newSize.textContent = size.toFixed(1) + ' KB';
+                    downloadBtn.disabled = false;
+                };
+                img.src = originalPreview.src;
+            }
+
+            convertBtn.addEventListener('click', convertImage);
+
+            downloadBtn.addEventListener('click', function() {
+                if (!convertedDataUrl) return;
+                const format = formatSelect.value.split('/')[1];
+                const link = document.createElement('a');
+                link.download = `converted.${format === 'jpeg' ? 'jpg' : format}`;
+                link.href = convertedDataUrl;
+                link.click();
+            });
+
+            clearBtn.addEventListener('click', function() {
+                originalFile = null;
+                convertedDataUrl = null;
+                originalPreview.src = '';
+                originalPreview.style.display = 'none';
+                convertedPreview.src = '';
+                convertedPreview.style.display = 'none';
+                previewContainer.classList.remove('visible');
+                downloadBtn.disabled = true;
+                originalSize.textContent = '—';
+                newSize.textContent = '—';
+                fileInput.value = '';
+            });
+
+            formatSelect.addEventListener('change', () => { if (originalFile) convertImage(); });
+            qualityInput.addEventListener('change', () => { if (originalFile) convertImage(); });
+
+            console.log('🖼️ Image Converter loaded!');
+        })();
+    </script>
+</body>
+</html>

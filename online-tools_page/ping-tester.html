@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تست پینگ آنلاین | ابزار حرفه‌ای بررسی اتصال شبکه Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای تست پینگ برای بررسی اتصال به سرورها، IPها و دامنه‌ها." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/ping-tester" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .ping-input-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .ping-input-group input {
+            flex: 1;
+            min-width: 200px;
+            padding: 14px 18px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8f5f0;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            direction: ltr;
+            text-align: right;
+        }
+        .ping-input-group input:focus {
+            border-color: #00ffcc;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.1);
+        }
+        .ping-input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.15);
+            direction: rtl;
+        }
+        .ping-input-group .ping-btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        .ping-input-group .ping-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 204, 0.3);
+        }
+        .ping-input-group .ping-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .quick-hosts {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .quick-hosts .qh-btn {
+            padding: 4px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            font-size: 0.75rem;
+            color: #a0b4c8;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .quick-hosts .qh-btn:hover {
+            border-color: #00ffcc;
+            color: #00ffcc;
+        }
+
+        .ping-settings {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            align-items: center;
+        }
+        .ping-settings .setting-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ping-settings .setting-item label {
+            font-size: 0.85rem;
+            color: #a0b4c8;
+            font-weight: 500;
+        }
+        .ping-settings .setting-item input[type="number"] {
+            width: 70px;
+            padding: 6px 10px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8f5f0;
+        }
+        .ping-settings .setting-item input[type="number"]:focus {
+            border-color: #00ffcc;
+            outline: none;
+        }
+
+        .ping-status {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            align-items: center;
+            gap: 10px;
+        }
+        .ping-status.visible {
+            display: flex;
+        }
+        .ping-status .status-spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.06);
+            border-top-color: #00ffcc;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            flex-shrink: 0;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .ping-status.info {
+            background: rgba(52, 152, 219, 0.12);
+            color: #5fcde6;
+        }
+        .ping-status.success {
+            background: rgba(0, 255, 204, 0.08);
+            color: #00ffcc;
+        }
+        .ping-status.error {
+            background: rgba(239, 68, 68, 0.12);
+            color: #f87171;
+        }
+
+        .ping-results {
+            display: none;
+            margin-top: 16px;
+            animation: fadeSlideIn 0.4s ease;
+        }
+        .ping-results.visible {
+            display: block;
+        }
+
+        .ping-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .ping-summary .summary-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 12px 14px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .ping-summary .summary-item .label {
+            font-size: 0.7rem;
+            color: rgba(160, 180, 200, 0.4);
+            display: block;
+            font-weight: 500;
+        }
+        .ping-summary .summary-item .value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e8f5f0;
+            display: block;
+            margin-top: 2px;
+        }
+        .ping-summary .summary-item .value.success {
+            color: #00ffcc;
+        }
+        .ping-summary .summary-item .value.danger {
+            color: #f87171;
+        }
+
+        .ping-table-wrap {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .ping-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .ping-table th {
+            background: rgba(255, 255, 255, 0.04);
+            color: #a0b4c8;
+            font-weight: 600;
+            padding: 10px 14px;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+        }
+        .ping-table td {
+            padding: 8px 14px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-family: 'Courier New', monospace;
+            direction: ltr;
+        }
+        .ping-table .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .ping-table .status-dot.success {
+            background: #00ffcc;
+        }
+        .ping-table .status-dot.danger {
+            background: #f87171;
+        }
+        .ping-table .status-dot.timeout {
+            background: rgba(160, 180, 200, 0.3);
+        }
+
+        .act-btn-stop {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.15);
+        }
+        .act-btn-stop:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        @media (max-width: 640px) {
+            .ping-input-group {
+                flex-direction: column;
+            }
+            .ping-input-group .ping-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .ping-settings {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .ping-settings .setting-item {
+                justify-content: space-between;
+            }
+            .ping-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">📡</span>
+                <h2>تست پینگ</h2>
+                <span class="badge">آنلاین &bull; دقیق</span>
+            </div>
+
+            <div class="ping-input-group">
+                <input type="text" id="pingInput" placeholder="آدرس IP یا دامنه را وارد کنید..." value="google.com" />
+                <button class="ping-btn" id="pingBtn"><span>📡</span> شروع پینگ</button>
+            </div>
+
+            <div class="quick-hosts">
+                <button class="qh-btn" data-host="google.com">🌐 google.com</button>
+                <button class="qh-btn" data-host="github.com">🐙 github.com</button>
+                <button class="qh-btn" data-host="8.8.8.8">🟢 8.8.8.8</button>
+                <button class="qh-btn" data-host="1.1.1.1">🔵 1.1.1.1</button>
+                <button class="qh-btn" data-host="novinix.ir">🟣 novinix.ir</button>
+            </div>
+
+            <div class="ping-settings">
+                <div class="setting-item"><label>🔢 تعداد:</label><input type="number" id="pingCount" value="5" min="1" max="20" /></div>
+                <div class="setting-item"><label>⏱️ تایم‌اوت (ms):</label><input type="number" id="pingTimeout" value="5000" min="1000" max="30000" step="500" /></div>
+            </div>
+
+            <div class="ping-status" id="pingStatus"><div class="status-spinner"></div><span id="statusText">در حال بررسی...</span></div>
+
+            <div class="ping-results" id="pingResults">
+                <div class="ping-summary" id="pingSummary">
+                    <div class="summary-item"><span class="label">📊 ارسال</span><span class="value" id="sentCount">0</span></div>
+                    <div class="summary-item"><span class="label">✅ دریافت</span><span class="value" id="receivedCount">0</span></div>
+                    <div class="summary-item"><span class="label">📉 از دست رفته</span><span class="value" id="lostCount">0</span></div>
+                    <div class="summary-item"><span class="label">📈 موفقیت</span><span class="value" id="successRate">0%</span></div>
+                    <div class="summary-item"><span class="label">⏱️ میانگین</span><span class="value" id="avgTime">—</span></div>
+                </div>
+
+                <div class="ping-table-wrap">
+                    <table class="ping-table">
+                        <thead><tr><th>#</th><th>وضعیت</th><th>زمان (ms)</th></tr></thead>
+                        <tbody id="pingTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="copyPingBtn">📋 کپی</button>
+                    <button class="act-btn act-btn-clear" id="clearPingBtn">🗑️ پاک کردن</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            let isRunning = false;
+            let shouldStop = false;
+
+            function ping(url) {
+                return new Promise((resolve) => {
+                    const start = performance.now();
+                    fetch(url, { mode: 'no-cors', cache: 'no-cache' })
+                        .then(() => resolve(performance.now() - start))
+                        .catch(() => resolve(performance.now() - start));
+                });
+            }
+
+            async function runPing() {
+                const host = document.getElementById('pingInput').value.trim();
+                if (!host) { alert('لطفاً آدرس را وارد کنید.'); return; }
+                if (isRunning) return;
+
+                isRunning = true;
+                shouldStop = false;
+                const count = parseInt(document.getElementById('pingCount').value) || 5;
+                const timeout = parseInt(document.getElementById('pingTimeout').value) || 5000;
+
+                document.getElementById('pingBtn').disabled = true;
+                document.getElementById('pingBtn').textContent = '⏳ در حال پینگ...';
+
+                const status = document.getElementById('pingStatus');
+                status.className = 'ping-status visible info';
+                document.getElementById('statusText').textContent = 'در حال ارسال درخواست...';
+
+                const results = [];
+                const tableBody = document.getElementById('pingTableBody');
+                tableBody.innerHTML = '';
+
+                const url = host.startsWith('http') ? host : `https://${host}`;
+
+                for (let i = 0; i < count && !shouldStop; i++) {
+                    let success = false;
+                    let time = 0;
+
+                    try {
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), timeout);
+                        const fetchStart = performance.now();
+                        await fetch(url, { mode: 'no-cors', cache: 'no-cache', signal: controller.signal });
+                        clearTimeout(timeoutId);
+                        time = performance.now() - fetchStart;
+                        success = true;
+                    } catch (e) {
+                        time = timeout;
+                        success = false;
+                    }
+
+                    results.push({ success, time });
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${i+1}</td>
+                        <td><span class="status-dot ${success ? 'success' : 'danger'}"></span> ${success ? '✅ موفق' : '❌ خطا'}</td>
+                        <td>${success ? time.toFixed(1) : '—'}</td>
+                    `;
+                    tableBody.appendChild(row);
+
+                    document.getElementById('statusText').textContent = `پینگ ${i+1}/${count}...`;
+
+                    if (i < count - 1 && !shouldStop) await new Promise(r => setTimeout(r, 500));
+                }
+
+                const sent = results.length;
+                const received = results.filter(r => r.success).length;
+                const lost = sent - received;
+                const times = results.filter(r => r.success).map(r => r.time);
+                const avg = times.length ? times.reduce((a, b) => a + b, 0) / times.length : 0;
+
+                document.getElementById('sentCount').textContent = sent;
+                document.getElementById('receivedCount').textContent = received;
+                document.getElementById('lostCount').textContent = lost;
+                document.getElementById('successRate').textContent = `${(received/sent*100).toFixed(1)}%`;
+                document.getElementById('avgTime').textContent = avg ? avg.toFixed(1) + 'ms' : '—';
+
+                status.className = 'ping-status visible success';
+                document.getElementById('statusText').textContent = `✅ پینگ کامل شد! ${received}/${sent} موفق`;
+
+                document.getElementById('pingResults').classList.add('visible');
+                isRunning = false;
+                document.getElementById('pingBtn').disabled = false;
+                document.getElementById('pingBtn').textContent = '📡 شروع پینگ';
+            }
+
+            document.getElementById('pingBtn').addEventListener('click', runPing);
+
+            document.querySelectorAll('.qh-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.getElementById('pingInput').value = this.dataset.host;
+                });
+            });
+
+            document.getElementById('pingInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') runPing();
+            });
+
+            document.getElementById('copyPingBtn').addEventListener('click', function() {
+                const rows = document.querySelectorAll('#pingTableBody tr');
+                const text = Array.from(rows).map(row => row.textContent.trim()).join('\n');
+                if (!text) return;
+                navigator.clipboard.writeText(text).then(() => {
+                    const orig = this.textContent;
+                    this.textContent = '✅ کپی شد!';
+                    this.classList.add('copied');
+                    setTimeout(() => { this.textContent = orig;
+                        this.classList.remove('copied'); }, 1500);
+                });
+            });
+
+            document.getElementById('clearPingBtn').addEventListener('click', function() {
+                document.getElementById('pingTableBody').innerHTML = '';
+                document.getElementById('pingResults').classList.remove('visible');
+                document.getElementById('pingStatus').className = 'ping-status';
+                document.getElementById('sentCount').textContent = '0';
+                document.getElementById('receivedCount').textContent = '0';
+                document.getElementById('lostCount').textContent = '0';
+                document.getElementById('successRate').textContent = '0%';
+                document.getElementById('avgTime').textContent = '—';
+            });
+
+            console.log('📡 Ping Tester loaded!');
+        })();
+    </script>
+</body>
+</html>

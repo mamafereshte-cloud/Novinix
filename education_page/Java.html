@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>آموزش جاوا | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+    <link rel="stylesheet" href="../assets/css/education.css" />
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar"></aside>
+        <main class="main-content" id="mainContent"></main>
+    </div>
+
+    <script>
+        // ================================================================
+        // ☕ Java Course Data
+        // ================================================================
+
+        const lessons = [{
+            id: 'java-intro',
+            title: 'معرفی جاوا',
+            section: 'مقدمات',
+            order: 1,
+            badge: null,
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">☕ آموزش جاوا / <span>مقدمات</span></div>
+                        <h1>معرفی <span>جاوا</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۱۵ دقیقه</span>
+                            <span>📊 سطح: مبتدی</span>
+                            <span>⭐ ۴.۸ (۹۵۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>جاوا چیست؟</h2>
+                        <p>
+                            جاوا یک زبان آموزش ها سطح بالا، شی‌گرا و چندمنظوره است که
+                            توسط <strong>جیمز گاسلینگ</strong> در شرکت سان مایکروسیستمز در سال ۱۹۹۵
+                            ساخته شد. شعار معروف جاوا <strong>"Write Once, Run Anywhere"</strong>
+                            (یک بار بنویس، همه‌جا اجرا کن) است.
+                        </p>
+
+                        <div class="note-box">
+                            <strong>💡 نکته:</strong>
+                            <p>جاوا به دلیل استقلال از پلتفرم، امنیت بالا و کتابخانه‌های غنی،
+                            یکی از محبوب‌ترین زبان‌های آموزش ها سازمانی است.</p>
+                        </div>
+
+                        <h3>کاربردهای جاوا</h3>
+                        <ul>
+                            <li>🏢 <strong>برنامه‌های سازمانی</strong> – سیستم‌های بانکی، فروشگاهی و مدیریتی</li>
+                            <li>📱 <strong>توسعه اندروید</strong> – اپلیکیشن‌های موبایل</li>
+                            <li>🌐 <strong>برنامه‌های وب</strong> – با Spring و Jakarta EE</li>
+                            <li>🔧 <strong>ابزارهای توسعه</strong> – IDEها و ابزارهای اتوماسیون</li>
+                            <li>🎮 <strong>توسعه بازی</strong> – با LibGDX و jMonkeyEngine</li>
+                        </ul>
+
+                        <h3>اولین برنامه جاوا</h3>
+                        <p>برنامه‌ای که عبارت "Hello, World!" را چاپ می‌کند:</p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="java">Java</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="java">
+                                    <pre><span class="comment">// First Java program</span>
+<span class="keyword">public class</span> <span class="class">HelloWorld</span> {
+    <span class="keyword">public static void</span> <span class="function">main</span>(<span class="type">String</span>[] args) {
+        <span class="builtin">System</span>.out.<span class="function">println</span>(<span class="string">"Hello, World!"</span>);
+        <span class="builtin">System</span>.out.<span class="function">println</span>(<span class="string">"سلام، دنیا!"</span>);
+    }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'java-variables',
+            title: 'متغیرها و انواع داده',
+            section: 'مقدمات',
+            order: 2,
+            badge: null,
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">☕ آموزش جاوا / <span>مقدمات</span></div>
+                        <h1>متغیرها و <span>انواع داده</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۰ دقیقه</span>
+                            <span>📊 سطح: مبتدی</span>
+                            <span>⭐ ۴.۷ (۸۵۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>متغیرها در جاوا</h2>
+                        <p>
+                            جاوا یک زبان <strong>با نوع‌دهی ایستا (Static Typing)</strong> است،
+                            یعنی شما باید نوع هر متغیر را هنگام تعریف مشخص کنید.
+                            برخلاف پایتون، نوع متغیر در جاوا قابل تغییر نیست.
+                        </p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="java">Java</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="java">
+                                    <pre><span class="comment">// Variable declarations</span>
+<span class="type">String</span> name = <span class="string">"Ali"</span>;        <span class="comment">// String</span>
+<span class="type">int</span> age = <span class="number">25</span>;              <span class="comment">// int</span>
+<span class="type">double</span> height = <span class="number">1.78</span>;       <span class="comment">// double</span>
+<span class="type">boolean</span> isStudent = <span class="keyword">true</span>;  <span class="comment">// boolean</span>
+
+<span class="builtin">System</span>.out.<span class="function">println</span>(<span class="string">"Name: "</span> + name + <span class="string">", Age: "</span> + age);
+<span class="builtin">System</span>.out.<span class="function">println</span>(<span class="string">"Height: "</span> + height);
+<span class="builtin">System</span>.out.<span class="function">println</span>(<span class="string">"Student: "</span> + isStudent);</pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>انواع داده اصلی در جاوا</h3>
+                        <ul>
+                            <li><strong>int</strong> – اعداد صحیح (۴ بایت)</li>
+                            <li><strong>double</strong> – اعداد اعشاری (۸ بایت)</li>
+                            <li><strong>boolean</strong> – true یا false</li>
+                            <li><strong>char</strong> – یک کاراکتر (۲ بایت)</li>
+                            <li><strong>String</strong> – رشته متنی (کلاس)</li>
+                            <li><strong>byte</strong> – عدد کوچک (۱ بایت)</li>
+                            <li><strong>long</strong> – عدد بزرگ (۸ بایت)</li>
+                            <li><strong>float</strong> – عدد اعشاری (۴ بایت)</li>
+                        </ul>
+                    </div>
+                `
+        }, {
+            id: 'java-conditions',
+            title: 'ساختارهای شرطی',
+            section: 'مقدمات',
+            order: 3,
+            badge: 'new',
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">☕ آموزش جاوا / <span>مقدمات</span></div>
+                        <h1>ساختارهای <span>شرطی</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۵ دقیقه</span>
+                            <span>📊 سطح: مبتدی</span>
+                            <span>⭐ ۴.۶ (۷۸۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>if, else if, else</h2>
+                        <p>
+                            در جاوا از ساختارهای شرطی <strong>if</strong>، <strong>else if</strong>
+                            و <strong>else</strong> برای تصمیم‌گیری استفاده می‌شود.
+                            نکته مهم: شرط‌ها باید داخل پرانتز <strong>()</strong> نوشته شوند.
+                        </p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="java">Java</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="java">
+                                    <pre><span class="type">int</span> score = <span class="number">85</span>;
+
+<span class="keyword">if</span> (score >= <span class="number">90</span>) {
+    <span class="builtin">System</span>.out.<span class="function">println</span>(<span class="string">"Grade: A"</span>);
+} <span class="keyword">else if</span> (score >= <span class="number">80</span>) {
+    <span class="builtin">System</span>.out.<span class="function">println</span>(<span class="string">"Grade: B"</span>);
+} <span class="keyword">else if</span> (score >= <span class="number">70</span>) {
+    <span class="builtin">System</span>.out.<span class="function">println</span>(<span class="string">"Grade: C"</span>);
+} <span class="keyword">else</span> {
+    <span class="builtin">System</span>.out.<span class="function">println</span>(<span class="string">"Grade: D"</span>);
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'java-loops',
+            title: 'حلقه‌ها (for و while)',
+            section: 'پیشرفته',
+            order: 1,
+            badge: 'hot',
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">☕ آموزش جاوا / <span>پیشرفته</span></div>
+                        <h1>حلقه‌های <span>for و while</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۳۰ دقیقه</span>
+                            <span>📊 سطح: متوسط</span>
+                            <span>⭐ ۴.۸ (۶۵۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>حلقه for</h2>
+                        <p>
+                            حلقه <strong>for</strong> برای تکرار با تعداد مشخص استفاده می‌شود.
+                            ساختار آن شامل سه بخش است: <strong>مقداردهی اولیه</strong>،
+                            <strong>شرط</strong> و <strong>افزایش</strong>.
+                        </p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="java">Java</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="java">
+                                    <pre><span class="comment">// for loop</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i < <span class="number">5</span>; i++) {
+    <span class="builtin">System</span>.out.<span class="function">println</span>(<span class="string">"Number: "</span> + i);
+}
+
+<span class="comment">// for loop on array</span>
+<span class="type">String</span>[] fruits = {<span class="string">"Apple"</span>, <span class="string">"Banana"</span>, <span class="string">"Orange"</span>};
+<span class="keyword">for</span> (<span class="type">String</span> fruit : fruits) {
+    <span class="builtin">System</span>.out.<span class="function">println</span>(fruit);
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>حلقه while</h3>
+                        <p>
+                            حلقه <strong>while</strong> تا زمانی که شرط برقرار است، تکرار می‌شود.
+                        </p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="java">Java</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="java">
+                                    <pre><span class="comment">// while loop</span>
+<span class="type">int</span> count = <span class="number">0</span>;
+<span class="keyword">while</span> (count < <span class="number">5</span>) {
+    <span class="builtin">System</span>.out.<span class="function">println</span>(<span class="string">"Count: "</span> + count);
+    count++;
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'java-methods',
+            title: 'متدها (Methods)',
+            section: 'پیشرفته',
+            order: 2,
+            badge: 'new',
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">☕ آموزش جاوا / <span>پیشرفته</span></div>
+                        <h1>متدها <span>(Methods)</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۵ دقیقه</span>
+                            <span>📊 سطح: متوسط</span>
+                            <span>⭐ ۴.۷ (۵۶۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>متدها در جاوا</h2>
+                        <p>
+                            متدها در جاوا بلوک‌های کدی هستند که یک کار مشخص را انجام می‌دهند.
+                            هر متد شامل <strong>نوع بازگشتی</strong>، <strong>نام</strong> و
+                            <strong>پارامترها</strong> است.
+                        </p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="java">Java</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="java">
+                                    <pre><span class="comment">// Method definition</span>
+<span class="keyword">public static</span> <span class="type">String</span> <span class="function">greet</span>(<span class="type">String</span> name) {
+    <span class="keyword">return</span> <span class="string">"Hello "</span> + name + <span class="string">"!"</span>;
+}
+
+<span class="comment">// Method with multiple parameters</span>
+<span class="keyword">public static</span> <span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+    <span class="keyword">return</span> a + b;
+}
+
+<span class="comment">// Using methods</span>
+<span class="builtin">System</span>.out.<span class="function">println</span>(<span class="function">greet</span>(<span class="string">"Ali"</span>));
+<span class="builtin">System</span>.out.<span class="function">println</span>(<span class="string">"Sum: "</span> + <span class="function">add</span>(<span class="number">5</span>, <span class="number">3</span>));</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }];
+
+        // ================================================================
+        // 🔧 Core Functions
+        // ================================================================
+
+        let currentLessonId = 'java-intro';
+
+        function renderSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const sections = {};
+
+            lessons.forEach(lesson => {
+                if (!sections[lesson.section]) sections[lesson.section] = [];
+                sections[lesson.section].push(lesson);
+            });
+
+            let html = '';
+            for (const [sectionName, items] of Object.entries(sections)) {
+                html += `
+                    <div class="sidebar-section">
+                        <div class="section-title">${sectionName}</div>
+                        <ul>
+                `;
+                items.sort((a, b) => a.order - b.order).forEach(item => {
+                    const badge = item.badge ? `<span class="badge ${item.badge}">${item.badge}</span>` : '';
+                    html += `
+                        <li>
+                            <a href="#" data-id="${item.id}" class="${item.id === currentLessonId ? 'active-link' : ''}">
+                                ${item.title} ${badge}
+                            </a>
+                        </li>
+                    `;
+                });
+                html += `</ul></div>`;
+            }
+
+            sidebar.innerHTML = html;
+
+            sidebar.querySelectorAll('a[data-id]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = this.dataset.id;
+                    loadLesson(id);
+                    sidebar.querySelectorAll('a[data-id]').forEach(l => l.classList.remove('active-link'));
+                    this.classList.add('active-link');
+                });
+            });
+        }
+
+        function loadLesson(id) {
+            const lesson = lessons.find(l => l.id === id);
+            if (!lesson) return;
+
+            currentLessonId = id;
+            document.getElementById('mainContent').innerHTML = lesson.content;
+
+            initTabs();
+            renderSidebar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function initTabs() {
+            document.querySelectorAll('.code-container').forEach(container => {
+                const tabs = container.querySelectorAll('.tab');
+                const panels = container.querySelectorAll('.code-panel');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        const tabName = this.dataset.tab;
+                        tabs.forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        panels.forEach(p => p.classList.remove('active'));
+                        const target = container.querySelector(`.code-panel[data-panel="${tabName}"]`);
+                        if (target) target.classList.add('active');
+                    });
+                });
+            });
+        }
+
+        // ================================================================
+        // 📋 Copy Code
+        // ================================================================
+
+        function copyCode(btn) {
+            const container = btn.closest('.code-body');
+            const activePanel = container.querySelector('.code-panel.active');
+            const pre = activePanel ? activePanel.querySelector('pre') : container.querySelector('pre');
+            if (!pre) return;
+
+            const text = pre.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = '✅ Copied';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '📋 Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(() => {
+                const range = document.createRange();
+                range.selectNode(pre);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                document.execCommand('copy');
+                btn.textContent = '✅ Copied';
+                setTimeout(() => { btn.textContent = '📋 Copy'; }, 2000);
+            });
+        }
+
+        // ================================================================
+        // 🚀 Initial Load
+        // ================================================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = `
+                <div class="java-hero">
+                    <div class="hero-icon">☕</div>
+                    <h2>☕ آموزش جامع <span>جاوا</span></h2>
+                    <p>یادگیری جاوا از مقدماتی تا پیشرفته با مثال‌های عملی</p>
+                    <div class="hero-meta">
+                        <span>📚 ۵ فصل</span>
+                        <span>⏱️ ۲۰ ساعت</span>
+                        <span>⭐ ۴.۸ از ۵</span>
+                        <span>👨‍🎓 ۸۵۰ دانشجو</span>
+                    </div>
+                </div>
+                <div style="text-align:center; padding:20px; color:#6b7a8a;">
+                    <p style="font-size:1.1rem;">📚 یک درس را از سایدبار سمت راست انتخاب کنید</p>
+                    <p style="font-size:0.85rem; margin-top:5px;">دروس: مقدمات (۳ درس) | پیشرفته (۲ درس)</p>
+                </div>
+            `;
+
+            renderSidebar();
+            setTimeout(() => {
+                loadLesson('java-intro');
+            }, 100);
+        });
+
+        console.log('☕ Java learning system ready!');
+    </script>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../auth/header.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/user-panel.js"></script>
+    <script src="../assets/js/settings.js"></script>
+    <script src="../assets/js/seo.js"></script>
+</body>
+</html>

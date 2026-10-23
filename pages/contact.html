@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تماس با ما | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+
+    <!-- ===== CSS فایل‌های جداگانه ===== -->
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+
+    <style>
+        /* ===== استایل‌های اختصاصی تماس ===== */
+        .contact-hero {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .contact-hero h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .contact-hero p {
+            color: #a0b4c8;
+            font-size: 1.05rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 30px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .contact-form h3 {
+            color: #00ffcc;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: #a0b4c8;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            color: #e8f5f0;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00ffcc;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.1);
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .form-group select option {
+            background: #0f0c29;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 255, 204, 0.25);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.97);
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            border-color: rgba(0, 255, 204, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .info-card .icon {
+            font-size: 1.5rem;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .info-card h4 {
+            color: #e8f5f0;
+            font-size: 1rem;
+            display: inline-block;
+        }
+
+        .info-card p {
+            color: #a0b4c8;
+            margin-top: 5px;
+            padding-right: 38px;
+            font-size: 0.9rem;
+        }
+
+        .info-card a {
+            color: #00ffcc;
+            text-decoration: none;
+        }
+
+        .info-card a:hover {
+            text-decoration: underline;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+            padding-right: 38px;
+        }
+
+        .social-links a {
+            color: #a0b4c8;
+            text-decoration: none;
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #00ffcc;
+            transform: translateY(-3px);
+        }
+
+        .success-message {
+            display: none;
+            background: rgba(0, 255, 204, 0.1);
+            border: 1px solid #00ffcc;
+            padding: 15px;
+            border-radius: 12px;
+            color: #00ffcc;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            .contact-hero h2 {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contact-hero h2 {
+                font-size: 1.3rem;
+            }
+            .contact-form {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER توسط header.js ساخته می‌شود ===== -->
+
+    <main>
+        <div class="contact-hero">
+            <h2>📬 تماس با ما</h2>
+            <p>نظرات، پیشنهادات و انتقادات شما باعث پیشرفت ماست</p>
+        </div>
+
+        <div class="contact-grid">
+            <div class="contact-form">
+                <h3>✉️ ارسال پیام</h3>
+                <div class="success-message" id="successMessage">
+                    ✅ پیام شما با موفقیت ارسال شد! به زودی پاسخ می‌دهیم.
+                </div>
+                <form id="contactForm" onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                        <label for="name">نام و نام خانوادگی</label>
+                        <input type="text" id="name" placeholder="نام خود را وارد کنید" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="email">ایمیل</label>
+                        <input type="email" id="email" placeholder="ایمیل خود را وارد کنید" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">موضوع</label>
+                        <select id="subject" required>
+                            <option value="">انتخاب کنید...</option>
+                            <option value="suggestion">پیشنهاد</option>
+                            <option value="bug">گزارش مشکل</option>
+                            <option value="question">سوال</option>
+                            <option value="cooperation">همکاری</option>
+                            <option value="other">سایر</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">پیام</label>
+                        <textarea id="message" placeholder="پیام خود را بنویسید..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">ارسال پیام</button>
+                </form>
+            </div>
+
+            <div class="contact-info">
+                <div class="info-card">
+                    <span class="icon">📍</span>
+                    <h4>آدرس</h4>
+                    <p>قم، ایران</p>
+                </div>
+                <div class="info-card">
+                    <span class="icon">📧</span>
+                    <h4>ایمیل</h4>
+                    <p><a href="mailto:info@novinix.ir">info@novinix.ir</a></p>
+                </div>
+                <div class="info-card">
+                    <span class="icon">📱</span>
+                    <h4>شبکه‌های اجتماعی</h4>
+                    <div class="social-links">
+                        <a href="#" title="تلگرام">📱</a>
+                        <a href="#" title="اینستاگرام">📸</a>
+                        <a href="#" title="توییتر">🐦</a>
+                        <a href="#" title="لینکدین">🔗</a>
+                        <a href="#" title="یوتیوب">▶️</a>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <span class="icon">⏰</span>
+                    <h4>ساعات پاسخگویی</h4>
+                    <p>شنبه تا چهارشنبه: ۹ تا ۱۸</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===== FOOTER توسط footer.js ساخته می‌شود ===== -->
+
+    <!-- ===== اسکریپت‌ها ===== -->
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        function handleSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            const messages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+            messages.push({
+                name,
+                email,
+                subject,
+                message,
+                date: new Date().toLocaleString('fa-IR')
+            });
+            localStorage.setItem('contactMessages', JSON.stringify(messages));
+
+            const successMsg = document.getElementById('successMessage');
+            successMsg.style.display = 'block';
+            document.getElementById('contactForm').reset();
+
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 5000);
+
+            console.log('پیام ذخیره شد:', { name, email, subject, message });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const saved = localStorage.getItem('contactMessages');
+            if (saved) {
+                const messages = JSON.parse(saved);
+                console.log(`${messages.length} پیام ذخیره شده`);
+            }
+        });
+    </script>
+</body>
+</html>

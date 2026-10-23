@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🔨 سمورکوب</title>
+    <link rel="stylesheet" href="../assets/css/game.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 8px;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            font-family: system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mole-wrapper {
+            max-width: 550px;
+            width: 100%;
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .game-header h1 {
+            font-size: 1.2rem;
+            margin: 0;
+            color: #e6edf3;
+        }
+
+        .exit-btn {
+            color: #e74c3c;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: rgba(231, 76, 60, 0.15);
+        }
+
+        .game-info {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .info-box {
+            background: rgba(255,255,255,0.05);
+            padding: 6px 4px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .info-box .label {
+            display: block;
+            font-size: 0.55rem;
+            color: #8a8fa8;
+            margin-bottom: 2px;
+        }
+
+        .info-box .value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #e6edf3;
+            direction: ltr;
+        }
+
+        .info-box .value.high-score {
+            color: #f1c40f;
+        }
+
+        .status-message {
+            text-align: center;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #e6edf3;
+            background: rgba(255,255,255,0.05);
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .status-message.error {
+            background: rgba(231, 76, 60, 0.2);
+            color: #ff6b6b;
+        }
+
+        .status-message.success {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .status-message.warning {
+            background: rgba(241, 196, 15, 0.15);
+            color: #f1c40f;
+        }
+
+        /* ===== تخته بازی ===== */
+        .mole-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            padding: 20px;
+            background: radial-gradient(ellipse at center, #3d2b1f, #1a0f08);
+            border-radius: 50% 50% 20px 20px;
+            border: 3px solid rgba(139, 69, 19, 0.3);
+            box-shadow: inset 0 -20px 40px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        /* ===== سوراخ ===== */
+        .hole {
+            aspect-ratio: 1;
+            background: radial-gradient(ellipse at center, #2d1b0e, #0d0805);
+            border-radius: 50%;
+            position: relative;
+            cursor: pointer;
+            box-shadow: inset 0 -8px 15px rgba(0,0,0,0.8), 0 4px 8px rgba(0,0,0,0.3);
+            border: 2px solid rgba(139, 69, 19, 0.2);
+            overflow: hidden;
+            touch-action: manipulation;
+            transition: transform 0.1s;
+        }
+
+        .hole:active:not(.disabled) {
+            transform: scale(0.95);
+        }
+
+        .hole.disabled {
+            cursor: default;
+        }
+
+        /* ===== سمور (موش) ===== */
+        .mole {
+            position: absolute;
+            bottom: -120%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            height: 90%;
+            transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            z-index: 2;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .hole.active .mole {
+            bottom: 5%;
+            pointer-events: auto;
+        }
+
+        /* بدن سمور */
+        .mole-body {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 75%;
+            height: 70%;
+            background: radial-gradient(ellipse at 40% 30%, #8B7355, #5D4037);
+            border-radius: 50% 50% 40% 40%;
+            border: 2px solid #4A3520;
+        }
+
+        /* بدن پایین (شکم روشن‌تر) */
+        .mole-body::after {
+            content: '';
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 40%;
+            background: radial-gradient(ellipse at center, #A0886A, #8B7355);
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        /* سر سمور */
+        .mole-head {
+            position: absolute;
+            bottom: 55%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 45%;
+            background: radial-gradient(ellipse at 40% 30%, #A0886A, #7A5D42);
+            border-radius: 50% 50% 35% 35%;
+            border: 2px solid #4A3520;
+        }
+
+        /* گوش‌های سمور */
+        .mole-ear {
+            position: absolute;
+            width: 20%;
+            height: 25%;
+            background: radial-gradient(ellipse at center, #8B7355, #5D4037);
+            border-radius: 50% 50% 50% 50%;
+            border: 2px solid #4A3520;
+            top: -5%;
+        }
+
+        .mole-ear.left {
+            left: 5%;
+            transform: rotate(-10deg);
+        }
+
+        .mole-ear.right {
+            right: 5%;
+            transform: rotate(10deg);
+        }
+
+        .mole-ear::after {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(ellipse at center, #D4A574, #A0886A);
+            border-radius: 50%;
+        }
+
+        /* چشم‌های سمور */
+        .mole-eyes {
+            position: absolute;
+            top: 18%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 65%;
+            height: 25%;
+            display: flex;
+            justify-content: space-between;
+            z-index: 3;
+        }
+
+        .mole-eye {
+            width: 35%;
+            height: 100%;
+            background: radial-gradient(ellipse at 40% 30%, #fff, #ddd);
+            border-radius: 50%;
+            position: relative;
+            border: 1.5px solid #4A3520;
+            box-shadow: inset 0 -2px 4px rgba(0,0,0,0.1);
+        }
+
+        .mole-eye::after {
+            content: '';
+            position: absolute;
+            top: 25%;
+            left: 30%;
+            width: 45%;
+            height: 45%;
+            background: radial-gradient(ellipse at center, #1a1a2e, #000);
+            border-radius: 50%;
+        }
+
+        /* مردمک براق */
+        .mole-eye::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            right: 20%;
+            width: 20%;
+            height: 20%;
+            background: rgba(255,255,255,0.6);
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        /* بینی سمور */
+        .mole-nose {
+            position: absolute;
+            bottom: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 18%;
+            height: 12%;
+            background: radial-gradient(ellipse at center, #e74c3c, #c0392b);
+            border-radius: 50%;
+            z-index: 3;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* سبیل‌های سمور */
+        .mole-whiskers {
+            position: absolute;
+            bottom: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 10%;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .whisker {
+            position: absolute;
+            width: 25%;
+            height: 2px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+        }
+
+        .whisker.l1 { left: 0; top: 20%; transform: rotate(-20deg); }
+        .whisker.l2 { left: 5%; top: 60%; transform: rotate(-10deg); }
+        .whisker.r1 { right: 0; top: 20%; transform: rotate(20deg); }
+        .whisker.r2 { right: 5%; top: 60%; transform: rotate(10deg); }
+
+        /* دندان‌های سمور (خنده) */
+        .mole-teeth {
+            position: absolute;
+            bottom: 28%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20%;
+            height: 8%;
+            z-index: 3;
+            display: flex;
+            gap: 10%;
+            justify-content: center;
+        }
+
+        .mole-tooth {
+            width: 30%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, #f5f5f5, #ddd);
+            border-radius: 0 0 50% 50%;
+            border: 1px solid #ccc;
+        }
+
+        /* ضربه خوردن */
+        .hole.hit .mole {
+            animation: hitEffect 0.25s ease;
+        }
+
+        @keyframes hitEffect {
+            0% { transform: translateX(-50%) scale(1) rotate(0); }
+            20% { transform: translateX(-50%) scale(0.6) rotate(-20deg); }
+            50% { transform: translateX(-50%) scale(0.8) rotate(10deg); }
+            100% { transform: translateX(-50%) scale(1) rotate(0); }
+        }
+
+        /* ستاره‌های امتیاز */
+        .float-score {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            font-weight: 900;
+            color: #f1c40f;
+            pointer-events: none;
+            animation: floatUp 0.8s ease forwards;
+            z-index: 10;
+            text-shadow: 0 0 30px rgba(241, 196, 15, 0.5), 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.3); }
+            100% { opacity: 0; transform: translate(-50%, -250%) scale(1.5); }
+        }
+
+        .hit-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.5rem;
+            pointer-events: none;
+            animation: hitParticles 0.5s ease forwards;
+            z-index: 10;
+        }
+
+        @keyframes hitParticles {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.3) rotate(0); }
+            100% { opacity: 0; transform: translate(-50%, -200%) scale(1.8) rotate(30deg); }
+        }
+
+        /* Combo نمایش */
+        .combo-display {
+            position: absolute;
+            top: 10%;
+            right: 10%;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #f1c40f;
+            opacity: 0;
+            transition: all 0.3s;
+            text-shadow: 0 0 20px rgba(241, 196, 15, 0.3);
+            z-index: 5;
+        }
+
+        .combo-display.show {
+            opacity: 1;
+        }
+
+        /* ===== دکمه‌ها ===== */
+        .game-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .game-buttons .btn {
+            flex: 1;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            touch-action: manipulation;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00b894, #00a381);
+            color: #fff;
+        }
+
+        .btn-success:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e17055, #d63031);
+            color: #fff;
+        }
+
+        .btn-cyan {
+            background: linear-gradient(135deg, #00cec9, #00b894);
+            color: #fff;
+        }
+
+        .btn-purple {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            color: #fff;
+        }
+
+        .difficulty-btns {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .difficulty-btns .btn {
+            flex: 1;
+            padding: 6px 8px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            touch-action: manipulation;
+            color: #fff;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .difficulty-btns .btn.active {
+            border-color: #f1c40f;
+            background: rgba(241, 196, 15, 0.15);
+        }
+
+        .btn-easy { color: #00b894; }
+        .btn-medium { color: #fdcb6e; }
+        .btn-hard { color: #e17055; }
+
+        .key-hints {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 10px;
+            font-size: 0.65rem;
+            color: #8a8fa8;
+            flex-wrap: wrap;
+        }
+
+        .key-hints span {
+            background: rgba(255,255,255,0.05);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        /* ===== واکنش‌گرایی ===== */
+        @media (max-width: 500px) {
+            .mole-board {
+                gap: 12px;
+                padding: 16px;
+            }
+            .float-score {
+                font-size: 1.5rem;
+            }
+            .hit-effect {
+                font-size: 2.5rem;
+            }
+            .game-info {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 4px;
+            }
+            .info-box .value {
+                font-size: 0.85rem;
+            }
+            .game-header h1 {
+                font-size: 1rem;
+            }
+            .mole-body { width: 70%; }
+            .mole-head { width: 55%; }
+            .mole-eye { width: 30%; }
+        }
+
+        @media (max-width: 400px) {
+            .mole-board {
+                gap: 8px;
+                padding: 12px;
+            }
+            .float-score {
+                font-size: 1.2rem;
+            }
+            .hit-effect {
+                font-size: 2rem;
+            }
+            .info-box .label {
+                font-size: 0.45rem;
+            }
+            .info-box .value {
+                font-size: 0.75rem;
+            }
+            .game-buttons .btn {
+                font-size: 0.75rem;
+                padding: 8px;
+            }
+            .difficulty-btns .btn {
+                font-size: 0.6rem;
+                padding: 4px 6px;
+            }
+        }
+
+        @media (max-width: 350px) {
+            .mole-board {
+                gap: 6px;
+                padding: 10px;
+            }
+            .mole-body { width: 65%; }
+            .mole-head { width: 50%; }
+            .mole-eye { width: 25%; }
+            .float-score { font-size: 1rem; }
+            .hit-effect { font-size: 1.5rem; }
+        }
+
+        .board-wrapper {
+            margin: 4px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="game-wrapper mole-wrapper">
+    <div class="game-header">
+        <h1>🔨 سمورکوب</h1>
+        <div class="header-buttons"><a href="../pages/games.html" class="exit-btn">✕ خروج</a></div>
+    </div>
+    
+    <div class="game-info">
+        <div class="info-box"><span class="label">🎯 امتیاز</span><span class="value" id="scoreD">0</span></div>
+        <div class="info-box"><span class="label">⏱️ زمان</span><span class="value" id="timeD">30</span></div>
+        <div class="info-box"><span class="label">🏆 بهترین</span><span class="value high-score" id="bestD">0</span></div>
+        <div class="info-box"><span class="label">💥 ضربات</span><span class="value" id="hitsD">0</span></div>
+    </div>
+
+    <div class="status-message" id="statusMsg">🎮 برای شروع کلیک کنید</div>
+    
+    <div class="board-wrapper">
+        <div class="mole-board" id="board">
+            <div class="combo-display" id="comboDisplay">🔥 Combo x<span id="comboCount">0</span></div>
+        </div>
+    </div>
+
+    <div class="game-buttons">
+        <button class="btn btn-success" id="startBtn">▶ شروع بازی</button>
+        <button class="btn btn-danger" id="resetBtn">🔄 ریست</button>
+    </div>
+
+    <div class="difficulty-btns">
+        <button class="btn btn-easy active" data-diff="easy">🟢 آسان</button>
+        <button class="btn btn-medium" data-diff="medium">🟡 متوسط</button>
+        <button class="btn btn-hard" data-diff="hard">🔴 سخت</button>
+    </div>
+
+    <div class="key-hints">
+        <span>👆 ضربه روی سمور</span>
+        <span>␣ Space = شروع</span>
+    </div>
+</div>
+
+<script>
+// ===== سمورکوب با گرافیک بهبود یافته =====
+const board = document.getElementById('board');
+const statusMsg = document.getElementById('statusMsg');
+const scoreD = document.getElementById('scoreD');
+const timeD = document.getElementById('timeD');
+const bestD = document.getElementById('bestD');
+const hitsD = document.getElementById('hitsD');
+const comboDisplay = document.getElementById('comboDisplay');
+const comboCount = document.getElementById('comboCount');
+
+// ===== تنظیمات سختی =====
+const diffs = {
+    easy: { name: 'آسان', speed: 1300, time: 30, max: 1, points: 10, label: '🟢 آسان' },
+    medium: { name: 'متوسط', speed: 850, time: 25, max: 2, points: 15, label: '🟡 متوسط' },
+    hard: { name: 'سخت', speed: 500, time: 20, max: 3, points: 20, label: '🔴 سخت' }
+};
+
+let currentDiff = 'easy';
+let score = 0;
+let hits = 0;
+let time = 30;
+let best = parseInt(localStorage.getItem('whackBest')) || 0;
+let playing = false;
+let gameEnd = false;
+let combo = 0;
+let maxCombo = 0;
+
+// تایمرها
+let gameInterval = null;
+let moleInterval = null;
+let timeouts = [];
+let activeMoles = [];
+let hitMoles = new Set(); // سمورهایی که قبلاً ضربه خوردن
+
+// ===== تنظیمات صدا =====
+function playHitSound() {
+    try {
+        const ac = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ac.createOscillator();
+        const g = ac.createGain();
+        o.connect(g);
+        g.connect(ac.destination);
+        o.frequency.value = 800 + Math.random() * 200;
+        o.type = 'sine';
+        g.gain.setValueAtTime(0.2, ac.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.01, ac.currentTime + 0.1);
+        o.start(ac.currentTime);
+        o.stop(ac.currentTime + 0.1);
+    } catch(e) {}
+}
+
+function playMissSound() {
+    try {
+        const ac = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ac.createOscillator();
+        const g = ac.createGain();
+        o.connect(g);
+        g.connect(ac.destination);
+        o.frequency.value = 300;
+        o.type = 'sawtooth';
+        g.gain.setValueAtTime(0.1, ac.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.01, ac.currentTime + 0.1);
+        o.start(ac.currentTime);
+        o.stop(ac.currentTime + 0.1);
+    } catch(e) {}
+}
+
+// ===== ساخت تخته =====
+function initBoard() {
+    board.innerHTML = '';
+    // کامبو دیسپلی رو دوباره اضافه می‌کنیم
+    const comboDiv = document.createElement('div');
+    comboDiv.className = 'combo-display';
+    comboDiv.id = 'comboDisplay';
+    comboDiv.innerHTML = '🔥 Combo x<span id="comboCount">0</span>';
+    board.appendChild(comboDiv);
+
+    for (let i = 0; i < 9; i++) {
+        const hole = document.createElement('div');
+        hole.className = 'hole';
+        hole.dataset.index = i;
+        
+        // ساخت سمور با HTML
+        hole.innerHTML = `
+            <div class="mole">
+                <div class="mole-body">
+                    <div class="mole-head">
+                        <div class="mole-ear left"></div>
+                        <div class="mole-ear right"></div>
+                        <div class="mole-eyes">
+                            <div class="mole-eye"></div>
+                            <div class="mole-eye"></div>
+                        </div>
+                        <div class="mole-nose"></div>
+                        <div class="mole-whiskers">
+                            <div class="whisker l1"></div>
+                            <div class="whisker l2"></div>
+                            <div class="whisker r1"></div>
+                            <div class="whisker r2"></div>
+                        </div>
+                        <div class="mole-teeth">
+                            <div class="mole-tooth"></div>
+                            <div class="mole-tooth"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        hole.addEventListener('click', (e) => whack(i, e));
+        hole.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            whack(i, e);
+        });
+        
+        board.appendChild(hole);
+    }
+}
+
+// ===== ضربه زدن =====
+function whack(index, event) {
+    if (!playing || gameEnd) {
+        playMissSound();
+        return;
+    }
+
+    const hole = board.children[index + 1]; // +1 برای کامبو دیسپلی
+    if (!hole.classList.contains('active')) {
+        playMissSound();
+        return;
+    }
+
+    // چک کن که این سمور قبلاً ضربه نخورده
+    const moleId = `${index}-${Date.now()}`;
+    if (hitMoles.has(index)) {
+        playMissSound();
+        return;
+    }
+
+    // امتیاز
+    const cfg = diffs[currentDiff];
+    const points = cfg.points + (combo > 0 ? Math.floor(combo / 3) : 0);
+    score += points;
+    hits++;
+    combo++;
+    if (combo > maxCombo) maxCombo = combo;
+    
+    hitMoles.add(index);
+    hole.classList.add('hit');
+    
+    // نمایش امتیاز
+    showFloat(hole, `+${points}`);
+    showHit(hole);
+    
+    // نمایش کامبو
+    updateCombo();
+    
+    // به‌روزرسانی نمایش
+    updateDisplay();
+    playHitSound();
+    
+    // غیرفعال کردن موش بعد از ضربه
+    setTimeout(() => {
+        hole.classList.remove('active', 'hit');
+        const i = activeMoles.indexOf(index);
+        if (i > -1) activeMoles.splice(i, 1);
+        hitMoles.delete(index);
+    }, 250);
+}
+
+// ===== نمایش کامبو =====
+function updateCombo() {
+    const display = document.getElementById('comboDisplay');
+    const count = document.getElementById('comboCount');
+    if (count) count.textContent = combo;
+    if (display) {
+        if (combo >= 3) {
+            display.classList.add('show');
+        } else {
+            display.classList.remove('show');
+        }
+    }
+}
+
+// ===== نمایش امتیاز شناور =====
+function showFloat(el, text) {
+    const f = document.createElement('div');
+    f.className = 'float-score';
+    f.textContent = text;
+    el.appendChild(f);
+    setTimeout(() => f.remove(), 800);
+}
+
+// ===== نمایش افکت ضربه =====
+function showHit(el) {
+    const h = document.createElement('div');
+    h.className = 'hit-effect';
+    const emojis = ['💥', '⚡', '🔥', '💫', '⭐'];
+    h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.appendChild(h);
+    setTimeout(() => h.remove(), 500);
+}
+
+// ===== ظاهر شدن سمور =====
+function spawnMole() {
+    if (!playing || gameEnd) return;
+    
+    const cfg = diffs[currentDiff];
+    const available = [];
+    for (let i = 0; i < 9; i++) {
+        if (!activeMoles.includes(i) && !board.children[i + 1].classList.contains('active')) {
+            available.push(i);
+        }
+    }
+    
+    if (available.length === 0) return;
+    
+    const num = Math.min(Math.floor(Math.random() * cfg.max) + 1, available.length);
+    const shuffled = shuffle(available);
+    const selected = shuffled.slice(0, num);
+    
+    for (const idx of selected) {
+        const hole = board.children[idx + 1];
+        hole.classList.add('active');
+        activeMoles.push(idx);
+        
+        // تایمر برای مخفی شدن
+        const timeout = setTimeout(() => {
+            if (hole.classList.contains('active')) {
+                hole.classList.remove('active');
+                const i = activeMoles.indexOf(idx);
+                if (i > -1) activeMoles.splice(i, 1);
+                hitMoles.delete(idx);
+            }
+        }, cfg.speed + Math.random() * 300);
+        timeouts.push(timeout);
+    }
+}
+
+// ===== توابع کمکی =====
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function updateDisplay() {
+    scoreD.textContent = score;
+    timeD.textContent = time;
+    hitsD.textContent = hits;
+    bestD.textContent = best;
+}
+
+// ===== ذخیره امتیاز =====
+async function saveScore() {
+    try {
+        if (typeof NovinixAuth !== 'undefined' && NovinixAuth.isLoggedIn()) {
+            await NovinixAuth.saveGameScore('whack-mole', score, {
+                hits: hits,
+                difficulty: currentDiff,
+                maxCombo: maxCombo
+            });
+        }
+    } catch(e) {}
+}
+
+// ===== پایان بازی =====
+function endGame() {
+    playing = false;
+    gameEnd = true;
+    
+    clearInterval(gameInterval);
+    clearInterval(moleInterval);
+    timeouts.forEach(t => clearTimeout(t));
+    timeouts = [];
+    
+    // مخفی کردن همه سمورها
+    for (let i = 0; i < 9; i++) {
+        board.children[i + 1].classList.remove('active', 'hit');
+    }
+    activeMoles = [];
+    hitMoles.clear();
+    
+    // ذخیره امتیاز
+    saveScore();
+    
+    // بروزرسانی رکورد
+    if (score > best) {
+        best = score;
+        localStorage.setItem('whackBest', best);
+        bestD.textContent = best;
+        statusMsg.textContent = `🏆 رکورد جدید! امتیاز: ${score} 🎉`;
+        statusMsg.className = 'status-message success';
+    } else {
+        statusMsg.textContent = `⏰ زمان تمام شد! امتیاز: ${score}`;
+        statusMsg.className = 'status-message error';
+    }
+    
+    document.getElementById('startBtn').textContent = '🔄 دوباره بازی';
+    document.getElementById('startBtn').disabled = false;
+    document.querySelectorAll('.difficulty-btns .btn').forEach(b => b.disabled = false);
+    document.getElementById('comboDisplay').classList.remove('show');
+}
+
+// ===== ریست حالت =====
+function resetState() {
+    score = 0;
+    hits = 0;
+    combo = 0;
+    maxCombo = 0;
+    time = diffs[currentDiff].time;
+    activeMoles = [];
+    hitMoles.clear();
+    gameEnd = false;
+    
+    timeouts.forEach(t => clearTimeout(t));
+    timeouts = [];
+    clearInterval(gameInterval);
+    clearInterval(moleInterval);
+    
+    for (let i = 0; i < 9; i++) {
+        board.children[i + 1].classList.remove('active', 'hit');
+    }
+    
+    updateDisplay();
+    updateCombo();
+}
+
+// ===== شروع بازی =====
+function startGame() {
+    if (playing) return;
+    
+    resetState();
+    playing = true;
+    
+    document.getElementById('startBtn').textContent = '⏳ در حال بازی...';
+    document.getElementById('startBtn').disabled = true;
+    document.querySelectorAll('.difficulty-btns .btn').forEach(b => b.disabled = true);
+    
+    statusMsg.textContent = '🎮 شروع بازی! به سمورها ضربه بزنید!';
+    statusMsg.className = 'status-message';
+    
+    // تایمر زمان
+    gameInterval = setInterval(() => {
+        time--;
+        timeD.textContent = time;
+        if (time <= 0) {
+            endGame();
+        }
+    }, 1000);
+    
+    // تایمر ظاهر شدن سمورها
+    const cfg = diffs[currentDiff];
+    spawnMole();
+    moleInterval = setInterval(spawnMole, cfg.speed * 0.7);
+}
+
+// ===== تغییر سختی =====
+function setDifficulty(diff) {
+    if (playing) return;
+    currentDiff = diff;
+    
+    document.querySelectorAll('.difficulty-btns .btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.diff === diff);
+    });
+    
+    const cfg = diffs[diff];
+    time = cfg.time;
+    timeD.textContent = time;
+    resetState();
+    statusMsg.textContent = `🎯 حالت ${cfg.name} انتخاب شد`;
+    statusMsg.className = 'status-message warning';
+    document.getElementById('startBtn').textContent = '▶ شروع بازی';
+    document.getElementById('startBtn').disabled = false;
+}
+
+// ===== رویدادها =====
+document.getElementById('startBtn').addEventListener('click', startGame);
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+    if (playing) {
+        endGame();
+    }
+    resetState();
+    document.getElementById('startBtn').textContent = '▶ شروع بازی';
+    document.getElementById('startBtn').disabled = false;
+    document.querySelectorAll('.difficulty-btns .btn').forEach(b => b.disabled = false);
+    statusMsg.textContent = '🔄 بازی ریست شد';
+    statusMsg.className = 'status-message';
+});
+
+document.querySelectorAll('.difficulty-btns .btn').forEach(btn => {
+    btn.addEventListener('click', () => setDifficulty(btn.dataset.diff));
+});
+
+// کیبورد
+document.addEventListener('keydown', e => {
+    if (e.key === ' ' || e.key === 'Space') {
+        e.preventDefault();
+        if (!playing) startGame();
+    }
+});
+
+// ===== شروع =====
+bestD.textContent = best;
+initBoard();
+resetState();
+statusMsg.textContent = '🎮 برای شروع کلیک کنید یا Space بزنید';
+statusMsg.className = 'status-message';
+</script>
+<script src="../assets/js/seo.js"></script>
+</body>
+</html>

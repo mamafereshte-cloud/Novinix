@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<script src="../auth/auth.js"></script>
+<script src="../auth/header.js"></script>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>فیلم و سریال | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0c29;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e8f5f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER - SUPPORTS header.js ===== */
+        header {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #00ffcc;
+            text-shadow: 0 0 30px rgba(0, 255, 204, 0.15);
+        }
+        .logo h1 span {
+            color: #a0b4c8;
+            font-weight: 300;
+            font-size: 0.7rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 3px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav ul li a {
+            color: #a0b4c8;
+            text-decoration: none;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            font-weight: 500;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.08);
+            color: #00ffcc;
+        }
+
+        nav ul li a.active {
+            background: rgba(0, 255, 204, 0.12);
+            border-color: rgba(0, 255, 204, 0.2);
+            color: #00ffcc;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        /* ===== MAIN ===== */
+        main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            width: 100%;
+        }
+
+        /* ===== HERO ===== */
+        .movie-hero {
+            background: linear-gradient(135deg, #1a1a2e, #2d1b69, #6c2eb7);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(108, 46, 183, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .movie-hero::before {
+            content: '🎬';
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.05;
+            right: -30px;
+            bottom: -30px;
+            transform: rotate(10deg);
+        }
+
+        .movie-hero h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .movie-hero h2 span {
+            color: #ffd93d;
+        }
+
+        .movie-hero p {
+            opacity: 0.85;
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== SEARCH ===== */
+        .search-box {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px 14px 50px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e8f5f0;
+            font-family: inherit;
+        }
+
+        .search-box input:focus {
+            border-color: #00ffcc;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .search-box .clear-search {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: none;
+            background: none;
+            border: none;
+        }
+
+        .search-box .clear-search.visible {
+            display: block;
+        }
+
+        .search-box .clear-search:hover {
+            color: #e74c3c;
+        }
+
+        /* ===== CATEGORIES ===== */
+        .movie-categories {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .category-tag {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #a0b4c8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            font-weight: 500;
+        }
+
+        .category-tag:hover {
+            border-color: #00ffcc;
+            transform: translateY(-2px);
+            color: #00ffcc;
+        }
+
+        .category-tag.active {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            border-color: #00ffcc;
+        }
+
+        /* ===== MOVIE GRID ===== */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 10px;
+        }
+
+        .movie-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+            border-color: #6c2eb7;
+            box-shadow: 0 12px 40px rgba(108, 46, 183, 0.15);
+        }
+
+        .movie-card .poster-placeholder {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, rgba(108, 46, 183, 0.2), rgba(0, 255, 204, 0.05));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .movie-card:hover .poster-placeholder {
+            border-color: rgba(0, 255, 204, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 255, 204, 0.05);
+        }
+
+        .movie-card .genre-badge {
+            display: inline-block;
+            font-size: 0.6rem;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            background: rgba(0, 255, 204, 0.15);
+            color: #00ffcc;
+        }
+
+        .movie-card .type-badge {
+            display: inline-block;
+            font-size: 0.55rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            background: rgba(255, 215, 0, 0.15);
+            color: #ffd93d;
+            margin-right: 8px;
+        }
+
+        .movie-card h3 {
+            color: #e8f5f0;
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+        }
+
+        .movie-card .director {
+            color: #a0b4c8;
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+        }
+
+        .movie-card .year {
+            color: rgba(160, 180, 200, 0.5);
+            font-size: 0.75rem;
+            margin-bottom: 8px;
+        }
+
+        .movie-card .description {
+            color: #a0b4c8;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            flex: 1;
+            margin-bottom: 12px;
+        }
+
+        .movie-card .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            margin-top: auto;
+        }
+
+        .movie-card .movie-meta .info {
+            display: flex;
+            gap: 15px;
+            font-size: 0.7rem;
+            color: rgba(160, 180, 200, 0.5);
+        }
+
+        .movie-card .movie-meta .watch-btn {
+            color: #00ffcc;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            padding: 5px 16px;
+            border-radius: 30px;
+            background: rgba(0, 255, 204, 0.08);
+            border: 1px solid rgba(0, 255, 204, 0.15);
+        }
+
+        .movie-card .movie-meta .watch-btn:hover {
+            background: rgba(0, 255, 204, 0.15);
+            transform: translateX(-5px);
+        }
+
+        .movie-card .badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            font-size: 0.55rem;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+
+        .badge.new {
+            background: #00ffcc;
+            color: #0f0c29;
+        }
+
+        .badge.popular {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .badge.hot {
+            background: #e67e22;
+            color: white;
+        }
+
+        .badge.updated {
+            background: #3498db;
+            color: white;
+        }
+
+        /* ===== FEATURED MOVIE ===== */
+        .featured-movie {
+            background: linear-gradient(135deg, rgba(0, 255, 204, 0.05), rgba(0, 180, 219, 0.05));
+            border: 1px solid rgba(0, 255, 204, 0.15);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0 40px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-movie::before {
+            content: '⭐';
+            position: absolute;
+            font-size: 6rem;
+            opacity: 0.05;
+            left: -20px;
+            bottom: -20px;
+            transform: rotate(-15deg);
+        }
+
+        .featured-movie .featured-icon {
+            font-size: 3.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .featured-movie .featured-info {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .featured-movie .featured-info .label {
+            font-size: 0.7rem;
+            color: #00ffcc;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .featured-movie .featured-info h3 {
+            font-size: 1.3rem;
+            color: #e8f5f0;
+            margin-bottom: 2px;
+        }
+
+        .featured-movie .featured-info .director {
+            color: #a0b4c8;
+            font-size: 0.9rem;
+        }
+
+        .featured-movie .featured-btn {
+            padding: 12px 35px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 255, 204, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .featured-movie .featured-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 35px rgba(0, 255, 204, 0.3);
+        }
+
+        /* ===== NO RESULTS ===== */
+        .no-results {
+            text-align: center;
+            padding: 50px 20px;
+            color: #a0b4c8;
+            display: none;
+        }
+
+        .no-results .big-icon {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .no-results h3 {
+            color: #e8f5f0;
+            margin-bottom: 5px;
+        }
+
+        /* ===== STATS ===== */
+        .movie-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00ffcc;
+            display: block;
+        }
+
+        .stat-item .label {
+            font-size: 0.8rem;
+            color: #a0b4c8;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            color: rgba(160, 180, 200, 0.4);
+            font-size: 0.8rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 8px 12px;
+            }
+            .logo h1 {
+                text-align: center;
+                font-size: 1rem;
+            }
+            nav ul {
+                justify-content: center;
+            }
+            nav ul li a {
+                font-size: 0.6rem;
+                padding: 3px 8px;
+            }
+            .auth-buttons {
+                justify-content: center;
+            }
+            .movie-hero {
+                padding: 25px 20px;
+            }
+            .movie-hero h2 {
+                font-size: 1.5rem;
+            }
+            .movie-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+            .movie-card {
+                padding: 16px;
+            }
+            .movie-card .poster-placeholder {
+                height: 120px;
+                font-size: 2.8rem;
+            }
+            .featured-movie {
+                padding: 20px;
+                flex-direction: column;
+                text-align: center;
+            }
+            .movie-stats {
+                gap: 15px;
+                padding: 12px 15px;
+            }
+            .stat-item .number {
+                font-size: 1.2rem;
+            }
+            .category-tag {
+                font-size: 0.75rem;
+                padding: 6px 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .movie-grid {
+                grid-template-columns: 1fr;
+            }
+            .movie-card {
+                padding: 14px;
+            }
+            .movie-card .poster-placeholder {
+                height: 140px;
+                font-size: 3rem;
+            }
+            .movie-hero h2 {
+                font-size: 1.3rem;
+            }
+            .movie-hero p {
+                font-size: 0.9rem;
+            }
+            .movie-card .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            .movie-card .movie-meta {
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+            }
+            .movie-card .movie-meta .watch-btn {
+                width: 100%;
+                text-align: center;
+            }
+            .search-box input {
+                padding: 12px 16px 12px 40px;
+                font-size: 0.9rem;
+            }
+            .movie-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .featured-movie .featured-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="logo">
+            <h1>نوینیکس <span>Novinix</span></h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../main.html">خانه</a></li>
+                <li><a href="../pages/online-tools.html">ابزارها</a></li>
+                <li><a href="../pages/calculator.html">ماشین‌حساب</a></li>
+                <li><a href="../pages/games.html">بازی‌ها</a></li>
+                                <li><a href="../pages/education.html">آموزش ها</a></li>
+                <li><a href="../pages/blog.html">وبلاگ</a></li>
+                <li><a href="../pages/entertainment.html" class="active">سرگرمی</a></li>
+                <li><a href="../pages/general-info.html">اطلاعات عمومی</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <!-- Managed by header.js -->
+            <a href="../auth/login.html" class="btn-login">ورود</a>
+            <a href="../auth/register.html" class="btn-register">ثبت نام</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- ===== محتوای فیلم و سریال (همانند قبل) ===== -->
+        <div class="movie-hero">
+            <h2>🎬 فیلم و <span>سریال</span></h2>
+            <p>معرفی و نقد جدیدترین فیلم‌ها و سریال‌های روز دنیا</p>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="searchMovies" placeholder="جستجو در فیلم و سریال..." onkeyup="filterMovies()">
+            <button class="clear-search" id="clearSearch" onclick="clearSearch()">✕</button>
+        </div>
+
+        <div class="movie-categories">
+            <span class="category-tag active" data-category="all" onclick="filterCategory('all', this)">همه</span>
+            <span class="category-tag" data-category="action" onclick="filterCategory('action', this)">🔥 اکشن</span>
+            <span class="category-tag" data-category="drama" onclick="filterCategory('drama', this)">🎭 درام</span>
+            <span class="category-tag" data-category="comedy" onclick="filterCategory('comedy', this)">😂 کمدی</span>
+            <span class="category-tag" data-category="scifi" onclick="filterCategory('scifi', this)">🚀 علمی-تخیلی</span>
+            <span class="category-tag" data-category="thriller" onclick="filterCategory('thriller', this)">🔪 هیجان‌انگیز</span>
+            <span class="category-tag" data-category="animation" onclick="filterCategory('animation', this)">🎨 انیمیشن</span>
+        </div>
+
+        <div class="featured-movie">
+            <div class="featured-icon">🎥</div>
+            <div class="featured-info">
+                <span class="label">⭐ فیلم برگزیده هفته</span>
+                <h3>سایه‌های سپیده‌دم</h3>
+                <span class="director">کارگردان: احمد رضایی | درام</span>
+            </div>
+            <a href="#" class="featured-btn">تماشا →</a>
+        </div>
+
+        <div class="movie-grid" id="movieGrid">
+            <!-- کارت‌های فیلم‌ها (همانند قبل) -->
+            <div class="movie-card" data-category="action" data-type="movie">
+                <span class="badge hot">🔥 داغ</span>
+                <div class="poster-placeholder">🎬</div>
+                <div class="card-header">
+                    <h3>عملیات آسمان</h3>
+                    <span class="genre-badge">اکشن</span>
+                </div>
+                <div class="director">کارگردان: علی نوری</div>
+                <div class="year">۱۴۰۴ | ۱۲۰ دقیقه</div>
+                <div class="description">یک مامور مخفی برای نجات جهان، وارد یک عملیات بین‌المللی می‌شود.</div>
+                <div class="movie-meta">
+                    <div class="info">
+                        <span>⭐ ۸.۲</span>
+                        <span>📅 ۱۴۰۴/۱۲/۰۵</span>
+                    </div>
+                    <a href="#" class="watch-btn">تماشا →</a>
+                </div>
+            </div>
+
+            <div class="movie-card" data-category="drama" data-type="series">
+                <span class="badge popular">محبوب</span>
+                <div class="poster-placeholder">📺</div>
+                <div class="card-header">
+                    <h3>شهر بی‌خوابی</h3>
+                    <span class="genre-badge">درام</span>
+                    <span class="type-badge">سریال</span>
+                </div>
+                <div class="director">کارگردان: مریم حسینی</div>
+                <div class="year">۱۴۰۵ | ۸ قسمت</div>
+                <div class="description">داستان زندگی چند خانواده در شهری که هرگز نمی‌خوابد.</div>
+                <div class="movie-meta">
+                    <div class="info">
+                        <span>⭐ ۹.۱</span>
+                        <span>📅 ۱۴۰۵/۰۱/۱۵</span>
+                    </div>
+                    <a href="#" class="watch-btn">تماشا →</a>
+                </div>
+            </div>
+
+            <div class="movie-card" data-category="comedy" data-type="movie">
+                <span class="badge new">جدید</span>
+                <div class="poster-placeholder">😂</div>
+                <div class="card-header">
+                    <h3>ماجرای خنده‌دار</h3>
+                    <span class="genre-badge">کمدی</span>
+                </div>
+                <div class="director">کارگردان: سعید مظفری</div>
+                <div class="year">۱۴۰۵ | ۹۵ دقیقه</div>
+                <div class="description">یک کارمند ساده با اتفاقی عجیب، وارد ماجراجویی خنده‌دار می‌شود.</div>
+                <div class="movie-meta">
+                    <div class="info">
+                        <span>⭐ ۷.۸</span>
+                        <span>📅 ۱۴۰۵/۰۲/۰۳</span>
+                    </div>
+                    <a href="#" class="watch-btn">تماشا →</a>
+                </div>
+            </div>
+
+            <div class="movie-card" data-category="scifi" data-type="movie">
+                <div class="poster-placeholder">🚀</div>
+                <div class="card-header">
+                    <h3>کهکشان گمشده</h3>
+                    <span class="genre-badge">علمی-تخیلی</span>
+                </div>
+                <div class="director">کارگردان: نیما صادقی</div>
+                <div class="year">۱۴۰۴ | ۱۴۰ دقیقه</div>
+                <div class="description">فضانوردان در جستجوی کهکشانی ناشناخته با موجودات مرموز روبرو می‌شوند.</div>
+                <div class="movie-meta">
+                    <div class="info">
+                        <span>⭐ ۸.۵</span>
+                        <span>📅 ۱۴۰۴/۱۱/۲۰</span>
+                    </div>
+                    <a href="#" class="watch-btn">تماشا →</a>
+                </div>
+            </div>
+
+            <div class="movie-card" data-category="thriller" data-type="series">
+                <span class="badge hot">🔥 داغ</span>
+                <div class="poster-placeholder">🔪</div>
+                <div class="card-header">
+                    <h3>معمای پنهان</h3>
+                    <span class="genre-badge">هیجان‌انگیز</span>
+                    <span class="type-badge">سریال</span>
+                </div>
+                <div class="director">کارگردان: حسین کریمی</div>
+                <div class="year">۱۴۰۵ | ۱۰ قسمت</div>
+                <div class="description">یک کارآگاه برای حل معمای قتل‌های زنجیره‌ای وارد بازی خطرناکی می‌شود.</div>
+                <div class="movie-meta">
+                    <div class="info">
+                        <span>⭐ ۸.۹</span>
+                        <span>📅 ۱۴۰۵/۰۲/۱۰</span>
+                    </div>
+                    <a href="#" class="watch-btn">تماشا →</a>
+                </div>
+            </div>
+
+            <div class="movie-card" data-category="animation" data-type="movie">
+                <span class="badge new">جدید</span>
+                <div class="poster-placeholder">🎨</div>
+                <div class="card-header">
+                    <h3>سفر رنگین‌کمان</h3>
+                    <span class="genre-badge">انیمیشن</span>
+                </div>
+                <div class="director">کارگردان: لیلا رضایی</div>
+                <div class="year">۱۴۰۵ | ۸۵ دقیقه</div>
+                <div class="description">انیمیشنی جذاب درباره دوستی و ماجراجویی در دنیای رنگ‌ها.</div>
+                <div class="movie-meta">
+                    <div class="info">
+                        <span>⭐ ۹.۳</span>
+                        <span>📅 ۱۴۰۵/۰۲/۰۱</span>
+                    </div>
+                    <a href="#" class="watch-btn">تماشا →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="no-results" id="noResults">
+            <span class="big-icon">🔍</span>
+            <h3>نتیجه‌ای یافت نشد</h3>
+            <p>فیلم یا سریال مورد نظر را با عبارت دیگری جستجو کنید</p>
+        </div>
+
+        <div class="movie-stats">
+            <div class="stat-item">
+                <span class="number">⭐</span>
+                <span class="label">برگزیده</span>
+            </div>
+            <div class="stat-item">
+                <span class="number">🎬</span>
+                <span class="label">به‌روزرسانی هفتگی</span>
+            </div>
+        </div>
+    </main>
+
+<script src="../assets/js/footer.js"></script>
+
+    <script>
+        function filterMovies() {
+            const input = document.getElementById('searchMovies');
+            if (!input) return;
+            const filter = input.value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.movie-card');
+            const clearBtn = document.getElementById('clearSearch');
+            let visibleCount = 0;
+
+            if (clearBtn) {
+                clearBtn.classList.toggle('visible', filter.length > 0);
+            }
+
+            cards.forEach(card => {
+                const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                const director = card.querySelector('.director')?.textContent.toLowerCase() || '';
+                const desc = card.querySelector('.description')?.textContent.toLowerCase() || '';
+                const category = card.dataset.category || '';
+                const type = card.dataset.type || '';
+                const match = title.includes(filter) || director.includes(filter) || desc.includes(filter) || category.includes(filter) || type.includes(filter);
+                card.style.display = match ? 'flex' : 'none';
+                if (match) visibleCount++;
+            });
+
+            const noResults = document.getElementById('noResults');
+            if (noResults) {
+                noResults.style.display = (visibleCount === 0 && filter.length > 0) ? 'block' : 'none';
+            }
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('searchMovies');
+            if (input) {
+                input.value = '';
+                filterMovies();
+                input.focus();
+            }
+        }
+
+        function filterCategory(category, element) {
+            document.querySelectorAll('.category-tag').forEach(tag => tag.classList.remove('active'));
+            if (element) element.classList.add('active');
+
+            const cards = document.querySelectorAll('.movie-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const cardCategory = card.dataset.category;
+                const match = category === 'all' || cardCategory === category;
+                card.style.display = match ? 'flex' : 'none';
+                if (match) visibleCount++;
+            });
+
+            const searchInput = document.getElementById('searchMovies');
+            const clearBtn = document.getElementById('clearSearch');
+            if (searchInput) searchInput.value = '';
+            if (clearBtn) clearBtn.classList.remove('visible');
+
+            const noResults = document.getElementById('noResults');
+            if (noResults) noResults.style.display = 'none';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') clearSearch();
+        });
+    </script>
+<script src="../assets/js/seo.js"></script>
+</body>
+</html>

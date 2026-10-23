@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>💣 ماین‌سوییپر</title>
+    <link rel="stylesheet" href="../assets/css/game.css">
+    <style>
+        /* ===== استایل بهینه برای موبایل ===== */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 8px;
+            background: #1a1a2e;
+            font-family: system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .minesweeper-wrapper {
+            max-width: 560px;
+            width: 100%;
+            background: #16213e;
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .game-header h1 {
+            font-size: 1.2rem;
+            margin: 0;
+            color: #e6edf3;
+        }
+
+        .exit-btn {
+            color: #e74c3c;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: rgba(231, 76, 60, 0.15);
+        }
+
+        .game-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .info-box {
+            background: rgba(255,255,255,0.05);
+            padding: 8px 6px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .info-box .label {
+            display: block;
+            font-size: 0.65rem;
+            color: #8a8fa8;
+            margin-bottom: 2px;
+        }
+
+        .info-box .value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #e6edf3;
+            direction: ltr;
+        }
+
+        /* ===== حالت‌های بازی ===== */
+        .mode-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            touch-action: manipulation;
+            background: transparent;
+            color: #8a8fa8;
+        }
+
+        .mode-btn.active {
+            background: #00b894;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0,184,148,0.3);
+        }
+
+        .mode-btn.active-flag {
+            background: #fdcb6e;
+            color: #1a1a2e;
+            box-shadow: 0 4px 15px rgba(253,203,110,0.3);
+        }
+
+        .mode-btn:active {
+            transform: scale(0.95);
+        }
+
+        #board {
+            display: grid;
+            gap: 2px;
+            background: #2d3436;
+            padding: 4px;
+            border-radius: 10px;
+            border: 2px solid #4a3520;
+            margin: 0 auto;
+            touch-action: manipulation;
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            background: #636e72;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 3px;
+            color: #2d3436;
+            min-width: 32px;
+            min-height: 32px;
+            transition: all 0.1s ease;
+            user-select: none;
+            border: none;
+            font-family: var(--font);
+            -webkit-touch-callout: none;
+            position: relative;
+        }
+
+        /* هایلایت حالت پرچم */
+        .cell.flag-mode:hover:not(.revealed) {
+            background: #fdcb6e;
+            transform: scale(1.02);
+        }
+
+        .cell.flag-mode:active:not(.revealed) {
+            background: #f9ca24;
+            transform: scale(0.92);
+        }
+
+        .cell:active:not(.revealed):not(.flag-mode) {
+            background: #7f8c8d;
+            transform: scale(0.92);
+        }
+
+        .cell.revealed {
+            background: #353b48;
+            cursor: default;
+            transform: none;
+            color: #e6edf3;
+        }
+
+        .cell.revealed.empty {
+            background: #2d3436;
+        }
+
+        .cell.revealed.mine {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .cell.flagged {
+            background: #fdcb6e;
+            color: #2d3436;
+        }
+
+        .cell.mine-exploded {
+            background: #ff6b6b;
+            color: #fff;
+            animation: explode 0.3s ease;
+        }
+
+        @keyframes explode {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .cell .emoji {
+            font-size: 1rem;
+        }
+
+        /* سایز سلول‌ها برای موبایل */
+        @media (max-width: 500px) {
+            .cell {
+                font-size: 0.85rem;
+                min-width: 28px;
+                min-height: 28px;
+                border-radius: 2px;
+            }
+            .game-header h1 {
+                font-size: 1rem;
+            }
+            .info-box .value {
+                font-size: 0.95rem;
+            }
+            .mode-btn {
+                font-size: 0.8rem;
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .cell {
+                font-size: 0.7rem;
+                min-width: 22px;
+                min-height: 22px;
+            }
+            .minesweeper-wrapper {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 340px) {
+            .cell {
+                font-size: 0.55rem;
+                min-width: 16px;
+                min-height: 16px;
+                gap: 1px;
+            }
+        }
+
+        .status-message {
+            text-align: center;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #e6edf3;
+            background: rgba(255,255,255,0.05);
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-message.error {
+            background: rgba(231, 76, 60, 0.2);
+            color: #ff6b6b;
+        }
+
+        .status-message.success {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .board-wrapper {
+            margin: 8px 0;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        #boardContainer {
+            display: flex;
+            justify-content: center;
+        }
+
+        .game-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .game-buttons .btn {
+            flex: 1;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            touch-action: manipulation;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00b894, #00a381);
+            color: #fff;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e17055, #d63031);
+            color: #fff;
+        }
+
+        .difficulty-btns {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .difficulty-btns .btn {
+            flex: 1;
+            min-width: 60px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            touch-action: manipulation;
+            color: #fff;
+        }
+
+        .btn-easy {
+            background: linear-gradient(135deg, #00b894, #00a381);
+        }
+
+        .btn-medium {
+            background: linear-gradient(135deg, #fdcb6e, #f9ca24);
+            color: #1a1a2e;
+        }
+
+        .btn-hard {
+            background: linear-gradient(135deg, #e17055, #d63031);
+        }
+
+        .difficulty-btns .btn:active {
+            transform: scale(0.92);
+        }
+
+        .key-hints {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 10px;
+            font-size: 0.7rem;
+            color: #8a8fa8;
+            flex-wrap: wrap;
+        }
+
+        .key-hints span {
+            background: rgba(255,255,255,0.05);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .header-buttons .exit-btn {
+            color: #e74c3c;
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 4px 10px;
+            border-radius: 8px;
+            background: rgba(231, 76, 60, 0.15);
+            display: inline-block;
+        }
+
+        .board-wrapper::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        .cell, .btn, .mode-btn {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* نشانگر حالت فعلی */
+        .mode-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: #8a8fa8;
+            margin-top: 4px;
+        }
+
+        .mode-indicator .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .mode-indicator .dot.click {
+            background: #00b894;
+        }
+
+        .mode-indicator .dot.flag {
+            background: #fdcb6e;
+        }
+    </style>
+</head>
+<body>
+<div class="game-wrapper minesweeper-wrapper">
+    <div class="game-header">
+        <h1>💣 ماین‌سوییپر</h1>
+        <div class="header-buttons"><a href="../pages/games.html" class="exit-btn">✕ خروج</a></div>
+    </div>
+    
+    <div class="game-info">
+        <div class="info-box"><span class="label">💣 مین</span><span class="value" id="mineCount">10</span></div>
+        <div class="info-box"><span class="label">🚩 پرچم</span><span class="value" id="flagCount">0</span></div>
+        <div class="info-box"><span class="label">⏱️ زمان</span><span class="value" id="timer">۰۰:۰۰</span></div>
+    </div>
+
+    <!-- ===== دکمه‌های حالت ===== -->
+    <div class="mode-toggle">
+        <button class="mode-btn active" id="clickModeBtn">👆 باز کردن</button>
+        <button class="mode-btn" id="flagModeBtn">🚩 پرچم</button>
+    </div>
+    <div class="mode-indicator">
+        <span>حالت فعلی:</span>
+        <span class="dot click" id="modeDot"></span>
+        <span id="modeLabel">باز کردن</span>
+    </div>
+
+    <div class="status-message" id="statusMessage">🎮 بازی شروع شد!</div>
+    <div class="board-wrapper"><div id="boardContainer"><div id="board"></div></div></div>
+    
+    <div class="game-buttons">
+        <button class="btn btn-success" id="newGameBtn">🔄 جدید</button>
+        <button class="btn btn-danger" id="exitBtn">🚪 خروج</button>
+    </div>
+    <div class="difficulty-btns">
+        <button class="btn btn-easy" id="easyBtn">🟢 آسان</button>
+        <button class="btn btn-medium" id="mediumBtn">🟡 متوسط</button>
+        <button class="btn btn-hard" id="hardBtn">🔴 سخت</button>
+    </div>
+    <div class="key-hints">
+        <span>👆 یک ضربه = باز یا پرچم</span>
+        <span>🔄 تغییر حالت با دکمه‌ها</span>
+    </div>
+</div>
+<script>
+// ===== ماین‌سوییپر با حالت‌های جداگانه برای موبایل =====
+let rows=9, cols=9, totalMines=10, board=[], revealed=[], flagged=[], gameOver=false, firstClick=true, flagCount=0;
+let timerInterval=null, seconds=0, cellsToReveal=0;
+let currentMode = 'click'; // 'click' یا 'flag'
+
+const boardEl=document.getElementById('board'), statusMsg=document.getElementById('statusMessage');
+const mineCountEl=document.getElementById('mineCount'), flagCountEl=document.getElementById('flagCount'), timerEl=document.getElementById('timer');
+const clickModeBtn=document.getElementById('clickModeBtn'), flagModeBtn=document.getElementById('flagModeBtn');
+const modeDot=document.getElementById('modeDot'), modeLabel=document.getElementById('modeLabel');
+
+// ===== مدیریت حالت‌ها =====
+function setMode(mode) {
+    currentMode = mode;
+    clickModeBtn.classList.remove('active', 'active-flag');
+    flagModeBtn.classList.remove('active', 'active-flag');
+    
+    if (mode === 'click') {
+        clickModeBtn.classList.add('active');
+        modeDot.className = 'dot click';
+        modeLabel.textContent = 'باز کردن';
+        // حذف کلاس flag-mode از سلول‌ها
+        document.querySelectorAll('.cell').forEach(c => c.classList.remove('flag-mode'));
+    } else {
+        flagModeBtn.classList.add('active-flag');
+        modeDot.className = 'dot flag';
+        modeLabel.textContent = 'پرچم';
+        // اضافه کردن کلاس flag-mode به سلول‌ها برای نمایش بصری
+        document.querySelectorAll('.cell').forEach(c => {
+            if (!c.classList.contains('revealed')) c.classList.add('flag-mode');
+        });
+    }
+}
+
+clickModeBtn.addEventListener('click', () => setMode('click'));
+flagModeBtn.addEventListener('click', () => setMode('flag'));
+
+function initGame(r,c,m){ 
+    rows=r||9; cols=c||9; totalMines=m||10; 
+    board=Array(rows).fill().map(()=>Array(cols).fill(0)); 
+    revealed=Array(rows).fill().map(()=>Array(cols).fill(false)); 
+    flagged=Array(rows).fill().map(()=>Array(cols).fill(false)); 
+    gameOver=false; firstClick=true; flagCount=0; seconds=0; cellsToReveal=rows*cols-totalMines; 
+    clearInterval(timerInterval); timerEl.textContent='۰۰:۰۰'; flagCountEl.textContent='0'; mineCountEl.textContent=totalMines; 
+    statusMsg.textContent='🎮 بازی شروع شد!'; statusMsg.className='status-message'; 
+    createBoard(); 
+    setMode('click');
+}
+
+function createBoard(){ 
+    boardEl.innerHTML=''; 
+    boardEl.style.gridTemplateColumns=`repeat(${cols},1fr)`; 
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){ 
+        const cell=document.createElement('div'); 
+        cell.className='cell'; 
+        cell.dataset.row=r; 
+        cell.dataset.col=c; 
+        
+        // فقط یک رویداد کلیک ساده
+        cell.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (gameOver) return;
+            
+            if (currentMode === 'flag') {
+                // حالت پرچم
+                handleRightClick(r,c);
+            } else {
+                // حالت باز کردن
+                handleClick(r,c);
+            }
+        });
+        
+        // کلیک راست برای دسکتاپ (همیشه پرچم)
+        cell.addEventListener('contextmenu', e => {
+            e.preventDefault();
+            handleRightClick(r,c);
+        });
+        
+        boardEl.appendChild(cell); 
+    } 
+    updateBoard(); 
+}
+
+function updateBoard(){ 
+    const cells=document.querySelectorAll('.cell'); 
+    cells.forEach(cell=>{ 
+        const r=parseInt(cell.dataset.row), c=parseInt(cell.dataset.col); 
+        cell.className='cell'; 
+        cell.textContent=''; 
+        
+        // اضافه کردن کلاس flag-mode اگر در حالت پرچم هستیم و سلول باز نشده
+        if (currentMode === 'flag' && !revealed[r][c]) {
+            cell.classList.add('flag-mode');
+        }
+        
+        if(revealed[r][c]){ 
+            cell.classList.add('revealed'); 
+            if(board[r][c]===-1){ 
+                cell.classList.add('mine'); 
+                cell.innerHTML='💣'; 
+            }else if(board[r][c]>0){ 
+                cell.textContent=board[r][c]; 
+                const colors=['','#3498db','#2ecc71','#e74c3c','#8e44ad','#f39c12','#1abc9c','#2c3e50','#7f8c8d']; 
+                cell.style.color=colors[board[r][c]]||'#fff'; 
+            }else cell.classList.add('empty'); 
+        }else if(flagged[r][c]){ 
+            cell.classList.add('flagged'); 
+            cell.innerHTML='🚩'; 
+        } 
+    }); 
+    flagCountEl.textContent=flagCount; 
+}
+
+function placeMines(excludeRow,excludeCol){ 
+    let placed=0; 
+    while(placed<totalMines){ 
+        const r=Math.floor(Math.random()*rows), c=Math.floor(Math.random()*cols); 
+        if(board[r][c]===-1)continue; 
+        if(Math.abs(r-excludeRow)<=1&&Math.abs(c-excludeCol)<=1)continue; 
+        board[r][c]=-1; placed++; 
+    } 
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){ 
+        if(board[r][c]===-1)continue; 
+        let count=0; 
+        for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){ 
+            const nr=r+dr,nc=c+dc; 
+            if(nr>=0&&nr<rows&&nc>=0&&nc<cols&&board[nr][nc]===-1)count++; 
+        } 
+        board[r][c]=count; 
+    } 
+}
+
+function handleClick(row,col){ 
+    if(gameOver||flagged[row][col]||revealed[row][col])return; 
+    if(firstClick){ placeMines(row,col); firstClick=false; startTimer(); } 
+    revealCell(row,col); 
+}
+
+function handleRightClick(row,col){ 
+    if(gameOver||revealed[row][col])return; 
+    flagged[row][col]=!flagged[row][col]; 
+    flagCount+=flagged[row][col]?1:-1; 
+    updateBoard(); 
+}
+
+function revealCell(row,col){ 
+    if(row<0||row>=rows||col<0||col>=cols||revealed[row][col]||flagged[row][col])return; 
+    revealed[row][col]=true; 
+    cellsToReveal--; 
+    if(board[row][col]===-1){ 
+        gameOver=true; clearInterval(timerInterval); 
+        statusMsg.textContent='💥 باختی!'; 
+        statusMsg.className='status-message error'; 
+        revealAllMines(row,col); updateBoard(); 
+        return; 
+    } 
+    if(board[row][col]===0){ 
+        for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++)revealCell(row+dr,col+dc); 
+    } 
+    updateBoard(); 
+    checkWin(); 
+}
+
+function revealAllMines(explodedRow,explodedCol){ 
+    document.querySelectorAll('.cell').forEach(cell=>{ 
+        const r=parseInt(cell.dataset.row), c=parseInt(cell.dataset.col); 
+        if(board[r][c]===-1&&!revealed[r][c]){ 
+            revealed[r][c]=true; 
+            if(r===explodedRow&&c===explodedCol)cell.classList.add('mine-exploded'); 
+        } 
+        if(flagged[r][c]&&board[r][c]!==-1){ 
+            cell.classList.add('revealed'); 
+            cell.textContent='❌'; 
+            cell.style.color='#e74c3c'; 
+        } 
+    }); 
+    updateBoard(); 
+}
+
+function checkWin(){ 
+    if(cellsToReveal===0){ 
+        gameOver=true; clearInterval(timerInterval); 
+        statusMsg.textContent='🎉 برنده شدی! 🎉'; 
+        statusMsg.className='status-message success'; 
+        for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){ 
+            if(board[r][c]===-1&&!flagged[r][c]){ flagged[r][c]=true; flagCount++; } 
+        } 
+        updateBoard(); 
+        saveScore(); 
+    } 
+}
+
+function startTimer(){ 
+    clearInterval(timerInterval); 
+    seconds=0; 
+    timerInterval=setInterval(()=>{ 
+        seconds++; 
+        const mins=String(Math.floor(seconds/60)).padStart(2,'0'); 
+        const secs=String(seconds%60).padStart(2,'0'); 
+        timerEl.textContent=`${mins}:${secs}`; 
+    },1000); 
+}
+
+async function saveScore(){ 
+    try{ 
+        if(typeof NovinixAuth!=='undefined'&&NovinixAuth.isLoggedIn()){ 
+            const diff=totalMines<=10?'easy':totalMines<=25?'medium':'hard'; 
+            const score=Math.max(0,Math.floor((rows*cols-totalMines)*10/(seconds+1))); 
+            await NovinixAuth.saveGameScore('minesweeper',score,{difficulty:diff,time:seconds,size:`${rows}x${cols}`}); 
+        } 
+    }catch(e){console.error(e);} 
+}
+
+function newGame(){ initGame(rows,cols,totalMines); }
+function setDifficulty(level){ 
+    if(level==='easy')initGame(9,9,10); 
+    else if(level==='medium')initGame(12,12,25); 
+    else if(level==='hard')initGame(16,16,50); 
+}
+function exitGame(){ window.location.href='../pages/games.html'; }
+
+document.getElementById('newGameBtn').addEventListener('click',newGame);
+document.getElementById('easyBtn').addEventListener('click',()=>setDifficulty('easy'));
+document.getElementById('mediumBtn').addEventListener('click',()=>setDifficulty('medium'));
+document.getElementById('hardBtn').addEventListener('click',()=>setDifficulty('hard'));
+document.getElementById('exitBtn').addEventListener('click',exitGame);
+
+initGame(9,9,10);
+</script>
+<script src="../assets/js/seo.js"></script>
+</body>
+</html>

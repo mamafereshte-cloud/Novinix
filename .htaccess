@@ -1,0 +1,30 @@
+# فعال‌سازی RewriteEngine
+RewriteEngine On
+RewriteBase /
+
+# ریدایرکت هر index.html به پوشه خودش (این رو جایگزین قانون قبلی کنید)
+RewriteCond %{REQUEST_URI} index\.html$ [NC]
+RewriteRule ^(.*)/index\.html$ /$1/ [R=301,L]
+
+# تنظیم فایل پیش‌فرض
+DirectoryIndex main.html index.html index.php
+
+# اگر درخواست برای دایرکتوری باشد، به main.html برو
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^$ main.html [L]
+
+# اگر فایل با .html وجود دارد، بدون .html نمایش بده
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ $1.html [L]
+
+# ریدایرکت ریشه به main.html
+RewriteRule ^$ main.html [L]
+
+# اگر فایل در پوشه pages نبود، در ریشه بگرد
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^pages/(.*)$ /$1.html [L]
+
+# ریدایرکت 404 به صفحه اصلی
+ErrorDocument 404 main.html

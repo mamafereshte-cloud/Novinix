@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>آموزش SQL | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+    <link rel="stylesheet" href="../assets/css/education.css" />
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar"></aside>
+        <main class="main-content" id="mainContent"></main>
+    </div>
+
+    <script>
+        // ================================================================
+        // 🗄️ SQL Course Data
+        // ================================================================
+
+        var lessons = [{
+            id: 'sql-intro',
+            title: 'معرفی SQL',
+            section: 'مقدمات',
+            order: 1,
+            badge: null,
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">🗄️ آموزش SQL / <span>مقدمات</span></div>
+                        <h1>معرفی <span>SQL</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۰ دقیقه</span>
+                            <span>📊 سطح: مبتدی</span>
+                            <span>⭐ ۴.۹ (۱,۳۰۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>SQL چیست؟</h2>
+                        <p>
+                            <strong>SQL</strong> مخفف <strong>Structured Query Language</strong>
+                            یک زبان استاندارد برای مدیریت پایگاه‌های داده رابطه‌ای است.
+                            با استفاده از SQL می‌توانید داده‌ها را در پایگاه‌های داده
+                            <strong>ذخیره</strong>، <strong>دریافت</strong>،
+                            <strong>به‌روزرسانی</strong> و <strong>حذف</strong> کنید.
+                        </p>
+
+                        <div class="note-box">
+                            <strong>💡 نکته:</strong>
+                            <p>SQL توسط <strong>IBM</strong> در دهه ۱۹۷۰ ساخته شد و امروزه
+                            به عنوان زبان استاندارد برای همه پایگاه‌های داده رابطه‌ای
+                            مانند MySQL، PostgreSQL، Oracle و SQL Server استفاده می‌شود.</p>
+                        </div>
+
+                        <h3>انواع دستورات SQL</h3>
+                        <ul>
+                            <li><strong>DDL</strong> – Data Definition Language (CREATE، ALTER، DROP)</li>
+                            <li><strong>DML</strong> – Data Manipulation Language (SELECT، INSERT، UPDATE، DELETE)</li>
+                            <li><strong>DCL</strong> – Data Control Language (GRANT، REVOKE)</li>
+                            <li><strong>TCL</strong> – Transaction Control Language (COMMIT، ROLLBACK)</li>
+                        </ul>
+
+                        <h3>اولین کوئری SQL</h3>
+                        <p>یک کوئری ساده برای دریافت داده‌ها از یک جدول:</p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="sql">SQL</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="sql">
+                                    <pre><span class="sql-comment">-- Create a sample table</span>
+<span class="sql-keyword">CREATE TABLE</span> customers (
+    id <span class="sql-keyword">INT PRIMARY KEY</span>,
+    name <span class="sql-keyword">VARCHAR</span>(100),
+    email <span class="sql-keyword">VARCHAR</span>(100),
+    age <span class="sql-keyword">INT</span>
+);
+
+<span class="sql-comment">-- Insert sample data</span>
+<span class="sql-keyword">INSERT INTO</span> customers <span class="sql-keyword">VALUES</span>
+    (<span class="sql-number">1</span>, <span class="sql-string">'Ali'</span>, <span class="sql-string">'ali@example.com'</span>, <span class="sql-number">25</span>),
+    (<span class="sql-number">2</span>, <span class="sql-string">'Maryam'</span>, <span class="sql-string">'maryam@example.com'</span>, <span class="sql-number">28</span>),
+    (<span class="sql-number">3</span>, <span class="sql-string">'Reza'</span>, <span class="sql-string">'reza@example.com'</span>, <span class="sql-number">30</span>);
+
+<span class="sql-comment">-- Select all data</span>
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> customers;
+
+<span class="sql-comment">-- Select specific columns</span>
+<span class="sql-keyword">SELECT</span> name, age <span class="sql-keyword">FROM</span> customers;
+
+<span class="sql-comment">-- Select with condition</span>
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> customers <span class="sql-keyword">WHERE</span> age > <span class="sql-number">25</span>;</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'sql-select',
+            title: 'دستور SELECT',
+            section: 'مقدمات',
+            order: 2,
+            badge: null,
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">🗄️ آموزش SQL / <span>مقدمات</span></div>
+                        <h1>دستور <span>SELECT</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۵ دقیقه</span>
+                            <span>📊 سطح: مبتدی</span>
+                            <span>⭐ ۴.۸ (۱,۰۵۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>دستور SELECT</h2>
+                        <p>
+                            دستور <strong>SELECT</strong> برای دریافت داده‌ها از یک یا چند
+                            جدول استفاده می‌شود. این مهم‌ترین دستور SQL است و به شما امکان
+                            می‌دهد داده‌ها را به روش‌های مختلف فیلتر و مرتب کنید.
+                        </p>
+
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>دستور</th>
+                                        <th>توضیح</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code style="color:#f1c40f;">SELECT *</code></td>
+                                        <td>انتخاب همه ستون‌ها</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code style="color:#f1c40f;">SELECT column1, column2</code></td>
+                                        <td>انتخاب ستون‌های خاص</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code style="color:#f1c40f;">SELECT DISTINCT</code></td>
+                                        <td>حذف مقادیر تکراری</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code style="color:#f1c40f;">SELECT ... WHERE</code></td>
+                                        <td>فیلتر کردن داده‌ها</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code style="color:#f1c40f;">SELECT ... ORDER BY</code></td>
+                                        <td>مرتب‌سازی داده‌ها</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code style="color:#f1c40f;">SELECT ... LIMIT</code></td>
+                                        <td>محدود کردن تعداد نتایج</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="sql">SQL</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="sql">
+                                    <pre><span class="sql-comment">-- Sample data</span>
+<span class="sql-keyword">CREATE TABLE</span> products (
+    id <span class="sql-keyword">INT PRIMARY KEY</span>,
+    name <span class="sql-keyword">VARCHAR</span>(100),
+    price <span class="sql-keyword">DECIMAL</span>(10,2),
+    category <span class="sql-keyword">VARCHAR</span>(50),
+    stock <span class="sql-keyword">INT</span>
+);
+
+<span class="sql-keyword">INSERT INTO</span> products <span class="sql-keyword">VALUES</span>
+    (<span class="sql-number">1</span>, <span class="sql-string">'Laptop'</span>, <span class="sql-number">999.99</span>, <span class="sql-string">'Electronics'</span>, <span class="sql-number">10</span>),
+    (<span class="sql-number">2</span>, <span class="sql-string">'Phone'</span>, <span class="sql-number">599.99</span>, <span class="sql-string">'Electronics'</span>, <span class="sql-number">25</span>),
+    (<span class="sql-number">3</span>, <span class="sql-string">'Headphones'</span>, <span class="sql-number">89.99</span>, <span class="sql-string">'Audio'</span>, <span class="sql-number">50</span>),
+    (<span class="sql-number">4</span>, <span class="sql-string">'Keyboard'</span>, <span class="sql-number">49.99</span>, <span class="sql-string">'Accessories'</span>, <span class="sql-number">30</span>),
+    (<span class="sql-number">5</span>, <span class="sql-string">'Monitor'</span>, <span class="sql-number">299.99</span>, <span class="sql-string">'Electronics'</span>, <span class="sql-number">15</span>);
+
+<span class="sql-comment">-- Basic SELECT</span>
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> products;
+
+<span class="sql-comment">-- Select specific columns</span>
+<span class="sql-keyword">SELECT</span> name, price <span class="sql-keyword">FROM</span> products;
+
+<span class="sql-comment">-- SELECT with WHERE</span>
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> products <span class="sql-keyword">WHERE</span> price > <span class="sql-number">100</span>;
+
+<span class="sql-comment">-- SELECT with ORDER BY</span>
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> products <span class="sql-keyword">ORDER BY</span> price <span class="sql-keyword">DESC</span>;
+
+<span class="sql-comment">-- SELECT with LIMIT</span>
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> products <span class="sql-keyword">LIMIT</span> <span class="sql-number">3</span>;
+
+<span class="sql-comment">-- SELECT with DISTINCT</span>
+<span class="sql-keyword">SELECT DISTINCT</span> category <span class="sql-keyword">FROM</span> products;</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'sql-join',
+            title: 'JOIN ها در SQL',
+            section: 'پیشرفته',
+            order: 1,
+            badge: 'hot',
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">🗄️ آموزش SQL / <span>پیشرفته</span></div>
+                        <h1><span>JOIN</span> ها در SQL</h1>
+                        <div class="meta">
+                            <span>⏱️ ۳۰ دقیقه</span>
+                            <span>📊 سطح: متوسط</span>
+                            <span>⭐ ۴.۹ (۸۵۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>JOIN در SQL</h2>
+                        <p>
+                            <strong>JOIN</strong> برای ترکیب داده‌ها از دو یا چند جدول
+                            بر اساس یک ستون مشترک استفاده می‌شود. این یکی از قدرتمندترین
+                            ویژگی‌های SQL است.
+                        </p>
+
+                        <h3>انواع JOIN</h3>
+                        <ul>
+                            <li><strong>INNER JOIN</strong> – فقط رکوردهای مشترک</li>
+                            <li><strong>LEFT JOIN</strong> – همه رکوردهای جدول چپ + مشترک‌ها</li>
+                            <li><strong>RIGHT JOIN</strong> – همه رکوردهای جدول راست + مشترک‌ها</li>
+                            <li><strong>FULL OUTER JOIN</strong> – همه رکوردهای هر دو جدول</li>
+                            <li><strong>CROSS JOIN</strong> – ضرب دکارتی دو جدول</li>
+                        </ul>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="sql">SQL</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="sql">
+                                    <pre><span class="sql-comment">-- Customers table</span>
+<span class="sql-keyword">CREATE TABLE</span> customers (
+    id <span class="sql-keyword">INT PRIMARY KEY</span>,
+    name <span class="sql-keyword">VARCHAR</span>(100)
+);
+
+<span class="sql-keyword">INSERT INTO</span> customers <span class="sql-keyword">VALUES</span>
+    (<span class="sql-number">1</span>, <span class="sql-string">'Ali'</span>),
+    (<span class="sql-number">2</span>, <span class="sql-string">'Maryam'</span>),
+    (<span class="sql-number">3</span>, <span class="sql-string">'Reza'</span>);
+
+<span class="sql-comment">-- Orders table</span>
+<span class="sql-keyword">CREATE TABLE</span> orders (
+    id <span class="sql-keyword">INT PRIMARY KEY</span>,
+    customer_id <span class="sql-keyword">INT</span>,
+    product <span class="sql-keyword">VARCHAR</span>(100),
+    amount <span class="sql-keyword">DECIMAL</span>(10,2)
+);
+
+<span class="sql-keyword">INSERT INTO</span> orders <span class="sql-keyword">VALUES</span>
+    (<span class="sql-number">1</span>, <span class="sql-number">1</span>, <span class="sql-string">'Laptop'</span>, <span class="sql-number">999.99</span>),
+    (<span class="sql-number">2</span>, <span class="sql-number">1</span>, <span class="sql-string">'Phone'</span>, <span class="sql-number">599.99</span>),
+    (<span class="sql-number">3</span>, <span class="sql-number">2</span>, <span class="sql-string">'Headphones'</span>, <span class="sql-number">89.99</span>);
+
+<span class="sql-comment">-- INNER JOIN</span>
+<span class="sql-keyword">SELECT</span> customers.name, orders.product, orders.amount
+<span class="sql-keyword">FROM</span> customers
+<span class="sql-keyword">INNER JOIN</span> orders <span class="sql-keyword">ON</span> customers.id = orders.customer_id;
+
+<span class="sql-comment">-- LEFT JOIN (shows all customers)</span>
+<span class="sql-keyword">SELECT</span> customers.name, orders.product, orders.amount
+<span class="sql-keyword">FROM</span> customers
+<span class="sql-keyword">LEFT JOIN</span> orders <span class="sql-keyword">ON</span> customers.id = orders.customer_id;</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'sql-aggregation',
+            title: 'توابع تجمیعی و GROUP BY',
+            section: 'پیشرفته',
+            order: 2,
+            badge: 'new',
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">🗄️ آموزش SQL / <span>پیشرفته</span></div>
+                        <h1>توابع تجمیعی و <span>GROUP BY</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۵ دقیقه</span>
+                            <span>📊 سطح: متوسط</span>
+                            <span>⭐ ۴.۷ (۷۸۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>توابع تجمیعی (Aggregate Functions)</h2>
+                        <p>
+                            توابع تجمیعی برای انجام محاسبات روی مجموعه‌ای از مقادیر
+                            استفاده می‌شوند.
+                        </p>
+
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>تابع</th>
+                                        <th>توضیح</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code style="color:#f1c40f;">COUNT()</code></td>
+                                        <td>تعداد رکوردها</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code style="color:#f1c40f;">SUM()</code></td>
+                                        <td>جمع مقادیر</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code style="color:#f1c40f;">AVG()</code></td>
+                                        <td>میانگین مقادیر</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code style="color:#f1c40f;">MIN()</code></td>
+                                        <td>کوچک‌ترین مقدار</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code style="color:#f1c40f;">MAX()</code></td>
+                                        <td>بزرگ‌ترین مقدار</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3>GROUP BY</h3>
+                        <p>
+                            دستور <strong>GROUP BY</strong> برای گروه‌بندی رکوردها و
+                            اعمال توابع تجمیعی روی هر گروه استفاده می‌شود.
+                        </p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="sql">SQL</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="sql">
+                                    <pre><span class="sql-comment">-- Sales table</span>
+<span class="sql-keyword">CREATE TABLE</span> sales (
+    id <span class="sql-keyword">INT PRIMARY KEY</span>,
+    product <span class="sql-keyword">VARCHAR</span>(100),
+    category <span class="sql-keyword">VARCHAR</span>(50),
+    amount <span class="sql-keyword">DECIMAL</span>(10,2),
+    quantity <span class="sql-keyword">INT</span>
+);
+
+<span class="sql-keyword">INSERT INTO</span> sales <span class="sql-keyword">VALUES</span>
+    (<span class="sql-number">1</span>, <span class="sql-string">'Laptop'</span>, <span class="sql-string">'Electronics'</span>, <span class="sql-number">999.99</span>, <span class="sql-number">2</span>),
+    (<span class="sql-number">2</span>, <span class="sql-string">'Phone'</span>, <span class="sql-string">'Electronics'</span>, <span class="sql-number">599.99</span>, <span class="sql-number">5</span>),
+    (<span class="sql-number">3</span>, <span class="sql-string">'Headphones'</span>, <span class="sql-string">'Audio'</span>, <span class="sql-number">89.99</span>, <span class="sql-number">10</span>),
+    (<span class="sql-number">4</span>, <span class="sql-string">'Keyboard'</span>, <span class="sql-string">'Accessories'</span>, <span class="sql-number">49.99</span>, <span class="sql-number">8</span>),
+    (<span class="sql-number">5</span>, <span class="sql-string">'Monitor'</span>, <span class="sql-string">'Electronics'</span>, <span class="sql-number">299.99</span>, <span class="sql-number">3</span>);
+
+<span class="sql-comment">-- COUNT - total number of sales</span>
+<span class="sql-keyword">SELECT</span> <span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> total_sales <span class="sql-keyword">FROM</span> sales;
+
+<span class="sql-comment">-- SUM - total revenue</span>
+<span class="sql-keyword">SELECT</span> <span class="sql-function">SUM</span>(amount) <span class="sql-keyword">AS</span> total_revenue <span class="sql-keyword">FROM</span> sales;
+
+<span class="sql-comment">-- AVG - average sale amount</span>
+<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(amount) <span class="sql-keyword">AS</span> avg_sale <span class="sql-keyword">FROM</span> sales;
+
+<span class="sql-comment">-- GROUP BY category</span>
+<span class="sql-keyword">SELECT</span> category,
+       <span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> product_count,
+       <span class="sql-function">SUM</span>(amount) <span class="sql-keyword">AS</span> total_revenue,
+       <span class="sql-function">AVG</span>(amount) <span class="sql-keyword">AS</span> avg_price
+<span class="sql-keyword">FROM</span> sales
+<span class="sql-keyword">GROUP BY</span> category
+<span class="sql-keyword">HAVING</span> <span class="sql-function">SUM</span>(amount) > <span class="sql-number">100</span>
+<span class="sql-keyword">ORDER BY</span> total_revenue <span class="sql-keyword">DESC</span>;</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }];
+
+        // ================================================================
+        // 🔧 Core Functions
+        // ================================================================
+
+        var currentLessonId = 'sql-intro';
+
+        function renderSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var sections = {};
+
+            for (var i = 0; i < lessons.length; i++) {
+                var lesson = lessons[i];
+                if (!sections[lesson.section]) {
+                    sections[lesson.section] = [];
+                }
+                sections[lesson.section].push(lesson);
+            }
+
+            var html = '';
+            var sectionNames = Object.keys(sections);
+            for (var s = 0; s < sectionNames.length; s++) {
+                var sectionName = sectionNames[s];
+                var items = sections[sectionName];
+                html += '<div class="sidebar-section">';
+                html += '<div class="section-title">' + sectionName + '</div>';
+                html += '<ul>';
+                items.sort(function(a, b) { return a.order - b.order; });
+                for (var j = 0; j < items.length; j++) {
+                    var item = items[j];
+                    var badge = item.badge ? '<span class="badge ' + item.badge + '">' + item.badge + '</span>' : '';
+                    var activeClass = (item.id === currentLessonId) ? 'active-link' : '';
+                    html += '<li><a href="#" data-id="' + item.id + '" class="' + activeClass + '">' + item.title + ' ' + badge + '</a></li>';
+                }
+                html += '</ul></div>';
+            }
+
+            sidebar.innerHTML = html;
+
+            sidebar.querySelectorAll('a[data-id]').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var id = this.dataset.id;
+                    loadLesson(id);
+                    sidebar.querySelectorAll('a[data-id]').forEach(function(l) {
+                        l.classList.remove('active-link');
+                    });
+                    this.classList.add('active-link');
+                });
+            });
+        }
+
+        function loadLesson(id) {
+            var lesson = null;
+            for (var i = 0; i < lessons.length; i++) {
+                if (lessons[i].id === id) {
+                    lesson = lessons[i];
+                    break;
+                }
+            }
+            if (!lesson) return;
+
+            currentLessonId = id;
+            document.getElementById('mainContent').innerHTML = lesson.content;
+
+            initTabs();
+            renderSidebar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function initTabs() {
+            document.querySelectorAll('.code-container').forEach(function(container) {
+                var tabs = container.querySelectorAll('.tab');
+                var panels = container.querySelectorAll('.code-panel');
+
+                tabs.forEach(function(tab) {
+                    tab.addEventListener('click', function() {
+                        var tabName = this.dataset.tab;
+                        tabs.forEach(function(t) {
+                            t.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        panels.forEach(function(p) {
+                            p.classList.remove('active');
+                        });
+                        var target = container.querySelector('.code-panel[data-panel="' + tabName + '"]');
+                        if (target) target.classList.add('active');
+                    });
+                });
+            });
+        }
+
+        // ================================================================
+        // 📋 Copy Code
+        // ================================================================
+
+        function copyCode(btn) {
+            var container = btn.closest('.code-body');
+            var activePanel = container.querySelector('.code-panel.active');
+            var pre = activePanel ? activePanel.querySelector('pre') : container.querySelector('pre');
+            if (!pre) return;
+
+            var text = pre.textContent;
+            navigator.clipboard.writeText(text).then(function() {
+                btn.textContent = '✅ Copied';
+                btn.classList.add('copied');
+                setTimeout(function() {
+                    btn.textContent = '📋 Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(function() {
+                var range = document.createRange();
+                range.selectNode(pre);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                document.execCommand('copy');
+                btn.textContent = '✅ Copied';
+                setTimeout(function() { btn.textContent = '📋 Copy'; }, 2000);
+            });
+        }
+
+        // ================================================================
+        // 🚀 Initial Load
+        // ================================================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = `
+                <div class="sql-hero">
+                    <div class="hero-icon">🗄️</div>
+                    <h2>🗄️ آموزش جامع <span>SQL</span></h2>
+                    <p>یادگیری SQL از مقدماتی تا پیشرفته با کوئری‌های عملی</p>
+                    <div class="hero-meta">
+                        <span>📚 ۴ فصل</span>
+                        <span>⏱️ ۲۵ ساعت</span>
+                        <span>⭐ ۴.۹ از ۵</span>
+                        <span>👨‍🎓 ۱,۳۰۰ دانشجو</span>
+                    </div>
+                </div>
+                <div style="text-align:center; padding:20px; color:#6b7a8a;">
+                    <p style="font-size:1.1rem;">📚 یک درس را از سایدبار سمت راست انتخاب کنید</p>
+                    <p style="font-size:0.85rem; margin-top:5px;">دروس: مقدمات (۲ درس) | پیشرفته (۲ درس)</p>
+                </div>
+            `;
+
+            renderSidebar();
+            setTimeout(function() {
+                loadLesson('sql-intro');
+            }, 100);
+        });
+
+        console.log('🗄️ SQL learning system ready!');
+    </script>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../auth/header.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/user-panel.js"></script>
+    <script src="../assets/js/settings.js"></script>
+    <script src="../assets/js/seo.js"></script>
+</body>
+</html>

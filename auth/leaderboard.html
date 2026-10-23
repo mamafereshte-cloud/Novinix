@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>رتبه‌بندی | نوینیکس</title>
+    <meta name="description" content="جدول رتبه‌بندی کاربران نوینیکس بر اساس امتیازات کسب شده" />
+    <link rel="canonical" href="https://novinix.ir/auth/leaderboard.html" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <style>
+        .leaderboard-wrapper {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 35px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        .lb-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .lb-header h2 {
+            color: #00ffcc;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .lb-header .lb-count {
+            font-size: 0.85rem;
+            color: rgba(160, 180, 200, 0.5);
+            font-weight: 400;
+        }
+        .lb-btn-refresh {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.1);
+        }
+        .lb-btn-refresh:hover { background: rgba(251, 191, 36, 0.2); transform: translateY(-2px); }
+        .leaderboard-table { width: 100%; border-collapse: collapse; }
+        .leaderboard-table th { text-align: right; padding: 12px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); color: rgba(160, 180, 200, 0.6); font-size: 0.8rem; font-weight: 600; }
+        .leaderboard-table td { padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+        .leaderboard-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
+        .leaderboard-table .rank { font-weight: 700; text-align: center; width: 50px; }
+        .leaderboard-table .rank.gold { color: #fbbf24; }
+        .leaderboard-table .rank.silver { color: #94a3b8; }
+        .leaderboard-table .rank.bronze { color: #d97706; }
+        .leaderboard-table .user-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 4px 8px;
+            border-radius: 8px;
+        }
+        .leaderboard-table .user-name:hover { background: rgba(0, 255, 204, 0.08); color: #00ffcc; }
+        .leaderboard-table .user-name .avatar-small {
+            font-size: 1.4rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.05);
+        }
+        .leaderboard-table .user-name .avatar-small img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .leaderboard-table .user-name .you-badge {
+            background: rgba(0, 255, 204, 0.12);
+            color: #00ffcc;
+            padding: 1px 10px;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            border: 1px solid rgba(0, 255, 204, 0.15);
+        }
+        .leaderboard-table .score { font-weight: 700; color: #00ffcc; text-align: center; }
+        .no-users { text-align: center; padding: 40px 20px; color: rgba(160, 180, 200, 0.6); }
+        .no-users .big-icon { font-size: 3rem; display: block; margin-bottom: 10px; }
+        .loading-spinner { text-align: center; padding: 40px 20px; }
+        .loading-spinner .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #00ffcc;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .lb-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .lb-actions .lb-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        .lb-actions .lb-btn:hover { transform: translateY(-2px); }
+        .lb-btn-home { background: rgba(255, 255, 255, 0.06); color: #a0b4c8; border: 1px solid rgba(255, 255, 255, 0.08); }
+        .lb-btn-home:hover { background: rgba(255, 255, 255, 0.1); color: #00ffcc; }
+        .lb-btn-profile { background: linear-gradient(135deg, #00ffcc, #00b4db); color: #0f0c29; }
+        .lb-btn-profile:hover { box-shadow: 0 4px 16px rgba(0, 255, 204, 0.3); }
+        .lb-btn-games { background: linear-gradient(135deg, #6c2eb7, #8e44ad); color: white; }
+        .lb-btn-games:hover { box-shadow: 0 4px 16px rgba(108, 46, 183, 0.3); }
+
+        /* Profile Popup */
+        .profile-popup {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        .profile-popup.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .profile-popup .popup-content {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 35px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        .profile-popup .close-popup {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            background: rgba(239, 68, 68, 0.15);
+            border: none;
+            color: #f87171;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .profile-popup .close-popup:hover { background: rgba(239, 68, 68, 0.25); transform: rotate(90deg); }
+        .profile-popup .popup-avatar { text-align: center; font-size: 4.5rem; margin-bottom: 10px; }
+        .profile-popup .popup-avatar img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(0, 255, 204, 0.3); }
+        .profile-popup .popup-username { text-align: center; font-size: 1.8rem; font-weight: 700; color: #00ffcc; margin-bottom: 4px; }
+        .profile-popup .popup-bio { text-align: center; color: #a0b4c8; font-size: 0.95rem; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.06); margin-bottom: 15px; min-height: 30px; }
+        .profile-popup .popup-bio .no-bio { color: rgba(160, 180, 200, 0.4); font-style: italic; font-size: 0.85rem; }
+        .profile-popup .popup-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .profile-popup .popup-stat { text-align: center; background: rgba(255, 255, 255, 0.03); padding: 12px 8px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.04); }
+        .profile-popup .popup-stat .number { display: block; font-size: 1.4rem; font-weight: 700; color: #00ffcc; }
+        .profile-popup .popup-stat .label { font-size: 0.7rem; color: rgba(160, 180, 200, 0.5); }
+        .profile-popup .popup-rank { text-align: center; margin-top: 10px; padding: 8px; background: rgba(251, 191, 36, 0.08); border-radius: 12px; border: 1px solid rgba(251, 191, 36, 0.1); color: #fbbf24; font-weight: 600; }
+        .profile-popup .popup-scores { border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 15px; }
+        .profile-popup .popup-scores h4 { color: #e8f5f0; font-size: 0.95rem; margin-bottom: 10px; }
+        .profile-popup .popup-score-item { display: flex; justify-content: space-between; padding: 6px 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.03); font-size: 0.85rem; }
+        .profile-popup .popup-score-item:last-child { border-bottom: none; }
+        .profile-popup .popup-score-item .gname { color: #e8f5f0; }
+        .profile-popup .popup-score-item .gscore { color: #00ffcc; font-weight: 600; }
+        .profile-popup .loading-small { text-align: center; padding: 20px; color: rgba(160, 180, 200, 0.5); }
+        .profile-popup .loading-small .spinner-small { width: 30px; height: 30px; border: 3px solid rgba(255, 255, 255, 0.1); border-top-color: #00ffcc; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
+
+        @media (max-width: 768px) {
+            .leaderboard-wrapper { padding: 20px 15px; }
+            .lb-header h2 { font-size: 1.2rem; }
+            .leaderboard-table th, .leaderboard-table td { padding: 8px 6px; font-size: 0.8rem; }
+            .leaderboard-table .rank { width: 30px; }
+            .profile-popup .popup-content { padding: 25px 20px; margin: 10px; }
+            .profile-popup .popup-stats { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+            .profile-popup .popup-stat .number { font-size: 1.1rem; }
+            .lb-actions { flex-direction: column; }
+            .lb-actions .lb-btn { justify-content: center; }
+        }
+        @media (max-width: 480px) {
+            .leaderboard-table th, .leaderboard-table td { padding: 6px 4px; font-size: 0.7rem; }
+            .leaderboard-table .user-name .avatar-small { font-size: 1rem; width: 24px; height: 24px; }
+            .leaderboard-table .user-name .you-badge { font-size: 0.5rem; padding: 1px 6px; }
+            .profile-popup .popup-avatar { font-size: 3rem; }
+            .profile-popup .popup-username { font-size: 1.3rem; }
+            .profile-popup .popup-stats { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader"></header>
+
+    <main>
+        <div class="leaderboard-wrapper">
+            <div class="lb-header">
+                <h2>🏆 جدول رتبه‌بندی <span class="lb-count" id="userCount"></span></h2>
+                <button class="lb-btn-refresh" id="refreshBtn">🔄 به‌روزرسانی</button>
+            </div>
+            <div id="leaderboardContent">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>⏳ در حال بارگذاری...</p>
+                </div>
+            </div>
+            <div class="lb-actions">
+                <a href="../main.html" class="lb-btn lb-btn-home">🏠 خانه</a>
+                <a href="profile.html" class="lb-btn lb-btn-profile">👤 پروفایل</a>
+                <a href="../pages/games.html" class="lb-btn lb-btn-games">🎮 بازی‌ها</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Profile Popup -->
+    <div class="profile-popup" id="profilePopup">
+        <div class="popup-content">
+            <button class="close-popup" id="closePopup">✕</button>
+            <div id="popupContent">
+                <div class="loading-small">
+                    <div class="spinner-small"></div>
+                    <p>⏳ در حال بارگذاری اطلاعات...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="mainFooter"></footer>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            const content = document.getElementById('leaderboardContent');
+            const userCount = document.getElementById('userCount');
+            const popup = document.getElementById('profilePopup');
+            const popupContent = document.getElementById('popupContent');
+            const closePopup = document.getElementById('closePopup');
+
+            const gameNames = {
+                'snake': '🐍 مار',
+                'tetris': '🧱 تتریس',
+                'flappy-bird': '🐦 فلپی برد',
+                'tic-tac-toe': '❌ دوز',
+                'memory': '🧠 حافظه',
+                'whack-mole': '🔨 موش‌کوب',
+                'pong': '🏓 پینگ پنگ',
+                '2048': '🔢 ۲۰۴۸',
+                'fruit-ninja': '🍉 برش میوه',
+                'catch-eggs': '🥚 تخم‌مرغ',
+                'puzzles': '🧩 معماها'
+            };
+
+            function getGameName(id) { return gameNames[id] || id; }
+
+            async function showUserProfile(username) {
+                popup.classList.add('active');
+                popupContent.innerHTML = `
+                    <div class="loading-small">
+                        <div class="spinner-small"></div>
+                        <p>⏳ در حال بارگذاری اطلاعات ${username}...</p>
+                    </div>
+                `;
+
+                try {
+                    const userResult = await fetch('/Novinix/api/auth.php?action=current&username=' + encodeURIComponent(username));
+                    const userData = await userResult.json();
+
+                    if (!userData.success || !userData.data) {
+                        popupContent.innerHTML = `<div style="text-align:center;padding:30px;color:#f87171;">❌ کاربر یافت نشد</div>`;
+                        return;
+                    }
+
+                    const user = userData.data;
+                    const scoresResult = await NovinixAuth.getUserScores(username);
+                    const bestScores = scoresResult.success ? scoresResult.data.best_scores : [];
+                    const rankData = await NovinixAuth.getUserRank(username);
+                    const rank = rankData?.user_rank || '—';
+
+                    function getRankBadge(r) {
+                        if (r === 1) return '🥇';
+                        if (r === 2) return '🥈';
+                        if (r === 3) return '🥉';
+                        return `#${r}`;
+                    }
+
+                    const avatarHtml = user.profile_image
+                        ? `<img src="${user.profile_image}" alt="${user.username}" />`
+                        : user.avatar || '👤';
+
+                    const bioHtml = user.bio ? user.bio : `<span class="no-bio">هیچ بیوگرافی ثبت نشده است</span>`;
+
+                    let scoresHtml = '';
+                    if (bestScores && bestScores.length > 0) {
+                        bestScores.forEach(item => {
+                            scoresHtml += `
+                                <div class="popup-score-item">
+                                    <span class="gname">${getGameName(item.game_id)}</span>
+                                    <span class="gscore">⭐ ${item.best_score}</span>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        scoresHtml = `<div style="text-align:center;color:rgba(160,180,200,0.4);padding:10px;font-size:0.85rem;">🎮 هنوز امتیازی ثبت نشده است</div>`;
+                    }
+
+                    const currentUser = NovinixAuth.getCurrentUserLocal();
+                    const isYou = currentUser && currentUser.username === username;
+
+                    popupContent.innerHTML = `
+                        <div class="popup-avatar">${avatarHtml}</div>
+                        <div class="popup-username">${user.username}${isYou ? ' <span style="font-size:0.8rem;color:#00ffcc;background:rgba(0,255,204,0.12);padding:2px 12px;border-radius:12px;">شما</span>' : ''}</div>
+                        <div class="popup-bio">${bioHtml}</div>
+                        <div class="popup-stats">
+                            <div class="popup-stat"><span class="number">${(user.total_score || 0).toLocaleString('fa-IR')}</span><span class="label">⭐ امتیاز</span></div>
+                            <div class="popup-stat"><span class="number">${user.games_played || 0}</span><span class="label">🎮 بازی</span></div>
+                            <div class="popup-stat"><span class="number">${user.games_won || 0}</span><span class="label">🏆 برد</span></div>
+                        </div>
+                        <div class="popup-rank">🏅 رتبه ${getRankBadge(rank)} در بین همه کاربران</div>
+                        <div class="popup-scores"><h4>🎮 امتیازات بازی‌ها</h4>${scoresHtml}</div>
+                    `;
+
+                } catch (error) {
+                    popupContent.innerHTML = `<div style="text-align:center;padding:30px;color:#f87171;">❌ خطا در بارگذاری اطلاعات</div>`;
+                }
+            }
+
+            function closeProfilePopup() { popup.classList.remove('active'); }
+            closePopup.addEventListener('click', closeProfilePopup);
+            popup.addEventListener('click', function(e) { if (e.target === this) closeProfilePopup(); });
+            document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeProfilePopup(); });
+
+            async function renderLeaderboard() {
+                content.innerHTML = `
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>⏳ در حال بارگذاری...</p>
+                    </div>
+                `;
+
+                const leaderboard = await NovinixAuth.getLeaderboard(100);
+                const currentUser = NovinixAuth.getCurrentUserLocal();
+
+                userCount.textContent = `(${leaderboard.length} کاربر)`;
+
+                if (leaderboard.length === 0) {
+                    content.innerHTML = `
+                        <div class="no-users">
+                            <span class="big-icon">👤</span>
+                            <p>هنوز کاربری ثبت‌نام نکرده است.</p>
+                            <p style="font-size:0.85rem; color:rgba(160,180,200,0.4);">اولین کاربر باشید! 🎉</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = `
+                    <table class="leaderboard-table">
+                        <thead><tr><th>#</th><th>کاربر</th><th>⭐ امتیاز</th><th>🎮 بازی‌ها</th></tr></thead>
+                        <tbody>
+                `;
+
+                leaderboard.forEach((item, index) => {
+                    const rankClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : '';
+                    const isYou = currentUser && item.username === currentUser.username;
+                    const avatarHtml = item.profile_image
+                        ? `<img src="${item.profile_image}" alt="${item.username}" />`
+                        : (item.avatar || '👤');
+
+                    html += `
+                        <tr>
+                            <td class="rank ${rankClass}">${index + 1}</td>
+                            <td>
+                                <div class="user-name" onclick="showUserProfile('${item.username}')">
+                                    <span class="avatar-small">${avatarHtml}</span>
+                                    ${item.username}
+                                    ${isYou ? '<span class="you-badge">شما</span>' : ''}
+                                </div>
+                            </td>
+                            <td class="score">${(item.total_score || 0).toLocaleString('fa-IR')}</td>
+                            <td style="text-align:center;">${item.games_count || 0}</td>
+                        </tr>
+                    `;
+                });
+
+                html += `</tbody></table>`;
+                content.innerHTML = html;
+            }
+
+            document.getElementById('refreshBtn').addEventListener('click', function() {
+                this.textContent = '⏳ در حال بروزرسانی...';
+                renderLeaderboard().then(() => { this.textContent = '🔄 به‌روزرسانی'; });
+            });
+
+            renderLeaderboard();
+            window.showUserProfile = showUserProfile;
+        })();
+    </script>
+</body>
+</html>

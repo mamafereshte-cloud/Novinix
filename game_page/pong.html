@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🏓 پینگ پنگ</title>
+    <link rel="stylesheet" href="../assets/css/game.css">
+    <style>
+        .pong-wrapper { max-width: 750px; }
+        .pong-header h1 { background: linear-gradient(135deg, #58a6ff, #ff6b6b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        #gameCanvas { display: block; width: 100%; height: auto; aspect-ratio: 800/500; background: #0d1117; border-radius: var(--radius-sm); }
+        .pong-info { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; margin-bottom: 12px; }
+        .pong-info .info-box { background: var(--card-bg); padding: 6px 12px; border-radius: var(--radius-sm); text-align: center; border: 1px solid var(--card-border); }
+        .pong-info .info-box .value { font-size: 1.8rem; font-weight: 700; }
+        .pong-info .player-left .value { color: #58a6ff; }
+        .pong-info .player-right .value { color: #ff6b6b; }
+        .pong-info .info-box .label { font-size: 0.6rem; color: var(--text-secondary); text-transform: uppercase; display: block; }
+        .touch-ctrl { display: none; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+        .touch-ctrl .btn { min-width: 60px; justify-content: center; }
+        @media (pointer: coarse) { .touch-ctrl { display: flex; } }
+        @media (max-width: 550px) { .pong-info .info-box .value { font-size: 1.3rem; } }
+        .game-over-overlay { position: absolute; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); display:none; flex-direction:column; align-items:center; justify-content:center; backdrop-filter:blur(6px); z-index:20; border-radius:var(--radius-sm); }
+        .game-over-overlay.active { display:flex; }
+        .game-over-overlay h2 { font-size:2.5rem; margin-bottom:8px; }
+        .game-over-overlay h2.win-left { color:#58a6ff; }
+        .game-over-overlay h2.win-right { color:#ff6b6b; }
+        .game-over-overlay .final-score { display:flex; gap:30px; font-size:3rem; font-weight:700; margin-bottom:20px; }
+        .game-over-overlay .final-score .left-score { color:#58a6ff; }
+        .game-over-overlay .final-score .right-score { color:#ff6b6b; }
+        .game-over-overlay .final-score .vs { color:var(--text-secondary); font-size:1.5rem; }
+        @media (max-width:500px) { .game-over-overlay h2 { font-size:1.8rem; } .game-over-overlay .final-score { font-size:2.2rem; gap:15px; } }
+    </style>
+</head>
+<body>
+<div class="game-wrapper pong-wrapper">
+    <div class="game-header">
+        <h1>🏓 پینگ پنگ</h1>
+        <div class="header-buttons"><a href="../pages/games.html" class="exit-btn">✕ خروج</a></div>
+    </div>
+    <div class="status-message" id="statusMessage">🎮 برای شروع کلیک کنید یا Space</div>
+    <div class="pong-info">
+        <div class="info-box player-left"><span class="label">🟦 بازیکن چپ</span><span class="value" id="scoreLeft">0</span></div>
+        <div class="info-box"><span class="label">⚡ سرعت</span><span class="value" id="speedDisplay">1</span></div>
+        <div class="info-box player-right"><span class="label">🟥 بازیکن راست</span><span class="value" id="scoreRight">0</span></div>
+    </div>
+    <div class="board-wrapper" style="position:relative;">
+        <canvas id="gameCanvas" width="800" height="500"></canvas>
+        <div class="game-over-overlay" id="gameOverOverlay">
+            <h2 id="winnerText">🏆 برنده!</h2>
+            <div class="final-score"><span class="left-score" id="finalLeft">0</span><span class="vs">⚡</span><span class="right-score" id="finalRight">0</span></div>
+            <button class="btn btn-success" onclick="resetGame()">🔄 بازی جدید</button>
+        </div>
+    </div>
+    <div class="touch-ctrl">
+        <button class="btn btn-primary" onclick="movePaddle('up')">⬆</button>
+        <button class="btn btn-primary" onclick="movePaddle('down')">⬇</button>
+        <button class="btn btn-warning" onclick="togglePause()">⏸</button>
+    </div>
+    <div class="game-buttons">
+        <button class="btn btn-warning" onclick="togglePause()" id="startBtn">▶ شروع</button>
+        <button class="btn btn-success" onclick="resetGame()">🔄 بازی جدید</button>
+        <button class="btn btn-purple" onclick="toggleMode()" id="modeBtn">🤖 کامپیوتر</button>
+    </div>
+    <div class="key-hints"><span>⬆⬇ حرکت</span><span>␣ توقف</span><span>🖱 ماوس</span></div>
+</div>
+<script>
+// ===== پینگ پنگ =====
+const canvas=document.getElementById('gameCanvas'), ctx=canvas.getContext('2d');
+const W=800,H=500, PW=12, PH=80, BS=10;
+let lp={x:20,y:H/2-PH/2,w:PW,h:PH,speed:5,score:0}, rp={x:W-20-PW,y:H/2-PH/2,w:PW,h:PH,speed:5,score:0};
+let ball={x:W/2,y:H/2,size:BS,speedX:4,speedY:3,baseSpeed:4};
+let paused=true, gameOver=false, isAi=true, keys={}, speedLevel=1, gameEnded=false, animId=null;
+
+function resetGame(){ gameEnded=false; lp.score=0; rp.score=0; speedLevel=1; resetBall(); lp.y=H/2-PH/2; rp.y=H/2-PH/2; gameOver=false; paused=true; document.getElementById('gameOverOverlay').classList.remove('active'); updateDisplay(); setStatus('🎮 برای شروع کلیک کنید یا Space',''); document.getElementById('startBtn').textContent='▶ شروع'; draw(); }
+function resetBall(){ ball.x=W/2; ball.y=H/2; ball.speedX=(Math.random()>0.5?1:-1)*ball.baseSpeed*speedLevel; ball.speedY=(Math.random()-0.5)*6; }
+function togglePause(){ if(gameOver){ resetGame(); return; } paused=!paused; document.getElementById('startBtn').textContent=paused?'▶ شروع':'⏸ توقف'; setStatus(paused?'⏸ مکث':'🎮 در حال بازی...',paused?'':'playing'); }
+function toggleMode(){ isAi=!isAi; document.getElementById('modeBtn').textContent=isAi?'🤖 کامپیوتر':'👥 دو نفره'; resetGame(); }
+function setStatus(msg,type){ const el=document.getElementById('statusMessage'); el.textContent=msg; el.className='status-message'+(type?' '+type:''); }
+function updateDisplay(){ document.getElementById('scoreLeft').textContent=lp.score; document.getElementById('scoreRight').textContent=rp.score; document.getElementById('speedDisplay').textContent=speedLevel; }
+function movePaddle(dir){ if(paused||gameOver)return; if(dir==='up')lp.y-=lp.speed*3; else lp.y+=lp.speed*3; lp.y=Math.max(0,Math.min(H-lp.h,lp.y)); }
+function endGame(winner){ gameOver=true; gameEnded=true; paused=true; document.getElementById('finalLeft').textContent=lp.score; document.getElementById('finalRight').textContent=rp.score; const el=document.getElementById('winnerText'); if(winner==='left'){ el.textContent='🏆 بازیکن چپ برنده شد!'; el.className='win-left'; }else{ el.textContent='🏆 بازیکن راست برنده شد!'; el.className='win-right'; } document.getElementById('gameOverOverlay').classList.add('active'); document.getElementById('startBtn').textContent='🔄 دوباره'; setStatus('🏆 بازی تمام شد!','error'); saveScore(winner); }
+async function saveScore(winner){ try{ if(typeof NovinixAuth!=='undefined'&&NovinixAuth.isLoggedIn()){ const score=winner==='left'?lp.score:rp.score; await NovinixAuth.saveGameScore('pong',score,{winner,is_ai:isAi,left_score:lp.score,right_score:rp.score}); } }catch(e){} }
+function update(){ if(paused||gameOver)return; ball.x+=ball.speedX; ball.y+=ball.speedY; if(ball.y-BS/2<0||ball.y+BS/2>H)ball.speedY=-ball.speedY; if(ball.speedX<0&&ball.x-BS/2<lp.x+lp.w&&ball.x+BS/2>lp.x&&ball.y>lp.y&&ball.y<lp.y+lp.h){ const rel=(ball.y-(lp.y+lp.h/2))/(lp.h/2); const angle=rel*0.8; const sp=Math.sqrt(ball.speedX*ball.speedX+ball.speedY*ball.speedY); ball.speedX=sp*Math.cos(angle); ball.speedY=sp*Math.sin(angle); ball.speedX=Math.abs(ball.speedX); speedLevel=Math.min(5,speedLevel+0.05); const ns=ball.baseSpeed*speedLevel; const ratio=ns/Math.sqrt(ball.speedX*ball.speedX+ball.speedY*ball.speedY); ball.speedX*=ratio; ball.speedY*=ratio; updateDisplay(); } if(ball.speedX>0&&ball.x+BS/2>rp.x&&ball.x-BS/2<rp.x+rp.w&&ball.y>rp.y&&ball.y<rp.y+rp.h){ const rel=(ball.y-(rp.y+rp.h/2))/(rp.h/2); const angle=rel*0.8; const sp=Math.sqrt(ball.speedX*ball.speedX+ball.speedY*ball.speedY); ball.speedX=sp*Math.cos(angle+Math.PI); ball.speedY=sp*Math.sin(angle); ball.speedX=-Math.abs(ball.speedX); speedLevel=Math.min(5,speedLevel+0.05); const ns=ball.baseSpeed*speedLevel; const ratio=ns/Math.sqrt(ball.speedX*ball.speedX+ball.speedY*ball.speedY); ball.speedX*=ratio; ball.speedY*=ratio; updateDisplay(); } if(ball.x-BS/2<0){ rp.score++; updateDisplay(); if(rp.score>=5){endGame('right');return;} resetBall(); } if(ball.x+BS/2>W){ lp.score++; updateDisplay(); if(lp.score>=5){endGame('left');return;} resetBall(); } if(keys['ArrowUp'])lp.y-=lp.speed; if(keys['ArrowDown'])lp.y+=lp.speed; if(isAi){ const target=ball.y-rp.h/2; const diff=target-rp.y; if(ball.speedX>0||Math.abs(ball.x-rp.x)<200){ if(Math.abs(diff)>10)rp.y+=Math.sign(diff)*Math.min(Math.abs(diff)*0.08,rp.speed*0.6); }else{ const cd=H/2-rp.h/2-rp.y; rp.y+=Math.sign(cd)*Math.min(Math.abs(cd)*0.02,rp.speed*0.2); } }else{ if(keys['w']||keys['W'])rp.y-=rp.speed; if(keys['s']||keys['S'])rp.y+=rp.speed; } lp.y=Math.max(0,Math.min(H-lp.h,lp.y)); rp.y=Math.max(0,Math.min(H-rp.h,rp.y)); }
+function draw(){ ctx.clearRect(0,0,W,H); const g=ctx.createRadialGradient(W/2,H/2,50,W/2,H/2,400); g.addColorStop(0,'#1a2a3a'); g.addColorStop(1,'#0d1117'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H); ctx.setLineDash([10,15]); ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(W/2,0); ctx.lineTo(W/2,H); ctx.stroke(); ctx.setLineDash([]); ctx.shadowColor='rgba(88,166,255,0.2)'; ctx.shadowBlur=15; const gl=ctx.createLinearGradient(lp.x,0,lp.x+lp.w,0); gl.addColorStop(0,'#58a6ff'); gl.addColorStop(1,'#1f6feb'); ctx.fillStyle=gl; ctx.beginPath(); ctx.roundRect(lp.x,lp.y,lp.w,lp.h,6); ctx.fill(); ctx.shadowColor='rgba(255,107,107,0.2)'; const gr=ctx.createLinearGradient(rp.x,0,rp.x+rp.w,0); gr.addColorStop(0,'#ff6b6b'); gr.addColorStop(1,'#ee5a24'); ctx.fillStyle=gr; ctx.beginPath(); ctx.roundRect(rp.x,rp.y,rp.w,rp.h,6); ctx.fill(); ctx.shadowBlur=0; ctx.shadowColor='rgba(255,255,255,0.2)'; ctx.shadowBlur=20; const bg=ctx.createRadialGradient(ball.x-3,ball.y-3,2,ball.x,ball.y,ball.size); bg.addColorStop(0,'#ffffff'); bg.addColorStop(0.7,'#e6edf3'); bg.addColorStop(1,'#8b949e'); ctx.fillStyle=bg; ctx.beginPath(); ctx.arc(ball.x,ball.y,ball.size,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0; if(paused&&!gameOver){ ctx.fillStyle='rgba(0,0,0,0.4)'; ctx.fillRect(0,0,W,H); ctx.fillStyle='rgba(255,255,255,0.7)'; ctx.font='bold 40px Arial'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('⏸ مکث',W/2,H/2); } }
+if(!CanvasRenderingContext2D.prototype.roundRect){ CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){ if(r>w/2)r=w/2; if(r>h/2)r=h/2; this.moveTo(x+r,y); this.lineTo(x+w-r,y); this.quadraticCurveTo(x+w,y,x+w,y+r); this.lineTo(x+w,y+h-r); this.quadraticCurveTo(x+w,y+h,x+w-r,y+h); this.lineTo(x+r,y+h); this.quadraticCurveTo(x,y+h,x,y+h-r); this.lineTo(x,y+r); this.quadraticCurveTo(x,y,x+r,y); return this; }; }
+document.addEventListener('keydown',e=>{ if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key))e.preventDefault(); keys[e.key]=true; if(e.key===' '||e.key==='Space'){e.preventDefault();togglePause();} });
+document.addEventListener('keyup',e=>{ keys[e.key]=false; });
+canvas.addEventListener('click',()=>{ if(gameOver){resetGame();return;} if(paused)togglePause(); });
+canvas.addEventListener('mousemove',e=>{ if(paused||gameOver)return; const rect=canvas.getBoundingClientRect(); const sy=canvas.height/rect.height; const my=(e.clientY-rect.top)*sy; lp.y=my-lp.h/2; lp.y=Math.max(0,Math.min(H-lp.h,lp.y)); });
+function gameLoop(){ update(); draw(); animId=requestAnimationFrame(gameLoop); }
+updateDisplay(); setStatus('🎮 برای شروع کلیک کنید یا Space',''); document.getElementById('startBtn').textContent='▶ شروع'; document.getElementById('modeBtn').textContent='🤖 کامپیوتر'; gameLoop();
+</script>
+<script src="../assets/js/seo.js"></script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>خودروها | نوینیکس</title>
+    <meta name="description" content="معرفی و اطلاعات کامل انواع خودروهای سواری، شاسی‌بلند، اسپورت، لوکس، الکتریک، کلاسیک و وانت" />
+    <link rel="canonical" href="https://novinix.ir/pages/general-info/cars.html" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <style>
+        .cars-hero {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(15, 52, 96, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .cars-hero::before { content: '🚗'; position: absolute; font-size: 10rem; opacity: 0.05; right: -30px; bottom: -30px; transform: rotate(10deg); }
+        .cars-hero h2 { font-size: 2rem; margin-bottom: 10px; position: relative; z-index: 1; }
+        .cars-hero h2 span { color: #f1c40f; }
+        .cars-hero p { opacity: 0.85; font-size: 1.05rem; position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+        .category-filter { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
+        .cat-tag { background: rgba(255, 255, 255, 0.05); padding: 8px 20px; border-radius: 30px; font-size: 0.85rem; color: #a0b4c8; cursor: pointer; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.06); font-weight: 500; user-select: none; }
+        .cat-tag:hover { border-color: #00ffcc; transform: translateY(-2px); color: #00ffcc; }
+        .cat-tag.active { background: linear-gradient(135deg, #00ffcc, #00b4db); color: #0f0c29; border-color: #00ffcc; }
+        .car-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 10px; }
+        .car-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 18px; padding: 20px; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+        .car-card:hover { transform: translateY(-5px); border-color: #00ffcc; box-shadow: 0 12px 40px rgba(0, 255, 204, 0.1); }
+        .car-card .car-image { width: 100%; height: 200px; border-radius: 12px; overflow: hidden; margin-bottom: 15px; background: rgba(255, 255, 255, 0.03); display: flex; align-items: center; justify-content: center; position: relative; }
+        .car-card .car-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .car-card:hover .car-image img { transform: scale(1.05); }
+        .car-card .car-image .emoji-placeholder { font-size: 4rem; opacity: 0.3; }
+        .car-card .car-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .car-card .car-name { font-size: 1.2rem; font-weight: 700; color: #e8f5f0; }
+        .car-card .car-name-en { font-size: 0.9rem; font-weight: 400; color: #a0b4c8; display: block; }
+        .car-card .category-badge { font-size: 0.6rem; padding: 3px 12px; border-radius: 20px; font-weight: 700; white-space: nowrap; margin-top: 2px; }
+        .category-badge.sedan { background: rgba(52, 152, 219, 0.2); color: #3498db; }
+        .category-badge.suv { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .category-badge.sports { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+        .category-badge.luxury { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+        .category-badge.electric { background: rgba(155, 89, 182, 0.2); color: #9b59b6; }
+        .category-badge.classic { background: rgba(243, 156, 18, 0.2); color: #f39c12; }
+        .category-badge.pickup { background: rgba(85, 239, 196, 0.2); color: #55efc4; }
+        .car-card .car-description { font-size: 0.85rem; color: #a0b4c8; line-height: 1.6; flex-grow: 1; }
+        .car-card .car-description p { margin-bottom: 6px; }
+        .car-card .car-description p:last-child { margin-bottom: 0; }
+        .car-card { opacity: 0; animation: fadeInUp 0.5s ease forwards; }
+        .car-card:nth-child(1) { animation-delay: 0.03s; }
+        .car-card:nth-child(2) { animation-delay: 0.06s; }
+        .car-card:nth-child(3) { animation-delay: 0.09s; }
+        .car-card:nth-child(4) { animation-delay: 0.12s; }
+        .car-card:nth-child(5) { animation-delay: 0.15s; }
+        .car-card:nth-child(6) { animation-delay: 0.18s; }
+        .car-card:nth-child(7) { animation-delay: 0.21s; }
+        .car-card:nth-child(8) { animation-delay: 0.24s; }
+        .car-card:nth-child(9) { animation-delay: 0.27s; }
+        .car-card:nth-child(10) { animation-delay: 0.30s; }
+        .car-card:nth-child(11) { animation-delay: 0.33s; }
+        .car-card:nth-child(12) { animation-delay: 0.36s; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .no-results { text-align: center; padding: 50px 20px; color: #a0b4c8; display: none; }
+        .no-results .big-icon { font-size: 4rem; display: block; margin-bottom: 15px; }
+        .no-results h3 { color: #e8f5f0; margin-bottom: 5px; }
+        @media (max-width: 768px) {
+            .cars-hero { padding: 25px 20px; }
+            .cars-hero h2 { font-size: 1.5rem; }
+            .car-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .car-card .car-image { height: 150px; }
+            .cat-tag { font-size: 0.75rem; padding: 6px 14px; }
+        }
+        @media (max-width: 480px) {
+            .car-grid { grid-template-columns: 1fr; }
+            .car-card .car-image { height: 180px; }
+            .car-card .car-name { font-size: 1rem; }
+            .cars-hero h2 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader"></header>
+
+    <main>
+        <div class="cars-hero">
+            <h2>🚗 خودروهای <span>جهان</span></h2>
+            <p>دنیای شگفت‌انگیز خودروها از سواری تا اسپورت و الکتریک</p>
+        </div>
+
+        <div class="category-filter">
+            <span class="cat-tag active" data-cat="all">همه</span>
+            <span class="cat-tag" data-cat="sedan">🚗 سواری</span>
+            <span class="cat-tag" data-cat="suv">🚙 شاسی‌بلند</span>
+            <span class="cat-tag" data-cat="sports">🏎️ اسپورت</span>
+            <span class="cat-tag" data-cat="luxury">👑 لوکس</span>
+            <span class="cat-tag" data-cat="electric">⚡ الکتریک</span>
+            <span class="cat-tag" data-cat="classic">🕰️ کلاسیک</span>
+            <span class="cat-tag" data-cat="pickup">🚛 وانت</span>
+        </div>
+
+        <div class="car-grid" id="carGrid"></div>
+
+        <div class="no-results" id="noResults">
+            <span class="big-icon">🔍</span>
+            <h3>نتیجه‌ای یافت نشد</h3>
+            <p>در دسته‌بندی انتخاب شده خودرویی وجود ندارد</p>
+        </div>
+    </main>
+
+    <footer id="mainFooter"></footer>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        const carsData = [
+            { id: 'camry', nameFa: 'تویوتا کمری', nameEn: 'Toyota Camry', category: 'sedan', image: 'camry.jpg', emoji: '🚗', description: ['تویوتا کمری یکی از پرفروش‌ترین و محبوب‌ترین سدان‌های جهان با قابلیت اطمینان بالا است.', 'کمری به عنوان یکی از بهترین سدان‌های خانواده در جهان شناخته می‌شود.'] },
+            { id: 'accord', nameFa: 'هوندا آکورد', nameEn: 'Honda Accord', category: 'sedan', image: 'accord.jpg', emoji: '🚗', description: ['هوندا آکورد سدانی محبوب با طراحی زیبا و فضای داخلی جادار است.', 'آکورد یکی از رقبای اصلی تویوتا کمری در بازار سدان‌ها است.'] },
+            { id: 'mercedes_e_class', nameFa: 'مرسدس بنز کلاس E', nameEn: 'Mercedes-Benz E-Class', category: 'sedan', image: 'mercedes_e_class.jpg', emoji: '🚗', description: ['کلاس E مرسدس بنز سدانی لوکس با تکنولوژی پیشرفته و راحتی بالا است.', 'کلاس E یکی از بهترین سدان‌های لوکس در جهان است.'] },
+            { id: 'bmw_5_series', nameFa: 'بی‌ام‌و سری ۵', nameEn: 'BMW 5 Series', category: 'sedan', image: 'bmw_5_series.jpg', emoji: '🚗', description: ['سری ۵ بی‌ام‌و سدانی اسپرت و لوکس با تعادل عالی بین عملکرد و راحتی است.', 'سری ۵ یکی از محبوب‌ترین سدان‌های بی‌ام‌و در جهان است.'] },
+            { id: 'rav4', nameFa: 'تویوتا RAV4', nameEn: 'Toyota RAV4', category: 'suv', image: 'rav4.jpg', emoji: '🚙', description: ['تویوتا RAV4 یکی از پرفروش‌ترین شاسی‌بلندهای جهان با قابلیت اطمینان بالا است.', 'RAV4 به عنوان یکی از بهترین SUVهای کامپکت در جهان شناخته می‌شود.'] },
+            { id: 'cr_v', nameFa: 'هوندا CR-V', nameEn: 'Honda CR-V', category: 'suv', image: 'cr_v.jpg', emoji: '🚙', description: ['هوندا CR-V شاسی‌بلندی محبوب با فضای داخلی جادار و موتورهای اقتصادی است.', 'CR-V یکی از رقبای اصلی تویوتا RAV4 در بازار SUVها است.'] },
+            { id: 'range_rover', nameFa: 'رنج روور', nameEn: 'Range Rover', category: 'suv', image: 'range_rover.jpg', emoji: '🚙', description: ['رنج روور شاسی‌بلندی لوکس با توانایی آفرود بالا و طراحی بسیار شیک است.', 'رنج روور به عنوان یکی از بهترین SUVهای لوکس جهان شناخته می‌شود.'] },
+            { id: 'toyota_land_cruiser', nameFa: 'تویوتا لندکروزر', nameEn: 'Toyota Land Cruiser', category: 'suv', image: 'toyota_land_cruiser.jpg', emoji: '🚙', description: ['لندکروزر تویوتا یکی از معروف‌ترین و مقاوم‌ترین شاسی‌بلندهای آفرود جهان است.', 'لندکروزر به عنوان "پادشاه آفرود" در جهان شناخته می‌شود.'] },
+            { id: 'porsche_911', nameFa: 'پورشه ۹۱۱', nameEn: 'Porsche 911', category: 'sports', image: 'porsche_911.jpg', emoji: '🏎️', description: ['پورشه ۹۱۱ یکی از معروف‌ترین و پرافتخارترین خودروهای اسپورت جهان است.', 'پورشه ۹۱۱ به عنوان یکی از بهترین خودروهای اسپورت تمام دوران شناخته می‌شود.'] },
+            { id: 'ferrari_f8', nameFa: 'فراری F8', nameEn: 'Ferrari F8', category: 'sports', image: 'ferrari_f8.jpg', emoji: '🏎️', description: ['فراری F8 یکی از سریع‌ترین و زیباترین خودروهای اسپورت ایتالیایی است.', 'فراری F8 به عنوان یکی از بهترین سوپراسپرت‌های جهان شناخته می‌شود.'] },
+            { id: 'lamborghini_huracan', nameFa: 'لامبورگینی اوراکان', nameEn: 'Lamborghini Huracán', category: 'sports', image: 'lamborghini_huracan.jpg', emoji: '🏎️', description: ['لامبورگینی اوراکان سوپراسپرتی با طراحی خشن و موتور V10 قدرتمند است.', 'اوراکان به عنوان یکی از جذاب‌ترین سوپراسپرت‌های جهان شناخته می‌شود.'] },
+            { id: 'tesla_model_s', nameFa: 'تسلا مدل S', nameEn: 'Tesla Model S', category: 'electric', image: 'tesla_model_s.jpg', emoji: '⚡', description: ['تسلا مدل S یکی از پیشگامان خودروهای الکتریکی با برد ۶۰۰ کیلومتر است.', 'تسلا مدل S به عنوان یکی از بهترین خودروهای الکتریکی جهان شناخته می‌شود.'] },
+            { id: 'tesla_model_3', nameFa: 'تسلا مدل ۳', nameEn: 'Tesla Model 3', category: 'electric', image: 'tesla_model_3.jpg', emoji: '⚡', description: ['تسلا مدل ۳ پرفروش‌ترین خودروی الکتریکی جهان با طراحی مدرن است.', 'تسلا مدل ۳ به عنوان یکی از تأثیرگذارترین خودروهای قرن ۲۱ شناخته می‌شود.'] },
+            { id: 'ford_mustang', nameFa: 'فورد ماستنگ', nameEn: 'Ford Mustang', category: 'classic', image: 'ford_mustang.jpg', emoji: '🕰️', description: ['فورد ماستنگ یکی از نمادین‌ترین خودروهای کلاسیک و عضلانی آمریکایی است.', 'ماستنگ به عنوان "خودروی عضلانی" آمریکایی در سراسر جهان شناخته می‌شود.'] },
+            { id: 'chevrolet_camaro', nameFa: 'شورلت کامارو', nameEn: 'Chevrolet Camaro', category: 'classic', image: 'chevrolet_camaro.jpg', emoji: '🕰️', description: ['شورلت کامارو خودرویی عضلانی با طراحی اسپرت و تاریخچه‌ای غنی در آمریکا است.', 'کامارو رقیب اصلی فورد ماستنگ در کلاس خودروهای عضلانی است.'] },
+            { id: 'ford_f150', nameFa: 'فورد F-150', nameEn: 'Ford F-150', category: 'pickup', image: 'ford_f150.jpg', emoji: '🚛', description: ['فورد F-150 پرفروش‌ترین وانت جهان با توانایی باربری بالا و دوام استثنایی است.', 'F-150 به عنوان محبوب‌ترین وانت در آمریکا و جهان شناخته می‌شود.'] },
+            { id: 'toyota_hilux', nameFa: 'تویوتا هایلوکس', nameEn: 'Toyota Hilux', category: 'pickup', image: 'toyota_hilux.jpg', emoji: '🚛', description: ['تویوتا هایلوکس یکی از مقاوم‌ترین وانت‌های جهان با قابلیت اطمینان افسانه‌ای است.', 'هایلوکس به عنوان "غیرقابل‌تخریب" در جهان شناخته می‌شود.'] }
+        ];
+
+        function renderCars(data, filterCategory = 'all') {
+            const grid = document.getElementById('carGrid');
+            const noResults = document.getElementById('noResults');
+            let html = '';
+            let count = 0;
+
+            data.forEach(item => {
+                if (filterCategory !== 'all' && item.category !== filterCategory) return;
+                count++;
+                const imagePath = `cars_ph/${item.image}`;
+                const catLabels = { sedan: '🚗 سواری', suv: '🚙 شاسی‌بلند', sports: '🏎️ اسپورت', luxury: '👑 لوکس', electric: '⚡ الکتریک', classic: '🕰️ کلاسیک', pickup: '🚛 وانت' };
+                const catClasses = { sedan: 'sedan', suv: 'suv', sports: 'sports', luxury: 'luxury', electric: 'electric', classic: 'classic', pickup: 'pickup' };
+
+                html += `
+                    <div class="car-card" data-category="${item.category}">
+                        <div class="car-image">
+                            <img src="${imagePath}" alt="${item.nameFa}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                            <span class="emoji-placeholder" style="display:none;">${item.emoji || '🚗'}</span>
+                        </div>
+                        <div class="car-header">
+                            <div>
+                                <div class="car-name">${item.nameFa}</div>
+                                <span class="car-name-en">${item.nameEn}</span>
+                            </div>
+                            <span class="category-badge ${catClasses[item.category]}">${catLabels[item.category]}</span>
+                        </div>
+                        <div class="car-description">${item.description.map(p => `<p>${p}</p>`).join('')}</div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+            if (count === 0) noResults.style.display = 'block';
+            else noResults.style.display = 'none';
+
+            const cards = grid.querySelectorAll('.car-card');
+            cards.forEach((card, index) => {
+                card.style.animation = 'none';
+                card.offsetHeight;
+                card.style.animation = `fadeInUp 0.5s ease forwards`;
+                card.style.animationDelay = `${(index % 12) * 0.03 + 0.03}s`;
+            });
+        }
+
+        document.querySelectorAll('.cat-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                document.querySelectorAll('.cat-tag').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                renderCars(carsData, this.dataset.cat);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCars(carsData, 'all');
+        });
+    </script>
+</body>
+</html>

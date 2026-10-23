@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>سوالات متداول | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+
+    <!-- ===== CSS فایل‌های جداگانه ===== -->
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+
+    <style>
+        /* ===== استایل‌های اختصاصی سوالات متداول ===== */
+        .page-hero {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 35px;
+        }
+
+        .page-hero h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .page-hero p {
+            color: #a0b4c8;
+            font-size: 1rem;
+        }
+
+        .page-hero .icon-big {
+            font-size: 3.5rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .faq-search {
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        .faq-search input {
+            width: 100%;
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            color: #e8f5f0;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .faq-search input:focus {
+            border-color: #00ffcc;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.08);
+        }
+
+        .faq-search input::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+        }
+
+        .faq-categories {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .faq-category {
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 30px;
+            color: #a0b4c8;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-category:hover {
+            border-color: #00ffcc;
+            color: #00ffcc;
+        }
+
+        .faq-category.active {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            border-color: #00ffcc;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(0, 255, 204, 0.15);
+        }
+
+        .faq-question {
+            padding: 18px 22px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+            user-select: none;
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .faq-question h4 {
+            color: #e8f5f0;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .faq-question .icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            color: #a0b4c8;
+        }
+
+        .faq-item.open .faq-question .icon {
+            transform: rotate(180deg);
+            color: #00ffcc;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+            padding: 0 22px;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+            padding: 0 22px 18px;
+        }
+
+        .faq-answer p {
+            color: #a0b4c8;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .faq-answer ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 8px;
+        }
+
+        .faq-answer ul li {
+            color: #a0b4c8;
+            padding: 4px 0 4px 25px;
+            position: relative;
+            font-size: 0.9rem;
+        }
+
+        .faq-answer ul li::before {
+            content: '•';
+            position: absolute;
+            right: 0;
+            color: #00ffcc;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: #a0b4c8;
+            display: none;
+        }
+
+        .no-results .big-icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .page-hero h2 { font-size: 1.6rem; }
+            .faq-question { padding: 14px 16px; }
+            .faq-question h4 { font-size: 0.9rem; }
+            .faq-answer p { font-size: 0.85rem; }
+        }
+
+        @media (max-width: 480px) {
+            .page-hero h2 { font-size: 1.3rem; }
+            .page-hero .icon-big { font-size: 2.5rem; }
+            .faq-category { font-size: 0.75rem; padding: 6px 14px; }
+            .faq-question { padding: 12px 14px; }
+            .faq-question h4 { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER توسط header.js ساخته می‌شود ===== -->
+
+    <main>
+        <div class="page-hero">
+            <span class="icon-big">❓</span>
+            <h2>سوالات متداول</h2>
+            <p>پاسخ به سوالات رایج شما درباره نوینیکس</p>
+        </div>
+
+        <div class="faq-search">
+            <input type="text" id="faqSearch" placeholder="🔍 جستجوی سوال..." onkeyup="searchFAQ()">
+        </div>
+
+        <div class="faq-categories">
+            <span class="faq-category active" data-category="all" onclick="filterFAQ('all', this)">همه</span>
+            <span class="faq-category" data-category="general" onclick="filterFAQ('general', this)">عمومی</span>
+            <span class="faq-category" data-category="account" onclick="filterFAQ('account', this)">حساب کاربری</span>
+            <span class="faq-category" data-category="tools" onclick="filterFAQ('tools', this)">ابزارها</span>
+            <span class="faq-category" data-category="technical" onclick="filterFAQ('technical', this)">فنی</span>
+        </div>
+
+        <div class="faq-list" id="faqList">
+            <!-- ===== دسته: عمومی ===== -->
+            <div class="faq-item" data-category="general">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>نوینیکس چیست و چه خدماتی ارائه می‌دهد؟</h4>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>
+                        نوینیکس یک مجموعه کامل از ابزارهای آنلاین، بازی‌های تعاملی، 
+                        آموزش‌های برنامه‌نویسی و خدمات مفید است. ما تلاش می‌کنیم 
+                        بهترین و کاربردی‌ترین ابزارها را به صورت رایگان در اختیار کاربران قرار دهیم.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="general">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>آیا استفاده از نوینیکس رایگان است؟</h4>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>
+                        بله! تمامی ابزارها، بازی‌ها و خدمات نوینیکس کاملاً رایگان هستند. 
+                        ما معتقدیم که فناوری باید در دسترس همه باشد.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ===== دسته: حساب کاربری ===== -->
+            <div class="faq-item" data-category="account">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>چگونه در نوینیکس ثبت‌نام کنم؟</h4>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>
+                        برای ثبت‌نام در نوینیکس، روی دکمه "ثبت نام" در بالای صفحه کلیک کنید 
+                        و فرم ثبت‌نام را تکمیل کنید. فقط کافی است نام، ایمیل و رمز عبور خود را وارد کنید.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="account">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>رمز عبور خود را فراموش کرده‌ام، چه کنم؟</h4>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>
+                        در صفحه ورود، روی لینک "رمز عبور را فراموش کرده‌ام" کلیک کنید. 
+                        سپس ایمیل خود را وارد کنید تا لینک بازیابی رمز عبور برای شما ارسال شود.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ===== دسته: ابزارها ===== -->
+            <div class="faq-item" data-category="tools">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>چه ابزارهایی در نوینیکس وجود دارد؟</h4>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>نوینیکس شامل ابزارهای متنوعی است:</p>
+                    <ul>
+                        <li>ماشین‌حساب مهندسی پیشرفته</li>
+                        <li>تبدیل واحدها</li>
+                        <li>تولید رمز عبور قوی</li>
+                        <li>فرمت‌کننده JSON</li>
+                        <li>کدگذاری Base64 و URL</li>
+                        <li>انتخاب رنگ حرفه‌ای</li>
+                        <li>و بسیاری ابزارهای دیگر</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="tools">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>آیا می‌توانم ابزار جدیدی پیشنهاد بدهم؟</h4>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>
+                        بله! ما همیشه از پیشنهادات شما استقبال می‌کنیم. 
+                        می‌توانید از طریق صفحه <a href="contact.html" style="color:#00ffcc;">تماس با ما</a> 
+                        ابزار مورد نظر خود را پیشنهاد دهید.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ===== دسته: فنی ===== -->
+            <div class="faq-item" data-category="technical">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>آیا اطلاعات من در نوینیکس امن است؟</h4>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>
+                        بله! ما از پروتکل HTTPS و روش‌های پیشرفته رمزنگاری برای محافظت از اطلاعات شما استفاده می‌کنیم. 
+                        اطلاعات شما هرگز با شخص ثالث به اشتراک گذاشته نمی‌شود. 
+                        برای اطلاعات بیشتر، <a href="privacy.html" style="color:#00ffcc;">سیاست حریم خصوصی</a> را مطالعه کنید.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="technical">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>چرا برخی ابزارها در موبایل به درستی نمایش داده نمی‌شوند؟</h4>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>
+                        تمام ابزارهای نوینیکس برای نمایش در موبایل بهینه‌سازی شده‌اند. 
+                        اگر مشکلی مشاهده می‌کنید، لطفاً مرورگر خود را به آخرین نسخه به‌روزرسانی کنید 
+                        یا از مرورگر دیگری استفاده کنید. همچنین می‌توانید مشکل را از طریق صفحه تماس با ما گزارش دهید.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="technical">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>آیا نوینیکس از کوکی‌ها استفاده می‌کند؟</h4>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>
+                        بله، از کوکی‌ها برای ذخیره تنظیمات کاربری و بهبود تجربه استفاده می‌کنیم. 
+                        شما می‌توانید در هر زمان کوکی‌ها را از مرورگر خود حذف کنید.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="no-results" id="noResults">
+            <span class="big-icon">🔍</span>
+            <h3>سوالی یافت نشد</h3>
+            <p>سوال خود را با عبارت دیگری جستجو کنید</p>
+        </div>
+    </main>
+
+    <!-- ===== FOOTER توسط footer.js ساخته می‌شود ===== -->
+
+    <!-- ===== اسکریپت‌ها ===== -->
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        function toggleFAQ(element) {
+            const item = element.closest('.faq-item');
+            const isOpen = item.classList.contains('open');
+
+            document.querySelectorAll('.faq-item').forEach(el => {
+                el.classList.remove('open');
+            });
+
+            if (!isOpen) {
+                item.classList.add('open');
+            }
+        }
+
+        function searchFAQ() {
+            const input = document.getElementById('faqSearch');
+            const filter = input.value.toLowerCase().trim();
+            const items = document.querySelectorAll('.faq-item');
+            let visibleCount = 0;
+
+            items.forEach(item => {
+                const question = item.querySelector('.faq-question h4').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer p')?.textContent?.toLowerCase() || '';
+                const match = question.includes(filter) || answer.includes(filter);
+
+                if (filter === '' || match) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            const noResults = document.getElementById('noResults');
+            if (visibleCount === 0 && filter.length > 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        }
+
+        function filterFAQ(category, element) {
+            document.querySelectorAll('.faq-category').forEach(tag => {
+                tag.classList.remove('active');
+            });
+            element.classList.add('active');
+
+            const items = document.querySelectorAll('.faq-item');
+            let visibleCount = 0;
+
+            items.forEach(item => {
+                const itemCategory = item.dataset.category;
+                if (category === 'all' || itemCategory === category) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            document.getElementById('faqSearch').value = '';
+            document.getElementById('noResults').style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstItem = document.querySelector('.faq-item');
+            if (firstItem) {
+                firstItem.classList.add('open');
+            }
+        });
+    </script>
+</body>
+</html>

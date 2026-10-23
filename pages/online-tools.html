@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ابزارهای آنلاین | نوینیکس</title>
+    <meta name="description" content="مجموعه‌ای از بهترین ابزارهای آنلاین برای کارهای روزمره، برنامه نویسی و طراحی" />
+    <link rel="canonical" href="https://novinix.ir/pages/online-tools.html" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <style>
+        .tools-hero {
+            text-align: center;
+            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 35px;
+        }
+        .tools-hero h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        .tools-hero p {
+            color: #a0b4c8;
+            font-size: 1.05rem;
+        }
+        .tools-hero .icon-big {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto 25px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px 14px 50px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e8f5f0;
+            font-family: inherit;
+        }
+        .search-box input:focus {
+            border-color: #00ffcc;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .tools-categories {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .tools-categories .cat-tag {
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 30px;
+            color: #a0b4c8;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .tools-categories .cat-tag:hover {
+            border-color: #00ffcc;
+            color: #00ffcc;
+        }
+        .tools-categories .cat-tag.active {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            border-color: #00ffcc;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .tool-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 25px 20px;
+            text-decoration: none;
+            color: #e8f5f0;
+            text-align: center;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .tool-card:hover {
+            transform: translateY(-6px);
+            border-color: #00ffcc;
+            box-shadow: 0 12px 40px rgba(0, 255, 204, 0.1);
+        }
+        .tool-card .icon {
+            font-size: 2.8rem;
+            line-height: 1;
+            transition: transform 0.3s ease;
+        }
+        .tool-card:hover .icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+        .tool-card .name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #e8f5f0;
+        }
+        .tool-card .badge {
+            font-size: 0.6rem;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .badge.popular {
+            background: #e74c3c;
+            color: white;
+        }
+        .badge.hot {
+            background: #e67e22;
+            color: white;
+        }
+        .badge.new {
+            background: #00ffcc;
+            color: #0f0c29;
+        }
+        .tool-card .description {
+            font-size: 0.75rem;
+            color: #a0b4c8;
+            margin-top: -5px;
+        }
+        .tool-card.featured {
+            border-color: #00ffcc;
+            background: rgba(0, 255, 204, 0.05);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(160, 180, 200, 0.5);
+            display: none;
+        }
+        .no-results .big-icon {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            flex-wrap: wrap;
+        }
+        .pagination-container .page-btn {
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: #a0b4c8;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 0.85rem;
+            min-width: 40px;
+            text-align: center;
+        }
+        .pagination-container .page-btn:hover:not(:disabled) {
+            background: rgba(0, 255, 204, 0.1);
+            border-color: #00ffcc;
+            color: #00ffcc;
+            transform: translateY(-2px);
+        }
+        .pagination-container .page-btn.active {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            border-color: #00ffcc;
+            font-weight: 700;
+        }
+        .pagination-container .page-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .pagination-container .page-btn.arrow {
+            font-size: 1.1rem;
+            padding: 8px 18px;
+        }
+        .pagination-container .page-info {
+            color: rgba(160, 180, 200, 0.5);
+            font-size: 0.8rem;
+            padding: 0 12px;
+        }
+
+        .tools-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-item .number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00ffcc;
+            display: block;
+        }
+        .stat-item .label {
+            font-size: 0.8rem;
+            color: #a0b4c8;
+        }
+
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            .tool-card {
+                padding: 18px 12px;
+            }
+            .tool-card .icon {
+                font-size: 2.2rem;
+            }
+            .tool-card .name {
+                font-size: 0.85rem;
+            }
+            .tools-hero h2 {
+                font-size: 1.6rem;
+            }
+            .tools-categories .cat-tag {
+                font-size: 0.75rem;
+                padding: 6px 14px;
+            }
+            .tools-stats {
+                gap: 15px;
+                padding: 12px;
+            }
+            .stat-item .number {
+                font-size: 1.2rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            .tool-card {
+                padding: 15px 10px;
+                border-radius: 12px;
+            }
+            .tool-card .icon {
+                font-size: 1.8rem;
+            }
+            .tool-card .name {
+                font-size: 0.75rem;
+            }
+            .tool-card .description {
+                font-size: 0.6rem;
+            }
+            .tools-hero h2 {
+                font-size: 1.3rem;
+            }
+            .tools-hero p {
+                font-size: 0.9rem;
+            }
+            .pagination-container .page-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+                min-width: 34px;
+            }
+            .pagination-container .page-btn.arrow {
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main>
+        <div class="tools-hero">
+            <span class="icon-big">🧰</span>
+            <h2>ابزارهای آنلاین</h2>
+            <p>مجموعه‌ای از بهترین ابزارهای آنلاین برای کارهای روزمره، برنامه نویسی و طراحی</p>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="searchTools" placeholder="🔍 جستجوی ابزار..." />
+        </div>
+
+        <div class="tools-categories" id="categoryFilter">
+            <span class="cat-tag active" data-category="all">همه</span>
+            <span class="cat-tag" data-category="programming">💻 برنامه نویسی</span>
+            <span class="cat-tag" data-category="security">🔐 امنیت</span>
+            <span class="cat-tag" data-category="design">🎨 طراحی</span>
+            <span class="cat-tag" data-category="utility">🔧 کاربردی</span>
+            <span class="cat-tag" data-category="math">🧮 ریاضی</span>
+            <span class="cat-tag" data-category="network">🌐 شبکه</span>
+            <span class="cat-tag" data-category="data">📊 داده</span>
+            <span class="cat-tag" data-category="text">📝 متن</span>
+        </div>
+
+        <div class="tools-grid" id="toolsGrid"></div>
+
+        <div class="pagination-container" id="paginationContainer">
+            <button class="page-btn arrow" id="prevPage">‹</button>
+            <div id="pageNumbers"></div>
+            <button class="page-btn arrow" id="nextPage">›</button>
+            <span class="page-info" id="pageInfo"></span>
+        </div>
+
+        <div class="no-results" id="noResults">
+            <span class="big-icon">🔍</span>
+            <h3>نتیجه‌ای یافت نشد</h3>
+            <p>ابزار مورد نظر را با عبارت دیگری جستجو کنید</p>
+        </div>
+
+        <div class="tools-stats">
+            <div class="stat-item">
+                <span class="number" id="toolCount">۰</span>
+                <span class="label">ابزار</span>
+            </div>
+            <div class="stat-item">
+                <span class="number">🔓</span>
+                <span class="label">همگی رایگان</span>
+            </div>
+        </div>
+    </main>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            // ===== لیست کامل ابزارها =====
+            const toolsData = [
+                { name: "تبدیل واحد", icon: "📏", category: "utility", desc: "تبدیل انواع واحدها", link: "../online-tools_page/unit-converter.html" },
+                { name: "انتخاب رنگ", icon: "🎨", category: "design", desc: "پالت رنگی حرفه‌ای", link: "../online-tools_page/color-picker.html" },
+                { name: "تولید رمز", icon: "🔑", category: "security", desc: "رمز عبور قوی", link: "../online-tools_page/password-generator.html", badge: "popular" },
+                { name: "تبدیل تایم‌استمپ", icon: "⏳", category: "utility", desc: "تبدیل زمان Unix", link: "../online-tools_page/timestamp-converter.html" },
+                { name: "ماشین‌حساب تاریخ", icon: "📅", category: "utility", desc: "تفاوت و افزودن به تاریخ", link: "../online-tools_page/date-calculator.html" },
+                { name: "ماشین‌حساب درصد", icon: "🧮", category: "math", desc: "محاسبه درصد و تخفیف", link: "../online-tools_page/percentage-calculator.html" },
+                { name: "ماشین‌حساب آماری", icon: "📊", category: "math", desc: "میانگین، میانه، انحراف معیار", link: "../online-tools_page/statistical-calculator.html" },
+                { name: "ماشین‌حساب ماتریس", icon: "🧮", category: "math", desc: "جمع، ضرب، دترمینان", link: "../online-tools_page/matrix-calculator.html" },
+                { name: "فرمت‌کننده JSON", icon: "📋", category: "programming", desc: "فرمت و اعتبارسنجی JSON", link: "../online-tools_page/json-formatter.html", badge: "popular" },
+                { name: "مینی‌فایر CSS", icon: "🧹", category: "programming", desc: "فشرده‌سازی CSS", link: "../online-tools_page/css-minifier.html" },
+                { name: "کدگذاری HTML", icon: "🔐", category: "programming", desc: "کدگذاری کاراکترها", link: "../online-tools_page/html-encoder.html" },
+                { name: "کدگذاری URL", icon: "🔗", category: "programming", desc: "کدگذاری آدرس", link: "../online-tools_page/url-encoder.html" },
+                { name: "کدگذاری Base64", icon: "📦", category: "security", desc: "کدگذاری Base64", link: "../online-tools_page/base64-encoder.html" },
+                { name: "ویرایشگر مارک‌داون", icon: "✍️", category: "programming", desc: "نوشتن و پیش‌نمایش", link: "../online-tools_page/markdown-editor.html", badge: "popular" },
+                { name: "تولید UUID", icon: "🆔", category: "programming", desc: "شناسه یکتا", link: "../online-tools_page/uuid-generator.html" },
+                { name: "تولید هش", icon: "🔐", category: "security", desc: "MD5، SHA-1، SHA-256", link: "../online-tools_page/hash-generator.html" },
+                { name: "تست Regex", icon: "📋", category: "programming", desc: "آزمایش عبارت باقاعده", link: "../online-tools_page/regex-tester.html" },
+                { name: "تبدیل CSV ↔ JSON", icon: "📊", category: "data", desc: "تبدیل فرمت داده", link: "../online-tools_page/csv-json-converter.html" },
+                { name: "مشاهده IP", icon: "🌐", category: "network", desc: "اطلاعات IP", link: "../online-tools_page/ip-lookup.html" },
+                { name: "جستجوی Whois", icon: "🔍", category: "network", desc: "اطلاعات دامنه", link: "../online-tools_page/whois-lookup.html" },
+                { name: "تست پینگ", icon: "📡", category: "network", desc: "بررسی اتصال شبکه", link: "../online-tools_page/ping-tester.html" },
+                { name: "تبدیل حروف", icon: "🔡", category: "text", desc: "تغییر حالت حروف", link: "../online-tools_page/case-converter.html" },
+                { name: "حذف خطوط تکراری", icon: "📋", category: "text", desc: "پاک‌سازی متن", link: "../online-tools_page/duplicate-line-remover.html" },
+                { name: "تبدیل تصویر", icon: "🖼️", category: "design", desc: "تبدیل و بهینه‌سازی", link: "../online-tools_page/image-converter.html" },
+                { name: "ماشین‌حساب وام", icon: "🧮", category: "math", desc: "محاسبه اقساط وام", link: "../online-tools_page/loan-calculator.html" },
+                { name: "تبدیل ارز", icon: "💱", category: "math", desc: "تبدیل زنده ارزی", link: "../online-tools_page/currency-converter.html" },
+                { name: "محاسبه سن", icon: "📅", category: "utility", desc: "محاسبه سن دقیق", link: "../online-tools_page/age-calculator.html" }
+            ];
+
+            // ===== متغیرهای صفحه‌بندی =====
+            const ITEMS_PER_PAGE = 5;
+            let currentPage = 1;
+            let currentCategory = 'all';
+            let currentSearch = '';
+            let filteredTools = [...toolsData];
+
+            // ===== رندر ابزارها =====
+            function renderTools() {
+                const grid = document.getElementById('toolsGrid');
+                const noResults = document.getElementById('noResults');
+                const start = (currentPage - 1) * ITEMS_PER_PAGE;
+                const end = start + ITEMS_PER_PAGE;
+                const pageItems = filteredTools.slice(start, end);
+
+                if (filteredTools.length === 0) {
+                    grid.innerHTML = '';
+                    noResults.style.display = 'block';
+                    document.getElementById('paginationContainer').style.display = 'none';
+                    return;
+                }
+
+                noResults.style.display = 'none';
+                document.getElementById('paginationContainer').style.display = 'flex';
+
+                if (pageItems.length === 0 && filteredTools.length > 0) {
+                    currentPage = 1;
+                    renderTools();
+                    return;
+                }
+
+                let html = '';
+                pageItems.forEach(tool => {
+                    const badgeHtml = tool.badge ? `<span class="badge ${tool.badge}">${tool.badge === 'popular' ? 'محبوب' : tool.badge === 'hot' ? 'داغ' : 'جدید'}</span>` : '';
+                    html += `
+                        <a href="${tool.link}" class="tool-card" data-category="${tool.category}">
+                            ${badgeHtml}
+                            <span class="icon">${tool.icon}</span>
+                            <span class="name">${tool.name}</span>
+                            <span class="description">${tool.desc}</span>
+                        </a>
+                    `;
+                });
+
+                grid.innerHTML = html;
+                renderPagination();
+                document.getElementById('toolCount').textContent = toolsData.length;
+            }
+
+            // ===== رندر صفحه‌بندی =====
+            function renderPagination() {
+                const totalPages = Math.ceil(filteredTools.length / ITEMS_PER_PAGE);
+                const pageNumbers = document.getElementById('pageNumbers');
+                const prevBtn = document.getElementById('prevPage');
+                const nextBtn = document.getElementById('nextPage');
+                const pageInfo = document.getElementById('pageInfo');
+
+                if (totalPages <= 1) {
+                    pageNumbers.innerHTML = '';
+                    prevBtn.style.display = 'none';
+                    nextBtn.style.display = 'none';
+                    pageInfo.textContent = '';
+                    return;
+                }
+
+                prevBtn.style.display = 'inline-block';
+                nextBtn.style.display = 'inline-block';
+                prevBtn.disabled = (currentPage === 1);
+                nextBtn.disabled = (currentPage === totalPages);
+                pageInfo.textContent = `صفحه ${currentPage} از ${totalPages}`;
+
+                let html = '';
+                const maxVisible = 5;
+                let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+                let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+                if (endPage - startPage < maxVisible - 1) {
+                    startPage = Math.max(1, endPage - maxVisible + 1);
+                }
+
+                if (startPage > 1) {
+                    html += `<button class="page-btn" data-page="1">۱</button>`;
+                    if (startPage > 2) {
+                        html += `<span class="page-btn" style="border:none;background:none;cursor:default;">…</span>`;
+                    }
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    const activeClass = (i === currentPage) ? ' active' : '';
+                    html += `<button class="page-btn${activeClass}" data-page="${i}">${i}</button>`;
+                }
+
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) {
+                        html += `<span class="page-btn" style="border:none;background:none;cursor:default;">…</span>`;
+                    }
+                    html += `<button class="page-btn" data-page="${totalPages}">${totalPages}</button>`;
+                }
+
+                pageNumbers.innerHTML = html;
+
+                document.querySelectorAll('.page-btn[data-page]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const page = parseInt(this.dataset.page);
+                        goToPage(page);
+                    });
+                });
+            }
+
+            // ===== رفتن به صفحه =====
+            function goToPage(page) {
+                const totalPages = Math.ceil(filteredTools.length / ITEMS_PER_PAGE);
+                if (page < 1 || page > totalPages) return;
+                currentPage = page;
+                renderTools();
+                document.getElementById('toolsGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            // ===== فیلتر =====
+            function handleFilter() {
+                const searchInput = document.getElementById('searchTools');
+                currentSearch = searchInput.value.toLowerCase().trim();
+
+                let filtered = toolsData;
+
+                if (currentCategory !== 'all') {
+                    filtered = filtered.filter(t => t.category === currentCategory);
+                }
+
+                if (currentSearch) {
+                    filtered = filtered.filter(t =>
+                        t.name.includes(currentSearch) ||
+                        t.desc.includes(currentSearch)
+                    );
+                }
+
+                filteredTools = filtered;
+                currentPage = 1;
+                renderTools();
+            }
+
+            // ===== فیلتر دسته‌بندی =====
+            function filterCategory(category, element) {
+                document.querySelectorAll('.cat-tag').forEach(tag => tag.classList.remove('active'));
+                if (element) element.classList.add('active');
+                currentCategory = category;
+                handleFilter();
+            }
+
+            // ===== رویدادها =====
+            document.addEventListener('DOMContentLoaded', function() {
+                filteredTools = [...toolsData];
+                renderTools();
+
+                document.getElementById('searchTools').addEventListener('input', handleFilter);
+
+                document.querySelectorAll('.cat-tag').forEach(tag => {
+                    tag.addEventListener('click', function() {
+                        const category = this.dataset.category;
+                        filterCategory(category, this);
+                    });
+                });
+
+                document.getElementById('prevPage').addEventListener('click', function() {
+                    if (currentPage > 1) goToPage(currentPage - 1);
+                });
+
+                document.getElementById('nextPage').addEventListener('click', function() {
+                    const totalPages = Math.ceil(filteredTools.length / ITEMS_PER_PAGE);
+                    if (currentPage < totalPages) goToPage(currentPage + 1);
+                });
+            });
+
+            window.goToPage = goToPage;
+            window.filterCategory = filterCategory;
+            window.currentPage = currentPage;
+
+            console.log('🧰 Online Tools loaded!');
+        })();
+    </script>
+</body>
+</html>

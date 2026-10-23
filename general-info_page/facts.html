@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>دانستنی‌ها | نوینیکس</title>
+    <meta name="description" content="مجموعه‌ای از حقایق جالب، اطلاعات شگفت‌انگیز و دانستنی‌های علمی در دسته‌بندی‌های مختلف" />
+    <link rel="canonical" href="https://novinix.ir/pages/general-info/facts.html" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <style>
+        .facts-hero {
+            background: linear-gradient(135deg, #1a1a2e, #2d1b69, #6c2eb7);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(108, 46, 183, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .facts-hero::before { content: '📚'; position: absolute; font-size: 10rem; opacity: 0.05; right: -30px; bottom: -30px; transform: rotate(10deg); }
+        .facts-hero h2 { font-size: 2rem; margin-bottom: 10px; position: relative; z-index: 1; }
+        .facts-hero h2 span { color: #ff6b9d; }
+        .facts-hero p { opacity: 0.85; font-size: 1.05rem; position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+        .search-box { position: relative; max-width: 500px; margin: 0 auto 30px; }
+        .search-box input { width: 100%; padding: 14px 20px; border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 50px; font-size: 1rem; transition: all 0.3s ease; background: rgba(255, 255, 255, 0.05); color: #e8f5f0; font-family: inherit; }
+        .search-box input:focus { border-color: #00ffcc; outline: none; box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.1); background: rgba(255, 255, 255, 0.08); }
+        .search-box input::placeholder { color: rgba(255, 255, 255, 0.3); }
+        .facts-categories { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
+        .category-tag { background: rgba(255, 255, 255, 0.05); padding: 8px 20px; border-radius: 30px; font-size: 0.85rem; color: #a0b4c8; cursor: pointer; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.06); font-weight: 500; }
+        .category-tag:hover { border-color: #00ffcc; transform: translateY(-2px); color: #00ffcc; }
+        .category-tag.active { background: linear-gradient(135deg, #00ffcc, #00b4db); color: #0f0c29; border-color: #00ffcc; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; margin-top: 10px; }
+        .fact-card { background: rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 25px; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(255, 255, 255, 0.06); position: relative; overflow: hidden; }
+        .fact-card:hover { transform: translateY(-5px); border-color: #6c2eb7; box-shadow: 0 12px 40px rgba(108, 46, 183, 0.15); }
+        .fact-card .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; position: relative; z-index: 1; }
+        .fact-card .icon { font-size: 2.5rem; line-height: 1; position: relative; z-index: 1; transition: transform 0.3s ease; }
+        .fact-card:hover .icon { transform: scale(1.1) rotate(-5deg); }
+        .fact-card .category-badge { display: inline-block; font-size: 0.6rem; padding: 3px 12px; border-radius: 20px; font-weight: 600; position: relative; z-index: 1; }
+        .category-badge.science { background: rgba(0, 180, 219, 0.2); color: #5fcde6; }
+        .category-badge.history { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+        .category-badge.space { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .category-badge.technology { background: rgba(0, 255, 204, 0.2); color: #00ffcc; }
+        .category-badge.nature { background: rgba(52, 211, 153, 0.2); color: #34d399; }
+        .category-badge.health { background: rgba(244, 63, 94, 0.2); color: #fb7185; }
+        .category-badge.psychology { background: rgba(251, 146, 60, 0.2); color: #fb923c; }
+        .category-badge.animals { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
+        .fact-card h3 { color: #e8f5f0; font-size: 1.1rem; margin-bottom: 8px; position: relative; z-index: 1; line-height: 1.4; }
+        .fact-card .fact-content { color: #a0b4c8; font-size: 0.9rem; line-height: 1.7; position: relative; z-index: 1; }
+        .fact-card .fact-content .highlight { color: #00ffcc; font-weight: 600; }
+        .fact-card .fact-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.06); position: relative; z-index: 1; font-size: 0.75rem; color: rgba(160, 180, 200, 0.5); }
+        .fact-of-the-day { background: linear-gradient(135deg, rgba(0, 255, 204, 0.05), rgba(0, 180, 219, 0.05)); border: 1px solid rgba(0, 255, 204, 0.15); border-radius: 16px; padding: 30px; margin: 30px 0 40px; text-align: center; position: relative; overflow: hidden; }
+        .fact-of-the-day::before { content: '⭐'; position: absolute; font-size: 6rem; opacity: 0.05; right: -20px; bottom: -20px; transform: rotate(15deg); }
+        .fact-of-the-day .label { font-size: 0.8rem; color: #00ffcc; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 8px; position: relative; z-index: 1; }
+        .fact-of-the-day .day-fact { font-size: 1.3rem; color: #e8f5f0; line-height: 1.8; position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+        .fact-of-the-day .day-fact .highlight { color: #00ffcc; font-weight: 600; }
+        .fact-of-the-day .day-category { display: inline-block; margin-top: 10px; font-size: 0.7rem; padding: 3px 15px; border-radius: 20px; background: rgba(0, 255, 204, 0.15); color: #00ffcc; position: relative; z-index: 1; }
+        .no-results { text-align: center; padding: 50px 20px; color: #a0b4c8; display: none; }
+        .no-results .big-icon { font-size: 4rem; display: block; margin-bottom: 15px; }
+        .no-results h3 { color: #e8f5f0; margin-bottom: 5px; }
+        .facts-stats { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-top: 30px; padding: 15px 25px; background: rgba(255, 255, 255, 0.04); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.06); }
+        .stat-item { text-align: center; }
+        .stat-item .number { font-size: 1.5rem; font-weight: 700; color: #00ffcc; display: block; }
+        .stat-item .label { font-size: 0.8rem; color: #a0b4c8; }
+        .fact-card { opacity: 0; animation: fadeInUp 0.5s ease forwards; }
+        .fact-card:nth-child(1) { animation-delay: 0.03s; }
+        .fact-card:nth-child(2) { animation-delay: 0.06s; }
+        .fact-card:nth-child(3) { animation-delay: 0.09s; }
+        .fact-card:nth-child(4) { animation-delay: 0.12s; }
+        .fact-card:nth-child(5) { animation-delay: 0.15s; }
+        .fact-card:nth-child(6) { animation-delay: 0.18s; }
+        .fact-card:nth-child(7) { animation-delay: 0.21s; }
+        .fact-card:nth-child(8) { animation-delay: 0.24s; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) {
+            .facts-hero { padding: 25px 20px; }
+            .facts-hero h2 { font-size: 1.5rem; }
+            .facts-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .fact-card { padding: 18px; }
+            .fact-card h3 { font-size: 0.95rem; }
+            .fact-card .fact-content { font-size: 0.8rem; }
+            .fact-of-the-day .day-fact { font-size: 1.1rem; }
+            .category-tag { font-size: 0.75rem; padding: 6px 14px; }
+        }
+        @media (max-width: 480px) {
+            .facts-grid { grid-template-columns: 1fr; }
+            .fact-card { padding: 15px; }
+            .facts-hero h2 { font-size: 1.3rem; }
+            .fact-of-the-day { padding: 20px; }
+            .fact-of-the-day .day-fact { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader"></header>
+
+    <main>
+        <div class="facts-hero">
+            <h2>📚 دانستنی‌های <span>نوینیکس</span></h2>
+            <p>مجموعه‌ای از حقایق جالب، اطلاعات شگفت‌انگیز و دانستنی‌های علمی</p>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="searchFacts" placeholder="🔍 جستجو در دانستنی‌ها..." />
+        </div>
+
+        <div class="facts-categories">
+            <span class="category-tag active" data-category="all">همه</span>
+            <span class="category-tag" data-category="science">🔬 علمی</span>
+            <span class="category-tag" data-category="history">📜 تاریخی</span>
+            <span class="category-tag" data-category="space">🚀 فضا</span>
+            <span class="category-tag" data-category="technology">💻 فناوری</span>
+            <span class="category-tag" data-category="nature">🌿 طبیعت</span>
+            <span class="category-tag" data-category="health">❤️ سلامت</span>
+            <span class="category-tag" data-category="psychology">🧠 روانشناسی</span>
+            <span class="category-tag" data-category="animals">🐾 حیوانات</span>
+        </div>
+
+        <div class="fact-of-the-day">
+            <span class="label">⭐ دانستنی روز</span>
+            <div class="day-fact">
+                مغز انسان در طول شبانه‌روز حدود <span class="highlight">۷۰,۰۰۰</span> فکر تولید می‌کند که بیشتر آنها ناخودآگاه هستند.
+            </div>
+            <span class="day-category">🧠 روانشناسی</span>
+        </div>
+
+        <div class="facts-grid" id="factsGrid"></div>
+
+        <div class="no-results" id="noResults">
+            <span class="big-icon">🔍</span>
+            <h3>نتیجه‌ای یافت نشد</h3>
+            <p>دانستنی مورد نظر را با عبارت دیگری جستجو کنید</p>
+        </div>
+
+        <div class="facts-stats">
+            <div class="stat-item">
+                <span class="number">⭐</span>
+                <span class="label">دانستنی روز</span>
+            </div>
+            <div class="stat-item">
+                <span class="number">📚</span>
+                <span class="label">همیشه رایگان</span>
+            </div>
+        </div>
+    </main>
+
+    <footer id="mainFooter"></footer>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        const factsData = [
+            { id: 1, title: 'آب در دمای ۱۰۰ درجه می‌جوشد، اما در ارتفاعات متفاوت است', category: 'science', icon: '🔬', content: 'در ارتفاع <span class="highlight">۳۰۰۰ متری</span> از سطح دریا، آب در حدود <span class="highlight">۹۰ درجه</span> سانتی‌گراد می‌جوشد. این به دلیل کاهش فشار هوا در ارتفاعات است.', readTime: '۲ دقیقه' },
+            { id: 2, title: 'یک روز در سیاره زهره طولانی‌تر از یک سال آن است', category: 'space', icon: '🚀', content: 'زهره هر <span class="highlight">۲۲۵ روز</span> یک بار به دور خورشید می‌چرخد، اما چرخش آن حول محور خودش <span class="highlight">۲۴۳ روز</span> طول می‌کشد.', readTime: '۳ دقیقه' },
+            { id: 3, title: 'اهرام مصر قدیمی‌تر از ماموت‌های منقرض‌شده هستند', category: 'history', icon: '📜', content: 'آخرین ماموت‌های پشمالو حدود <span class="highlight">۴۰۰۰ سال پیش</span> منقرض شدند، در حالی که اهرام مصر حدود <span class="highlight">۴۵۰۰ سال</span> قدمت دارند.', readTime: '۲ دقیقه' },
+            { id: 4, title: 'اولین وب‌سایت جهان هنوز آنلاین است', category: 'technology', icon: '💻', content: 'اولین وب‌سایت جهان در تاریخ <span class="highlight">۶ آگوست ۱۹۹۱</span> توسط تیم برنرز-لی راه‌اندازی شد و همچنان در آدرس <span class="highlight">info.cern.ch</span> قابل دسترسی است.', readTime: '۲ دقیقه' },
+            { id: 5, title: 'درختان می‌توانند با یکدیگر ارتباط برقرار کنند', category: 'nature', icon: '🌿', content: 'درختان از طریق شبکه‌ای از قارچ‌های زیرزمینی به نام <span class="highlight">"Wood Wide Web"</span> با هم ارتباط برقرار می‌کنند.', readTime: '۴ دقیقه' },
+            { id: 6, title: 'قلب انسان در طول عمر خود حدود ۲٫۵ میلیارد بار می‌تپد', category: 'health', icon: '❤️', content: 'قلب انسان به طور متوسط در هر دقیقه <span class="highlight">۶۰ تا ۱۰۰ بار</span> می‌تپد. در طول یک عمر ۸۰ ساله، این عدد به بیش از <span class="highlight">۲٫۵ میلیارد</span> ضربه می‌رسد.', readTime: '۲ دقیقه' },
+            { id: 7, title: 'مغز انسان در شب بیشتر از روز فعال است', category: 'psychology', icon: '🧠', content: 'مغز انسان در هنگام خواب، فعالیت بیشتری نسبت به بیداری دارد. در شب، مغز <span class="highlight">اطلاعات روز را پردازش</span> و خاطرات را تثبیت می‌کند.', readTime: '۳ دقیقه' },
+            { id: 8, title: 'اختاپوس‌ها سه قلب دارند', category: 'animals', icon: '🐾', content: 'اختاپوس‌ها دارای <span class="highlight">سه قلب</span> هستند. دو قلب خون را به آبشش‌ها پمپاژ می‌کنند و قلب سوم خون را به سراسر بدن می‌فرستد.', readTime: '۲ دقیقه' }
+        ];
+
+        let currentCategory = 'all';
+
+        function renderFacts(category = 'all', search = '') {
+            const grid = document.getElementById('factsGrid');
+            const noResults = document.getElementById('noResults');
+            let html = '';
+            let count = 0;
+
+            const filtered = factsData.filter(item => {
+                const matchCategory = category === 'all' || item.category === category;
+                const matchSearch = !search || item.title.includes(search) || item.content.includes(search);
+                return matchCategory && matchSearch;
+            });
+
+            filtered.forEach(item => {
+                count++;
+                const badgeClass = item.category;
+                const badgeLabels = { science: 'علمی', history: 'تاریخی', space: 'فضا', technology: 'فناوری', nature: 'طبیعت', health: 'سلامت', psychology: 'روانشناسی', animals: 'حیوانات' };
+                html += `
+                    <div class="fact-card" data-category="${item.category}">
+                        <div class="card-header">
+                            <span class="icon">${item.icon}</span>
+                            <span class="category-badge ${badgeClass}">${badgeLabels[item.category] || item.category}</span>
+                        </div>
+                        <h3>${item.title}</h3>
+                        <div class="fact-content">${item.content}</div>
+                        <div class="fact-meta">
+                            <span class="read-time">⏱️ ${item.readTime} مطالعه</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+            if (count === 0) noResults.style.display = 'block';
+            else noResults.style.display = 'none';
+
+            const cards = grid.querySelectorAll('.fact-card');
+            cards.forEach((card, index) => {
+                card.style.animation = 'none';
+                card.offsetHeight;
+                card.style.animation = `fadeInUp 0.5s ease forwards`;
+                card.style.animationDelay = `${(index % 8) * 0.03 + 0.03}s`;
+            });
+        }
+
+        document.querySelectorAll('.category-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                document.querySelectorAll('.category-tag').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                currentCategory = this.dataset.category;
+                const search = document.getElementById('searchFacts').value;
+                renderFacts(currentCategory, search);
+            });
+        });
+
+        document.getElementById('searchFacts').addEventListener('input', function() {
+            renderFacts(currentCategory, this.value);
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderFacts('all', '');
+        });
+    </script>
+</body>
+</html>

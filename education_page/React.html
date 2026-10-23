@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>آموزش React.js | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+    <link rel="stylesheet" href="../assets/css/education.css" />
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar"></aside>
+        <main class="main-content" id="mainContent"></main>
+    </div>
+
+    <script>
+        // ================================================================
+        // ⚛️ React.js Course Data
+        // ================================================================
+
+        const lessons = [{
+            id: 'react-intro',
+            title: 'معرفی React',
+            section: 'مقدمات',
+            order: 1,
+            badge: null,
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">⚛️ آموزش React / <span>مقدمات</span></div>
+                        <h1>معرفی <span>React</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۰ دقیقه</span>
+                            <span>📊 سطح: مبتدی</span>
+                            <span>⭐ ۴.۹ (۱,۲۰۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>React چیست؟</h2>
+                        <p>
+                            React یک کتابخانه جاوااسکریپت برای ساخت رابط‌های کاربری (UI) است
+                            که توسط <strong>فیسبوک (Meta)</strong> در سال ۲۰۱۳ ساخته شد.
+                            React به توسعه‌دهندگان اجازه می‌دهد تا رابط‌های کاربری تعاملی و
+                            پویا را با استفاده از کامپوننت‌ها بسازند.
+                        </p>
+
+                        <div class="note-box">
+                            <strong>💡 نکته:</strong>
+                            <p>React از مفهوم <strong>Virtual DOM</strong> استفاده می‌کند
+                            که باعث افزایش سرعت و کارایی برنامه‌های وب می‌شود.</p>
+                        </div>
+
+                        <h3>مفاهیم کلیدی React</h3>
+                        <ul>
+                            <li>🧩 <strong>کامپوننت‌ها (Components)</strong> – بلوک‌های سازنده UI</li>
+                            <li>📦 <strong>Props</strong> – داده‌های ورودی به کامپوننت‌ها</li>
+                            <li>🔄 <strong>State</strong> – داده‌های پویا در کامپوننت</li>
+                            <li>⚛️ <strong>JSX</strong> – ترکیب HTML و جاوااسکریپت</li>
+                            <li>🔗 <strong>Hooks</strong> – استفاده از state و lifecycle در کامپوننت‌های تابعی</li>
+                        </ul>
+
+                        <h3>اولین کامپوننت React</h3>
+                        <p>یک کامپوننت ساده که پیام "Hello, World!" را نمایش می‌دهد:</p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="jsx">JSX</span>
+                                <span class="tab" data-tab="js">JavaScript</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="jsx">
+                                    <pre><span class="comment">// First React Component</span>
+<span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">function</span> <span class="function">App</span>() {
+    <span class="keyword">return</span> (
+        <span class="jsx-tag">&lt;div&gt;</span>
+            <span class="jsx-text">&lt;h1&gt;Hello, World!&lt;/h1&gt;</span>
+            <span class="jsx-text">&lt;p&gt;Welcome to React!&lt;/p&gt;</span>
+        <span class="jsx-tag">&lt;/div&gt;</span>
+    );
+}
+
+<span class="keyword">export default</span> App;</pre>
+                                </div>
+                                <div class="code-panel" data-panel="js">
+                                    <pre><span class="comment">// Without JSX</span>
+<span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">function</span> <span class="function">App</span>() {
+    <span class="keyword">return</span> React.<span class="function">createElement</span>(
+        <span class="string">'div'</span>,
+        <span class="keyword">null</span>,
+        React.<span class="function">createElement</span>(<span class="string">'h1'</span>, <span class="keyword">null</span>, <span class="string">'Hello, World!'</span>),
+        React.<span class="function">createElement</span>(<span class="string">'p'</span>, <span class="keyword">null</span>, <span class="string">'Welcome to React!'</span>)
+    );
+}
+
+<span class="keyword">export default</span> App;</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'react-jsx',
+            title: 'JSX - ترکیب HTML و JS',
+            section: 'مقدمات',
+            order: 2,
+            badge: null,
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">⚛️ آموزش React / <span>مقدمات</span></div>
+                        <h1>JSX - ترکیب <span>HTML و جاوااسکریپت</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۲۵ دقیقه</span>
+                            <span>📊 سطح: مبتدی</span>
+                            <span>⭐ ۴.۸ (۹۵۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>JSX چیست؟</h2>
+                        <p>
+                            <strong>JSX</strong> مخفف <strong>JavaScript XML</strong> است و به شما
+                            اجازه می‌دهد کدهای HTML را مستقیماً درون جاوااسکریپت بنویسید.
+                            JSX در واقع یک سینتکس شبیه به HTML است که در نهایت به کد جاوااسکریپت
+                            تبدیل می‌شود.
+                        </p>
+
+                        <div class="warning-box">
+                            <strong>⚠️ توجه:</strong>
+                            <p>JSX یک عبارت است، نه دستور. بنابراین می‌توانید از آن در
+                            <strong>return</strong> توابع و همچنین در متغیرها استفاده کنید.</p>
+                        </div>
+
+                        <h3>قوانین JSX</h3>
+                        <ul>
+                            <li><strong>یک عنصر والد:</strong> JSX باید یک عنصر اصلی داشته باشد</li>
+                            <li><strong>بستن تگ‌ها:</strong> تگ‌ها باید بسته شوند (مثل HTML)</li>
+                            <li><strong>استفاده از {}:</strong> برای نوشتن عبارات جاوااسکریپت</li>
+                            <li><strong>className:</strong> به جای class (چون class کلیدواژه جاوااسکریپت است)</li>
+                            <li><strong>تابع‌ها:</strong> تابع‌ها و کامپوننت‌ها باید با حرف بزرگ شروع شوند</li>
+                        </ul>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="jsx">JSX</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="jsx">
+                                    <pre><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">function</span> <span class="function">UserCard</span>({ name, age, isActive }) {
+    <span class="keyword">return</span> (
+        <span class="jsx-tag">&lt;div</span> <span class="jsx-attr">className</span>=<span class="string">"user-card"</span><span class="jsx-tag">&gt;</span>
+            <span class="jsx-text">&lt;h2&gt;{name}&lt;/h2&gt;</span>
+            <span class="jsx-text">&lt;p&gt;Age: {age}&lt;/p&gt;</span>
+            <span class="jsx-text">&lt;p&gt;Status: {isActive ? "Active" : "Inactive"}&lt;/p&gt;</span>
+        <span class="jsx-tag">&lt;/div&gt;</span>
+    );
+}
+
+<span class="keyword">export default</span> UserCard;</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'react-props-state',
+            title: 'Props و State',
+            section: 'پیشرفته',
+            order: 1,
+            badge: 'hot',
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">⚛️ آموزش React / <span>پیشرفته</span></div>
+                        <h1><span>Props</span> و <span>State</span></h1>
+                        <div class="meta">
+                            <span>⏱️ ۳۰ دقیقه</span>
+                            <span>📊 سطح: متوسط</span>
+                            <span>⭐ ۴.۹ (۸۵۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>Props</h2>
+                        <p>
+                            <strong>Props</strong> (مخفف Properties) داده‌هایی هستند که از یک
+                            کامپوننت والد به کامپوننت فرزند ارسال می‌شوند. Props در React
+                            <strong>غیرقابل تغییر</strong> (read-only) هستند.
+                        </p>
+
+                        <h2>State</h2>
+                        <p>
+                            <strong>State</strong> داده‌های پویایی هستند که درون یک کامپوننت
+                            مدیریت می‌شوند. برخلاف Props، State قابل تغییر است و با تغییر آن،
+                            کامپوننت دوباره رندر می‌شود.
+                        </p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="jsx">JSX</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="jsx">
+                                    <pre><span class="keyword">import</span> React, { useState } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">function</span> <span class="function">Counter</span>() {
+    const [count, setCount] = <span class="function">useState</span>(<span class="number">0</span>);
+
+    <span class="keyword">return</span> (
+        <span class="jsx-tag">&lt;div</span> <span class="jsx-attr">style</span>=<span class="string">{{ textAlign: "center", padding: "20px" }}</span><span class="jsx-tag">&gt;</span>
+            <span class="jsx-text">&lt;h2&gt;Counter: {count}&lt;/h2&gt;</span>
+            <span class="jsx-tag">&lt;button</span> <span class="jsx-attr">onClick</span>=<span class="string">{() =&gt; setCount(count + 1)}</span><span class="jsx-tag">&gt;</span>
+                ➕ Increment
+            <span class="jsx-tag">&lt;/button&gt;</span>
+            <span class="jsx-tag">&lt;button</span> <span class="jsx-attr">onClick</span>=<span class="string">{() =&gt; setCount(count - 1)}</span><span class="jsx-tag">&gt;</span>
+                ➖ Decrement
+            <span class="jsx-tag">&lt;/button&gt;</span>
+            <span class="jsx-tag">&lt;button</span> <span class="jsx-attr">onClick</span>=<span class="string">{() =&gt; setCount(0)}</span><span class="jsx-tag">&gt;</span>
+                🔄 Reset
+            <span class="jsx-tag">&lt;/button&gt;</span>
+        <span class="jsx-tag">&lt;/div&gt;</span>
+    );
+}
+
+<span class="keyword">export default</span> Counter;</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }, {
+            id: 'react-hooks',
+            title: 'Hooks (useEffect و ...)',
+            section: 'پیشرفته',
+            order: 2,
+            badge: 'new',
+            content: `
+                    <div class="article-header">
+                        <div class="breadcrumb">⚛️ آموزش React / <span>پیشرفته</span></div>
+                        <h1>Hooks - <span>useEffect</span> و دیگر Hooks</h1>
+                        <div class="meta">
+                            <span>⏱️ ۳۵ دقیقه</span>
+                            <span>📊 سطح: پیشرفته</span>
+                            <span>⭐ ۴.۷ (۷۵۰ امتیاز)</span>
+                        </div>
+                    </div>
+
+                    <div class="article-body">
+                        <h2>Hooks در React</h2>
+                        <p>
+                            <strong>Hooks</strong> توابعی هستند که به شما امکان می‌دهند از
+                            state و سایر ویژگی‌های React در کامپوننت‌های تابعی استفاده کنید.
+                            مهم‌ترین Hooks عبارتند از:
+                        </p>
+
+                        <ul>
+                            <li><strong>useState</strong> – مدیریت state در کامپوننت</li>
+                            <li><strong>useEffect</strong> – انجام عملیات جانبی (side effects)</li>
+                            <li><strong>useContext</strong> – استفاده از Context API</li>
+                            <li><strong>useReducer</strong> – مدیریت state پیچیده</li>
+                            <li><strong>useCallback</strong> – بهینه‌سازی توابع</li>
+                            <li><strong>useMemo</strong> – بهینه‌سازی محاسبات</li>
+                            <li><strong>useRef</strong> – دسترسی به DOM و ذخیره مقادیر</li>
+                        </ul>
+
+                        <div class="note-box">
+                            <strong>💡 نکته:</strong>
+                            <p>Hooks فقط در بالاترین سطح کامپوننت‌ها و فقط در کامپوننت‌های
+                            تابعی قابل استفاده هستند.</p>
+                        </div>
+
+                        <h3>useEffect</h3>
+                        <p>
+                            <strong>useEffect</strong> برای انجام عملیات‌هایی مانند دریافت داده از
+                            API، تنظیم تایمر، یا اشتراک‌گذاری در رویدادها استفاده می‌شود.
+                        </p>
+
+                        <div class="code-container">
+                            <div class="code-tabs">
+                                <span class="tab active" data-tab="jsx">JSX</span>
+                            </div>
+                            <div class="code-body">
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                                <div class="code-panel active" data-panel="jsx">
+                                    <pre><span class="keyword">import</span> React, { useState, useEffect } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">function</span> <span class="function">DataFetcher</span>() {
+    const [data, setData] = <span class="function">useState</span>(<span class="keyword">null</span>);
+    const [loading, setLoading] = <span class="function">useState</span>(<span class="keyword">true</span>);
+
+    <span class="function">useEffect</span>(() => {
+        <span class="function">fetch</span>(<span class="string">'https://api.example.com/data'</span>)
+            .<span class="function">then</span>(res => res.<span class="function">json</span>())
+            .<span class="function">then</span>(data => {
+                setData(data);
+                setLoading(false);
+            })
+            .<span class="function">catch</span>(error => {
+                console.<span class="function">error</span>(<span class="string">'Error fetching data:'</span>, error);
+                setLoading(false);
+            });
+    }, []);
+
+    <span class="keyword">if</span> (loading) <span class="keyword">return</span> <span class="jsx-tag">&lt;p&gt;</span>Loading...<span class="jsx-tag">&lt;/p&gt;</span>;
+    <span class="keyword">return</span> (
+        <span class="jsx-tag">&lt;div&gt;</span>
+            <span class="jsx-text">&lt;h2&gt;Data:&lt;/h2&gt;</span>
+            <span class="jsx-text">&lt;pre&gt;{JSON.stringify(data, null, 2)}&lt;/pre&gt;</span>
+        <span class="jsx-tag">&lt;/div&gt;</span>
+    );
+}
+
+<span class="keyword">export default</span> DataFetcher;</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+        }];
+
+        // ================================================================
+        // 🔧 Core Functions
+        // ================================================================
+
+        let currentLessonId = 'react-intro';
+
+        function renderSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const sections = {};
+
+            lessons.forEach(function(lesson) {
+                if (!sections[lesson.section]) {
+                    sections[lesson.section] = [];
+                }
+                sections[lesson.section].push(lesson);
+            });
+
+            let html = '';
+            var sectionNames = Object.keys(sections);
+            for (var s = 0; s < sectionNames.length; s++) {
+                var sectionName = sectionNames[s];
+                var items = sections[sectionName];
+                html += '<div class="sidebar-section">';
+                html += '<div class="section-title">' + sectionName + '</div>';
+                html += '<ul>';
+                items.sort(function(a, b) { return a.order - b.order; });
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var badge = item.badge ? '<span class="badge ' + item.badge + '">' + item.badge + '</span>' : '';
+                    var activeClass = (item.id === currentLessonId) ? 'active-link' : '';
+                    html += '<li><a href="#" data-id="' + item.id + '" class="' + activeClass + '">' + item.title + ' ' + badge + '</a></li>';
+                }
+                html += '</ul></div>';
+            }
+
+            sidebar.innerHTML = html;
+
+            sidebar.querySelectorAll('a[data-id]').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var id = this.dataset.id;
+                    loadLesson(id);
+                    sidebar.querySelectorAll('a[data-id]').forEach(function(l) {
+                        l.classList.remove('active-link');
+                    });
+                    this.classList.add('active-link');
+                });
+            });
+        }
+
+        function loadLesson(id) {
+            var lesson = null;
+            for (var i = 0; i < lessons.length; i++) {
+                if (lessons[i].id === id) {
+                    lesson = lessons[i];
+                    break;
+                }
+            }
+            if (!lesson) return;
+
+            currentLessonId = id;
+            document.getElementById('mainContent').innerHTML = lesson.content;
+
+            initTabs();
+            renderSidebar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function initTabs() {
+            document.querySelectorAll('.code-container').forEach(function(container) {
+                var tabs = container.querySelectorAll('.tab');
+                var panels = container.querySelectorAll('.code-panel');
+
+                tabs.forEach(function(tab) {
+                    tab.addEventListener('click', function() {
+                        var tabName = this.dataset.tab;
+                        tabs.forEach(function(t) {
+                            t.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        panels.forEach(function(p) {
+                            p.classList.remove('active');
+                        });
+                        var target = container.querySelector('.code-panel[data-panel="' + tabName + '"]');
+                        if (target) target.classList.add('active');
+                    });
+                });
+            });
+        }
+
+        // ================================================================
+        // 📋 Copy Code
+        // ================================================================
+
+        function copyCode(btn) {
+            var container = btn.closest('.code-body');
+            var activePanel = container.querySelector('.code-panel.active');
+            var pre = activePanel ? activePanel.querySelector('pre') : container.querySelector('pre');
+            if (!pre) return;
+
+            var text = pre.textContent;
+            navigator.clipboard.writeText(text).then(function() {
+                btn.textContent = '✅ Copied';
+                btn.classList.add('copied');
+                setTimeout(function() {
+                    btn.textContent = '📋 Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(function() {
+                var range = document.createRange();
+                range.selectNode(pre);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                document.execCommand('copy');
+                btn.textContent = '✅ Copied';
+                setTimeout(function() { btn.textContent = '📋 Copy'; }, 2000);
+            });
+        }
+
+        // ================================================================
+        // 🚀 Initial Load
+        // ================================================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = `
+                <div class="react-hero">
+                    <div class="hero-icon">⚛️</div>
+                    <h2>⚛️ آموزش جامع <span>React.js</span></h2>
+                    <p>یادگیری React از مقدماتی تا پیشرفته با پروژه‌های عملی</p>
+                    <div class="hero-meta">
+                        <span>📚 ۴ فصل</span>
+                        <span>⏱️ ۳۰ ساعت</span>
+                        <span>⭐ ۴.۹ از ۵</span>
+                        <span>👨‍🎓 ۱,۲۰۰ دانشجو</span>
+                    </div>
+                </div>
+                <div style="text-align:center; padding:20px; color:#6b7a8a;">
+                    <p style="font-size:1.1rem;">📚 یک درس را از سایدبار سمت راست انتخاب کنید</p>
+                    <p style="font-size:0.85rem; margin-top:5px;">دروس: مقدمات (۲ درس) | پیشرفته (۲ درس)</p>
+                </div>
+            `;
+
+            renderSidebar();
+            setTimeout(function() {
+                loadLesson('react-intro');
+            }, 100);
+        });
+
+        console.log('⚛️ React.js learning system ready!');
+    </script>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../auth/header.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/user-panel.js"></script>
+    <script src="../assets/js/settings.js"></script>
+    <script src="../assets/js/seo.js"></script>
+</body>
+</html>

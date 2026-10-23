@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>نوینیکس | Novinix - مجموعه ابزارها و بازی‌های آنلاین</title>
+    <meta name="description" content="نوینیکس: مجموعه‌ای از ابزارهای آنلاین، ماشین‌حساب‌ها، بازی‌های نوستالژیک و سرگرمی‌های مفید" />
+    <link rel="icon" href="assets/images/logo.ico">
+
+    <!-- ===== CSS فایل‌های جداگانه ===== -->
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+
+    <style>
+        /* ===== استایل‌های اختصاصی صفحه اصلی ===== */
+        .hero {
+            text-align: center;
+            padding: 50px 20px 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .hero h2 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #a0b4c8;
+            max-width: 600px;
+            margin: 0 auto 25px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 35px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            box-shadow: 0 4px 20px rgba(0, 255, 204, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 35px rgba(0, 255, 204, 0.35);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            color: #a0b4c8;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #00ffcc;
+            border-color: rgba(0, 255, 204, 0.2);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 255, 204, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card span {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .feature-card h3 {
+            color: #00ffcc;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .feature-card p {
+            color: #a0b4c8;
+            font-size: 0.9rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 2rem;
+            }
+            .hero {
+                padding: 30px 15px;
+            }
+            .features {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h2 {
+                font-size: 1.6rem;
+            }
+            .hero p {
+                font-size: 0.95rem;
+            }
+            .btn {
+                padding: 10px 25px;
+                font-size: 0.85rem;
+            }
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== HEADER توسط header.js ساخته می‌شود ===== -->
+
+    <main>
+        <section class="hero">
+            <h2>به نوینیکس خوش آمدید</h2>
+            <p>مجموعه‌ای کامل از ابزارهای آنلاین، بازی‌های تعاملی و خدمات مفید</p>
+        </section>
+
+        <section class="features">
+            <a href="pages/online-tools.html" class="feature-card-link">
+                <div class="feature-card">
+                    <span>🛠️</span>
+                    <h3>ابزارهای آنلاین</h3>
+                    <p>ابزارهای کاربردی برای کارهای روزمره</p>
+                </div>
+            </a>
+
+            <a href="pages/games.html" class="feature-card-link">
+                <div class="feature-card">
+                    <span>🎮</span>
+                    <h3>بازی‌ها</h3>
+                    <p>بازی‌های کلاسیک و سرگرم‌کننده</p>
+                </div>
+            </a>
+
+            <a href="pages/calculator.html" class="feature-card-link">
+                <div class="feature-card">
+                    <span>🧮</span>
+                    <h3>ماشین‌حساب</h3>
+                    <p>محاسبات سریع و آسان</p>
+                </div>
+            </a>
+
+            <a href="pages/education.html" class="feature-card-link">
+                <div class="feature-card">
+                    <span>📚</span>
+                    <h3>آموزش‌ها</h3>
+                    <p>یادگیری مهارت‌های جدید</p>
+                </div>
+            </a>
+        </section>
+    </main>
+
+    <!-- ===== FOOTER توسط footer.js ساخته می‌شود ===== -->
+
+    <!-- ===== اسکریپت‌ها ===== -->
+    <!-- سیستم احراز هویت -->
+    <script src="auth/auth.js"></script>
+    <script src="auth/header.js"></script>
+
+    <!-- مدیریت هدر و فوتر داینامیک -->
+    <script src="assets/js/header.js"></script>
+    <script src="assets/js/footer.js"></script>
+
+    <!-- پنل کاربری و تنظیمات -->
+    <script src="assets/js/user-panel.js"></script>
+    <script src="assets/js/settings.js"></script>
+
+    <!-- سئو -->
+    <script src="assets/js/seo.js"></script>
+</body>
+</html>

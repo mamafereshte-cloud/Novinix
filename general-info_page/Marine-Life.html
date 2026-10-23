@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>موجودات آبزی | نوینیکس</title>
+    <meta name="description" content="معرفی و اطلاعات کامل انواع موجودات آبزی شامل دریایی، آب شیرین، دوزیستان، مرجان‌ها، اعماق دریا و سخت‌پوستان" />
+    <link rel="canonical" href="https://novinix.ir/pages/general-info/marine-life.html" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <style>
+        .aquatic-hero {
+            background: linear-gradient(135deg, #0c2461, #1a1a2e, #0f3460);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(12, 36, 97, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .aquatic-hero::before { content: '🐟'; position: absolute; font-size: 10rem; opacity: 0.05; right: -30px; bottom: -30px; transform: rotate(10deg); }
+        .aquatic-hero h2 { font-size: 2rem; margin-bottom: 10px; position: relative; z-index: 1; }
+        .aquatic-hero h2 span { color: #00b4db; }
+        .aquatic-hero p { opacity: 0.85; font-size: 1.05rem; position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+        .category-filter { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
+        .cat-tag { background: rgba(255, 255, 255, 0.05); padding: 8px 20px; border-radius: 30px; font-size: 0.85rem; color: #a0b4c8; cursor: pointer; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.06); font-weight: 500; user-select: none; }
+        .cat-tag:hover { border-color: #00ffcc; transform: translateY(-2px); color: #00ffcc; }
+        .cat-tag.active { background: linear-gradient(135deg, #00ffcc, #00b4db); color: #0f0c29; border-color: #00ffcc; }
+        .aquatic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 10px; }
+        .aquatic-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 18px; padding: 20px; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+        .aquatic-card:hover { transform: translateY(-5px); border-color: #00ffcc; box-shadow: 0 12px 40px rgba(0, 255, 204, 0.1); }
+        .aquatic-card .aquatic-image { width: 100%; height: 200px; border-radius: 12px; overflow: hidden; margin-bottom: 15px; background: rgba(255, 255, 255, 0.03); display: flex; align-items: center; justify-content: center; position: relative; }
+        .aquatic-card .aquatic-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .aquatic-card:hover .aquatic-image img { transform: scale(1.05); }
+        .aquatic-card .aquatic-image .emoji-placeholder { font-size: 4rem; opacity: 0.3; }
+        .aquatic-card .aquatic-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .aquatic-card .aquatic-name { font-size: 1.2rem; font-weight: 700; color: #e8f5f0; }
+        .aquatic-card .aquatic-name-en { font-size: 0.9rem; font-weight: 400; color: #a0b4c8; display: block; }
+        .aquatic-card .category-badge { font-size: 0.6rem; padding: 3px 12px; border-radius: 20px; font-weight: 700; white-space: nowrap; margin-top: 2px; }
+        .category-badge.marine { background: rgba(52, 152, 219, 0.2); color: #3498db; }
+        .category-badge.freshwater { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .category-badge.amphibian { background: rgba(155, 89, 182, 0.2); color: #9b59b6; }
+        .category-badge.coral { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+        .category-badge.deepsea { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+        .category-badge.crustacean { background: rgba(243, 156, 18, 0.2); color: #f39c12; }
+        .aquatic-card .aquatic-description { font-size: 0.85rem; color: #a0b4c8; line-height: 1.6; flex-grow: 1; }
+        .aquatic-card .aquatic-description p { margin-bottom: 6px; }
+        .aquatic-card .aquatic-description p:last-child { margin-bottom: 0; }
+        .aquatic-card { opacity: 0; animation: fadeInUp 0.5s ease forwards; }
+        .aquatic-card:nth-child(1) { animation-delay: 0.03s; }
+        .aquatic-card:nth-child(2) { animation-delay: 0.06s; }
+        .aquatic-card:nth-child(3) { animation-delay: 0.09s; }
+        .aquatic-card:nth-child(4) { animation-delay: 0.12s; }
+        .aquatic-card:nth-child(5) { animation-delay: 0.15s; }
+        .aquatic-card:nth-child(6) { animation-delay: 0.18s; }
+        .aquatic-card:nth-child(7) { animation-delay: 0.21s; }
+        .aquatic-card:nth-child(8) { animation-delay: 0.24s; }
+        .aquatic-card:nth-child(9) { animation-delay: 0.27s; }
+        .aquatic-card:nth-child(10) { animation-delay: 0.30s; }
+        .aquatic-card:nth-child(11) { animation-delay: 0.33s; }
+        .aquatic-card:nth-child(12) { animation-delay: 0.36s; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .no-results { text-align: center; padding: 50px 20px; color: #a0b4c8; display: none; }
+        .no-results .big-icon { font-size: 4rem; display: block; margin-bottom: 15px; }
+        .no-results h3 { color: #e8f5f0; margin-bottom: 5px; }
+        @media (max-width: 768px) {
+            .aquatic-hero { padding: 25px 20px; }
+            .aquatic-hero h2 { font-size: 1.5rem; }
+            .aquatic-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .aquatic-card .aquatic-image { height: 150px; }
+            .cat-tag { font-size: 0.75rem; padding: 6px 14px; }
+        }
+        @media (max-width: 480px) {
+            .aquatic-grid { grid-template-columns: 1fr; }
+            .aquatic-card .aquatic-image { height: 180px; }
+            .aquatic-card .aquatic-name { font-size: 1rem; }
+            .aquatic-hero h2 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader"></header>
+
+    <main>
+        <div class="aquatic-hero">
+            <h2>🐟 موجودات <span>آبزی</span></h2>
+            <p>دنیای شگفت‌انگیز ماهی‌ها، دوزیستان و موجودات آبزی</p>
+        </div>
+
+        <div class="category-filter">
+            <span class="cat-tag active" data-cat="all">همه</span>
+            <span class="cat-tag" data-cat="marine">🌊 دریایی</span>
+            <span class="cat-tag" data-cat="freshwater">🏞️ آب شیرین</span>
+            <span class="cat-tag" data-cat="amphibian">🐸 دوزیستان</span>
+            <span class="cat-tag" data-cat="coral">🪸 مرجان‌ها</span>
+            <span class="cat-tag" data-cat="deepsea">🌌 اعماق دریا</span>
+            <span class="cat-tag" data-cat="crustacean">🦐 سخت‌پوستان</span>
+        </div>
+
+        <div class="aquatic-grid" id="aquaticGrid"></div>
+
+        <div class="no-results" id="noResults">
+            <span class="big-icon">🔍</span>
+            <h3>نتیجه‌ای یافت نشد</h3>
+            <p>در دسته‌بندی انتخاب شده موجود آبزی وجود ندارد</p>
+        </div>
+    </main>
+
+    <footer id="mainFooter"></footer>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        const aquaticData = [
+            { id: 'shark', nameFa: 'کوسه', nameEn: 'Shark', category: 'marine', image: 'shark.jpg', emoji: '🦈', description: ['کوسه یکی از قدیمی‌ترین و ترسناک‌ترین شکارچیان اقیانوس‌ها با بدن آیرودینامیک است.', 'کوسه سفید بزرگ معروف‌ترین گونه کوسه با طول ۶ متر است.'] },
+            { id: 'clownfish', nameFa: 'ماهی دلقک', nameEn: 'Clownfish', category: 'marine', image: 'clownfish.jpg', emoji: '🐠', description: ['ماهی دلقک با رنگ‌های نارنجی و سفید یکی از محبوب‌ترین ماهی‌های آب شور است.', 'ماهی دلقک به خاطر فیلم "در جستجوی نمو" شهرت جهانی دارد.'] },
+            { id: 'seahorse', nameFa: 'اسب دریایی', nameEn: 'Seahorse', category: 'marine', image: 'seahorse.jpg', emoji: '🐴', description: ['اسب دریایی ماهی‌ای با شکل عجیب و ایستاده است که در آب‌های گرمسیری زندگی می‌کند.', 'نرها تخم‌ها را در کیسه شکم خود حمل می‌کنند تا به دنیا بیایند.'] },
+            { id: 'tuna', nameFa: 'تن ماهی', nameEn: 'Tuna', category: 'marine', image: 'tuna.jpg', emoji: '🐟', description: ['تن ماهی یکی از سریع‌ترین ماهی‌های اقیانوس با سرعت ۷۰ کیلومتر بر ساعت است.', 'تن ماهی یکی از مهم‌ترین ماهی‌های تجاری در جهان است.'] },
+            { id: 'goldfish', nameFa: 'ماهی طلایی', nameEn: 'Goldfish', category: 'freshwater', image: 'goldfish.jpg', emoji: '🐠', description: ['ماهی طلایی یکی از محبوب‌ترین ماهی‌های آکواریومی با رنگ‌های طلایی و نارنجی است.', 'ماهی طلایی نماد خوش‌شانسی در فرهنگ‌های آسیایی است.'] },
+            { id: 'salmon', nameFa: 'ماهی آزاد', nameEn: 'Salmon', category: 'freshwater', image: 'salmon.jpg', emoji: '🐟', description: ['ماهی آزاد با توانایی مهاجرت از دریا به رودخانه‌ها برای تخم‌ریزی شناخته می‌شود.', 'ماهی آزاد یکی از مهم‌ترین ماهی‌های تجاری و غذایی است.'] },
+            { id: 'catfish', nameFa: 'گربه ماهی', nameEn: 'Catfish', category: 'freshwater', image: 'catfish.jpg', emoji: '🐱', description: ['گربه ماهی با سبیل‌های بلند و بدن بدون فلس در آب‌های شیرین زندگی می‌کند.', 'گربه ماهی در بسیاری از فرهنگ‌ها به عنوان غذا محبوب است.'] },
+            { id: 'frog', nameFa: 'قورباغه', nameEn: 'Frog', category: 'amphibian', image: 'frog.jpg', emoji: '🐸', description: ['قورباغه دوزیستی با پوست مرطوب و پاهای عقب قدرتمند برای پریدن است.', 'قورباغه درختی و قورباغه گاو نر از گونه‌های معروف هستند.'] },
+            { id: 'salamander', nameFa: 'سمندر', nameEn: 'Salamander', category: 'amphibian', image: 'salamander.jpg', emoji: '🦎', description: ['سمندر دوزیستی با بدن دراز و دم بلند که شبیه مارمولک است.', 'سمندر آتشین با رنگ قرمز-سیاه معروف است و نماد آتش در فرهنگ اروپایی است.'] },
+            { id: 'brain_coral', nameFa: 'مرجان مغزی', nameEn: 'Brain Coral', category: 'coral', image: 'brain_coral.jpg', emoji: '🧠', description: ['مرجان مغزی با ظاهر شبیه مغز انسان و شیارهای پیچیده در آب‌های گرمسیری زندگی می‌کند.', 'مرجان‌ها نقش مهمی در تشکیل صخره‌های مرجانی دارند.'] },
+            { id: 'sea_anemone', nameFa: 'شقایق دریایی', nameEn: 'Sea Anemone', category: 'coral', image: 'sea_anemone.jpg', emoji: '🌸', description: ['شقایق دریایی با شاخک‌های رنگارنگ و سمی در کف دریا زندگی می‌کند.', 'شقایق با ماهی دلقک هم‌زیستی دارد و به یکدیگر کمک می‌کنند.'] },
+            { id: 'anglerfish', nameFa: 'ماهی راهب', nameEn: 'Anglerfish', category: 'deepsea', image: 'anglerfish.jpg', emoji: '🐟', description: ['ماهی راهب با فانوس نورانی روی سر در تاریکی اعماق دریا شکار می‌کند.', 'نرهای ماهی راهب به ماده‌ها متصل می‌شوند و مانند انگل زندگی می‌کنند.'] },
+            { id: 'lanternfish', nameFa: 'ماهی فانوس', nameEn: 'Lanternfish', category: 'deepsea', image: 'lanternfish.jpg', emoji: '🌌', description: ['ماهی فانوس با نقاط نورانی روی بدن در اعماق دریا زندگی می‌کند.', 'ماهی فانوس یکی از فراوان‌ترین ماهی‌های اعماق دریا است.'] },
+            { id: 'lobster', nameFa: 'خرچنگ دریایی', nameEn: 'Lobster', category: 'crustacean', image: 'lobster.jpg', emoji: '🦞', description: ['خرچنگ دریایی سخت‌پوستی با دو چنگال بزرگ و بدن زره‌پوش است.', 'خرچنگ دریایی یکی از گران‌قیمت‌ترین غذاهای دریایی است.'] },
+            { id: 'crab', nameFa: 'خرچنگ', nameEn: 'Crab', category: 'crustacean', image: 'crab.jpg', emoji: '🦀', description: ['خرچنگ سخت‌پوستی با بدن پهن و پاهای متعدد است که در آب و خشکی زندگی می‌کند.', 'خرچنگ‌ها نقش مهمی در زنجیره غذایی دریاها دارند.'] },
+            { id: 'shrimp', nameFa: 'میگو', nameEn: 'Shrimp', category: 'crustacean', image: 'shrimp.jpg', emoji: '🦐', description: ['میگو سخت‌پوستی کوچک با بدن شفاف و پاهای متعدد است.', 'میگو یکی از محبوب‌ترین غذاهای دریایی در جهان است.'] }
+        ];
+
+        function renderAquatic(data, filterCategory = 'all') {
+            const grid = document.getElementById('aquaticGrid');
+            const noResults = document.getElementById('noResults');
+            let html = '';
+            let count = 0;
+
+            data.forEach(item => {
+                if (filterCategory !== 'all' && item.category !== filterCategory) return;
+                count++;
+                const imagePath = `aquatic_ph/${item.image}`;
+                const catLabels = { marine: '🌊 دریایی', freshwater: '🏞️ آب شیرین', amphibian: '🐸 دوزیستان', coral: '🪸 مرجان‌ها', deepsea: '🌌 اعماق دریا', crustacean: '🦐 سخت‌پوستان' };
+                const catClasses = { marine: 'marine', freshwater: 'freshwater', amphibian: 'amphibian', coral: 'coral', deepsea: 'deepsea', crustacean: 'crustacean' };
+
+                html += `
+                    <div class="aquatic-card" data-category="${item.category}">
+                        <div class="aquatic-image">
+                            <img src="${imagePath}" alt="${item.nameFa}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                            <span class="emoji-placeholder" style="display:none;">${item.emoji || '🐟'}</span>
+                        </div>
+                        <div class="aquatic-header">
+                            <div>
+                                <div class="aquatic-name">${item.nameFa}</div>
+                                <span class="aquatic-name-en">${item.nameEn}</span>
+                            </div>
+                            <span class="category-badge ${catClasses[item.category]}">${catLabels[item.category]}</span>
+                        </div>
+                        <div class="aquatic-description">${item.description.map(p => `<p>${p}</p>`).join('')}</div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+            if (count === 0) noResults.style.display = 'block';
+            else noResults.style.display = 'none';
+
+            const cards = grid.querySelectorAll('.aquatic-card');
+            cards.forEach((card, index) => {
+                card.style.animation = 'none';
+                card.offsetHeight;
+                card.style.animation = `fadeInUp 0.5s ease forwards`;
+                card.style.animationDelay = `${(index % 12) * 0.03 + 0.03}s`;
+            });
+        }
+
+        document.querySelectorAll('.cat-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                document.querySelectorAll('.cat-tag').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                renderAquatic(aquaticData, this.dataset.cat);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderAquatic(aquaticData, 'all');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+/* ============================================
+   استایل‌های اصلی نوینیکس - تم تیره
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0f0c29;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #e8f5f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    width: 100%;
+}
+
+/* ============================================
+   لینک‌ها و دکمه‌ها
+   ============================================ */
+
+a {
+    color: #00ffcc;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #5fcde6;
+}
+
+/* ============================================
+   اسکرول بار
+   ============================================ */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00ffcc;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00b4db;
+}
+
+/* ============================================
+   انیمیشن‌ها
+   ============================================ */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+/* ============================================
+   کلاس‌های کمکی
+   ============================================ */
+
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: #a0b4c8;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, #00ffcc, #00b4db);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.mb-1 { margin-bottom: 10px; }
+.mb-2 { margin-bottom: 20px; }
+.mb-3 { margin-bottom: 30px; }
+
+.mt-1 { margin-top: 10px; }
+.mt-2 { margin-top: 20px; }
+.mt-3 { margin-top: 30px; }
+
+.p-1 { padding: 10px; }
+.p-2 { padding: 20px; }
+.p-3 { padding: 30px; }
+
+.flex {
+    display: flex;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.gap-1 { gap: 10px; }
+.gap-2 { gap: 20px; }
+
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+
+.rounded {
+    border-radius: 12px;
+}
+
+.rounded-full {
+    border-radius: 9999px;
+}
+
+.shadow {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.border {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.bg-glass {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}

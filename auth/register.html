@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ثبت‌نام | نوینیکس</title>
+    <meta name="description" content="ثبت نام در نوینیکس و ایجاد حساب کاربری جدید" />
+    <link rel="canonical" href="https://novinix.ir/auth/register.html" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <style>
+        body { justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .auth-wrapper {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 40px 35px;
+            max-width: 420px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.6);
+        }
+        .auth-header { text-align: center; margin-bottom: 25px; }
+        .auth-header .icon { font-size: 3rem; display: block; margin-bottom: 8px; }
+        .auth-header h2 { font-size: 1.8rem; color: #00ffcc; margin-bottom: 4px; }
+        .auth-header p { color: #a0b4c8; font-size: 0.9rem; }
+        .auth-message {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            display: none;
+            font-size: 0.9rem;
+        }
+        .auth-message.visible { display: block; }
+        .auth-message.success { background: rgba(0, 255, 204, 0.12); color: #00ffcc; border: 1px solid rgba(0, 255, 204, 0.2); }
+        .auth-message.error { background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 0.85rem; color: #a0b4c8; margin-bottom: 5px; }
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8f5f0;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .form-group input:focus { outline: none; border-color: #00ffcc; box-shadow: 0 0 0 3px rgba(0, 255, 204, 0.1); }
+        .form-group input::placeholder { color: rgba(255, 255, 255, 0.2); }
+        .form-group input.error { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1); }
+        .input-error { color: #f87171; font-size: 0.8rem; margin-top: 4px; display: none; }
+        .input-error.visible { display: block; }
+        .input-hint { color: rgba(255, 255, 255, 0.3); font-size: 0.75rem; margin-top: 4px; }
+        .password-strength { margin-top: 6px; height: 4px; border-radius: 4px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+        .password-strength .bar { height: 100%; width: 0%; border-radius: 4px; transition: all 0.3s ease; }
+        .form-group-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 18px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .form-group-checkbox:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(0, 255, 204, 0.1); }
+        .form-group-checkbox.error { border-color: #ef4444; background: rgba(239, 68, 68, 0.05); }
+        .form-group-checkbox input[type="checkbox"] { width: 20px; height: 20px; min-width: 20px; margin-top: 1px; accent-color: #00ffcc; cursor: pointer; }
+        .form-group-checkbox label { font-size: 0.85rem; color: #a0b4c8; line-height: 1.6; cursor: pointer; }
+        .form-group-checkbox label a { color: #00ffcc; text-decoration: none; }
+        .form-group-checkbox label a:hover { text-decoration: underline; }
+        .form-group-checkbox .checkbox-error { display: none; font-size: 0.75rem; color: #f87171; margin-top: 4px; }
+        .form-group-checkbox.error .checkbox-error { display: block; }
+        .form-group-checkbox .check-icon { font-size: 1.2rem; opacity: 0.3; transition: all 0.3s ease; }
+        .form-group-checkbox.checked .check-icon { opacity: 1; color: #00ffcc; }
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0, 255, 204, 0.25); }
+        .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+        .auth-links { text-align: center; margin-top: 18px; color: #a0b4c8; font-size: 0.85rem; }
+        .auth-links a { color: #00ffcc; text-decoration: none; font-weight: 600; }
+        .auth-links a:hover { text-decoration: underline; }
+        .back-home { display: inline-block; margin-bottom: 15px; color: #a0b4c8; text-decoration: none; font-size: 0.85rem; transition: all 0.3s ease; }
+        .back-home:hover { color: #00ffcc; }
+        @media (max-width: 480px) { .auth-wrapper { padding: 25px 20px; } .auth-header h2 { font-size: 1.4rem; } }
+    </style>
+</head>
+<body>
+
+    <div class="auth-wrapper">
+        <a href="../main.html" class="back-home">← بازگشت به خانه</a>
+
+        <div class="auth-header">
+            <span class="icon">📝</span>
+            <h2>ثبت‌نام</h2>
+            <p>ایجاد حساب کاربری جدید در نوینیکس</p>
+        </div>
+
+        <div class="auth-message" id="authMessage"></div>
+
+        <form class="auth-form" id="registerForm">
+            <div class="form-group">
+                <label for="username">نام کاربری</label>
+                <input type="text" id="username" placeholder="حداقل ۳ کاراکتر..." required />
+                <div class="input-hint">حداقل ۳ کاراکتر، فقط حروف و اعداد</div>
+                <div class="input-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">ایمیل (اختیاری)</label>
+                <input type="email" id="email" placeholder="ایمیل خود را وارد کنید..." />
+                <div class="input-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">رمز عبور</label>
+                <input type="password" id="password" placeholder="حداقل ۶ کاراکتر..." required />
+                <div class="password-strength"><div class="bar" id="strengthBar"></div></div>
+                <div class="input-hint" id="strengthText">حداقل ۶ کاراکتر</div>
+                <div class="input-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">تکرار رمز عبور</label>
+                <input type="password" id="confirmPassword" placeholder="رمز عبور را دوباره وارد کنید..." required />
+                <div class="input-error"></div>
+            </div>
+
+            <div class="form-group-checkbox" id="termsCheckbox">
+                <input type="checkbox" id="termsAccepted" />
+                <label for="termsAccepted">
+                    <span class="check-icon">✅</span>
+                    <span>
+                        <a href="/Novinix/pages/terms.html" target="_blank">قوانین و مقررات</a> و 
+                        <a href="/Novinix/pages/privacy.html" target="_blank">حریم خصوصی</a> را می‌پذیرم
+                    </span>
+                </label>
+            </div>
+            <div class="checkbox-error" style="color:#f87171;font-size:0.8rem;display:none;margin-bottom:12px;" id="termsError">
+                ⚠️ برای ثبت‌نام، لطفاً قوانین و مقررات را بپذیرید.
+            </div>
+
+            <button type="submit" class="auth-btn" id="registerBtn" disabled>ثبت‌نام</button>
+        </form>
+
+        <div class="auth-links">
+            قبلاً ثبت‌نام کرده‌اید؟ <a href="login.html">ورود</a>
+        </div>
+    </div>
+
+    <script src="../auth/auth.js"></script>
+    <script>
+        (function() {
+            const form = document.getElementById('registerForm');
+            const usernameInput = document.getElementById('username');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const confirmInput = document.getElementById('confirmPassword');
+            const messageEl = document.getElementById('authMessage');
+            const registerBtn = document.getElementById('registerBtn');
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
+            const termsCheckbox = document.getElementById('termsAccepted');
+            const termsContainer = document.getElementById('termsCheckbox');
+            const termsError = document.getElementById('termsError');
+
+            if (typeof NovinixAuth !== 'undefined' && NovinixAuth.isLoggedIn()) {
+                window.location.href = 'profile.html';
+                return;
+            }
+
+            function updateTermsState() {
+                const checked = termsCheckbox.checked;
+                registerBtn.disabled = !checked;
+                if (checked) {
+                    termsContainer.classList.add('checked');
+                    termsContainer.classList.remove('error');
+                    termsError.style.display = 'none';
+                } else {
+                    termsContainer.classList.remove('checked');
+                }
+            }
+
+            termsCheckbox.addEventListener('change', updateTermsState);
+
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+                let color = '#ef4444';
+                let text = 'ضعیف';
+
+                if (password.length >= 6) strength += 20;
+                if (password.length >= 10) strength += 20;
+                if (/[a-z]/.test(password)) strength += 15;
+                if (/[A-Z]/.test(password)) strength += 15;
+                if (/[0-9]/.test(password)) strength += 15;
+                if (/[^a-zA-Z0-9]/.test(password)) strength += 15;
+
+                if (strength >= 80) { color = '#00ffcc'; text = 'عالی'; }
+                else if (strength >= 60) { color = '#fbbf24'; text = 'خوب'; }
+                else if (strength >= 40) { color = '#f59e0b'; text = 'متوسط'; }
+                else if (strength >= 20) { color = '#f97316'; text = 'ضعیف'; }
+
+                strengthBar.style.width = strength + '%';
+                strengthBar.style.background = color;
+                strengthText.textContent = text + ' (حداقل ۶ کاراکتر)';
+                strengthText.style.color = color;
+            });
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                if (!termsCheckbox.checked) {
+                    termsContainer.classList.add('error');
+                    termsError.style.display = 'block';
+                    termsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return;
+                }
+
+                const username = usernameInput.value.trim();
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+                const confirm = confirmInput.value;
+
+                messageEl.className = 'auth-message';
+                clearErrors();
+                termsContainer.classList.remove('error');
+                termsError.style.display = 'none';
+
+                if (!username || username.length < 3) {
+                    showError(usernameInput, 'نام کاربری باید حداقل ۳ کاراکتر باشد.');
+                    return;
+                }
+                if (!/^[a-zA-Z0-9_\u0600-\u06FF]+$/.test(username)) {
+                    showError(usernameInput, 'نام کاربری فقط می‌تواند شامل حروف و اعداد باشد.');
+                    return;
+                }
+                if (!password || password.length < 6) {
+                    showError(passwordInput, 'رمز عبور باید حداقل ۶ کاراکتر باشد.');
+                    return;
+                }
+                if (password !== confirm) {
+                    showError(confirmInput, 'رمز عبور و تکرار آن مطابقت ندارند.');
+                    return;
+                }
+
+                registerBtn.disabled = true;
+                registerBtn.textContent = '⏳ در حال ثبت‌نام...';
+
+                const result = await NovinixAuth.register(username, password, email);
+
+                if (result.success) {
+                    showMessage('✅ ' + result.message, 'success');
+                    localStorage.setItem('novinix_terms_accepted', 'true');
+                    setTimeout(() => { window.location.href = 'profile.html'; }, 1000);
+                } else {
+                    showMessage('❌ ' + result.message, 'error');
+                    registerBtn.disabled = false;
+                    registerBtn.textContent = 'ثبت‌نام';
+                }
+            });
+
+            function showMessage(message, type) {
+                messageEl.textContent = message;
+                messageEl.className = 'auth-message visible ' + type;
+            }
+
+            function showError(input, message) {
+                input.classList.add('error');
+                const errorEl = input.parentElement.querySelector('.input-error');
+                if (errorEl) { errorEl.textContent = message; errorEl.classList.add('visible'); }
+            }
+
+            function clearErrors() {
+                document.querySelectorAll('.form-group input.error').forEach(el => el.classList.remove('error'));
+                document.querySelectorAll('.input-error.visible').forEach(el => el.classList.remove('visible'));
+            }
+
+            document.querySelectorAll('.form-group input').forEach(input => {
+                input.addEventListener('input', function() {
+                    this.classList.remove('error');
+                    const errorEl = this.parentElement.querySelector('.input-error');
+                    if (errorEl) errorEl.classList.remove('visible');
+                });
+            });
+
+            if (localStorage.getItem('novinix_terms_accepted') === 'true') {
+                termsCheckbox.checked = true;
+                updateTermsState();
+            }
+        })();
+    </script>
+    <script src="../assets/js/seo.js"></script>
+</body>
+</html>

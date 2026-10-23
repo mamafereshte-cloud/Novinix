@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ماشین‌حساب آماری آنلاین | ابزار محاسبه آمار Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای محاسبه آمار شامل میانگین، میانه، مد، انحراف معیار، واریانس، دامنه و چارک‌ها." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/statistical-calculator" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .tool-textarea {
+            min-height: 120px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .stat-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .stat-results .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        .stat-results .stat-card:hover {
+            border-color: rgba(0, 255, 204, 0.15);
+        }
+        .stat-results .stat-card .label {
+            font-size: 0.7rem;
+            color: rgba(160, 180, 200, 0.4);
+            font-weight: 500;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-results .stat-card .value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e8f5f0;
+            display: block;
+            margin-top: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        .stat-results .stat-card .value.success {
+            color: #00ffcc;
+        }
+        .stat-results .stat-card .value.danger {
+            color: #f87171;
+        }
+        .stat-results .stat-card .value.warning {
+            color: #fbbf24;
+        }
+
+        .act-btn-sample {
+            background: rgba(52, 152, 219, 0.12);
+            color: #5fcde6;
+            border: 1px solid rgba(52, 152, 219, 0.15);
+        }
+        .act-btn-sample:hover {
+            background: rgba(52, 152, 219, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .stat-results {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 400px) {
+            .stat-results {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">📊</span>
+                <h2>ماشین‌حساب آماری</h2>
+                <span class="badge">میانگین &bull; میانه &bull; انحراف معیار</span>
+            </div>
+
+            <div class="panel-header"><span>📥 داده‌ها (هر عدد در یک خط)</span></div>
+            <textarea class="tool-textarea" id="statInput" placeholder="اعداد را هر کدام در یک خط وارد کنید...">12
+15
+18
+22
+25
+28
+30
+35
+40
+45</textarea>
+
+            <div class="stat-results" id="statResults">
+                <div class="stat-card"><span class="label">📊 تعداد</span><span class="value" id="statCount">—</span></div>
+                <div class="stat-card"><span class="label">📊 مجموع</span><span class="value" id="statSum">—</span></div>
+                <div class="stat-card"><span class="label">📊 میانگین</span><span class="value success" id="statMean">—</span></div>
+                <div class="stat-card"><span class="label">📊 میانه</span><span class="value" id="statMedian">—</span></div>
+                <div class="stat-card"><span class="label">📊 مد</span><span class="value" id="statMode">—</span></div>
+                <div class="stat-card"><span class="label">📊 دامنه</span><span class="value" id="statRange">—</span></div>
+                <div class="stat-card"><span class="label">📊 واریانس</span><span class="value" id="statVariance">—</span></div>
+                <div class="stat-card"><span class="label">📊 انحراف معیار</span><span class="value" id="statStdDev">—</span></div>
+                <div class="stat-card"><span class="label">📊 چارک اول</span><span class="value" id="statQ1">—</span></div>
+                <div class="stat-card"><span class="label">📊 چارک سوم</span><span class="value" id="statQ3">—</span></div>
+                <div class="stat-card"><span class="label">📊 کوچکترین</span><span class="value danger" id="statMin">—</span></div>
+                <div class="stat-card"><span class="label">📊 بزرگترین</span><span class="value success" id="statMax">—</span></div>
+            </div>
+
+            <div class="tool-actions">
+                <button class="act-btn act-btn-copy" id="calcStatBtn" style="background:linear-gradient(135deg, #00ffcc, #00b4db);color:#0f0c29;">🧮 محاسبه</button>
+                <button class="act-btn act-btn-sample" id="sampleStatBtn">📄 نمونه</button>
+                <button class="act-btn act-btn-copy" id="copyStatBtn">📋 کپی</button>
+                <button class="act-btn act-btn-clear" id="clearStatBtn">🗑️ پاک کردن</button>
+            </div>
+        </div>
+    </main>
+
+    
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            function getData() {
+                const text = document.getElementById('statInput').value;
+                return text.split('\n').filter(line => line.trim() !== '').map(n => parseFloat(n.trim())).filter(n => !isNaN(
+                    n));
+            }
+
+            function formatNumber(n) {
+                if (n === undefined || n === null || isNaN(n)) return '—';
+                if (Number.isInteger(n)) return n.toString();
+                return n.toFixed(4);
+            }
+
+            function calcStats() {
+                const data = getData();
+                const count = data.length;
+                if (count === 0) {
+                    document.querySelectorAll('.stat-results .value').forEach(el => el.textContent = '—');
+                    return;
+                }
+
+                const sorted = [...data].sort((a, b) => a - b);
+                const sum = data.reduce((a, b) => a + b, 0);
+                const mean = sum / count;
+
+                // median
+                let median;
+                if (count % 2 === 0) median = (sorted[count / 2 - 1] + sorted[count / 2]) / 2;
+                else median = sorted[Math.floor(count / 2)];
+
+                // mode
+                const freq = {};
+                data.forEach(n => freq[n] = (freq[n] || 0) + 1);
+                let maxFreq = 0,
+                    mode = [];
+                for (const [key, val] of Object.entries(freq)) {
+                    if (val > maxFreq) { maxFreq = val;
+                        mode = [parseFloat(key)]; } else if (val === maxFreq) mode.push(parseFloat(key));
+                }
+                if (mode.length === count) mode = [];
+
+                // range
+                const min = sorted[0],
+                    max = sorted[count - 1];
+                const range = max - min;
+
+                // variance & std dev
+                const variance = data.reduce((a, b) => a + (b - mean) ** 2, 0) / count;
+                const stdDev = Math.sqrt(variance);
+
+                // quartiles
+                const q1 = sorted[Math.floor(count * 0.25)];
+                const q3 = sorted[Math.floor(count * 0.75)];
+
+                document.getElementById('statCount').textContent = count;
+                document.getElementById('statSum').textContent = formatNumber(sum);
+                document.getElementById('statMean').textContent = formatNumber(mean);
+                document.getElementById('statMedian').textContent = formatNumber(median);
+                document.getElementById('statMode').textContent = mode.length ? mode.map(n => formatNumber(n)).join(', ') :
+                    '—';
+                document.getElementById('statRange').textContent = formatNumber(range);
+                document.getElementById('statVariance').textContent = formatNumber(variance);
+                document.getElementById('statStdDev').textContent = formatNumber(stdDev);
+                document.getElementById('statQ1').textContent = formatNumber(q1);
+                document.getElementById('statQ3').textContent = formatNumber(q3);
+                document.getElementById('statMin').textContent = formatNumber(min);
+                document.getElementById('statMax').textContent = formatNumber(max);
+            }
+
+            document.getElementById('calcStatBtn').addEventListener('click', calcStats);
+
+            document.getElementById('sampleStatBtn').addEventListener('click', function() {
+                document.getElementById('statInput').value = `12\n15\n18\n22\n25\n28\n30\n35\n40\n45`;
+                calcStats();
+            });
+
+            document.getElementById('copyStatBtn').addEventListener('click', function() {
+                const results = {};
+                document.querySelectorAll('.stat-card').forEach(card => {
+                    const label = card.querySelector('.label').textContent.trim();
+                    const value = card.querySelector('.value').textContent;
+                    results[label] = value;
+                });
+                const text = Object.entries(results).map(([k, v]) => `${k}: ${v}`).join('\n');
+                navigator.clipboard.writeText(text).then(() => {
+                    const orig = this.textContent;
+                    this.textContent = '✅ کپی شد!';
+                    setTimeout(() => this.textContent = orig, 1500);
+                });
+            });
+
+            document.getElementById('clearStatBtn').addEventListener('click', function() {
+                document.getElementById('statInput').value = '';
+                document.querySelectorAll('.stat-results .value').forEach(el => el.textContent = '—');
+            });
+
+            document.getElementById('statInput').addEventListener('input', calcStats);
+
+            calcStats();
+            console.log('📊 Statistical Calculator loaded!');
+        })();
+    </script>
+</body>
+</html>

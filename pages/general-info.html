@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>اطلاعات عمومی | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+
+    <!-- ===== CSS فایل‌های جداگانه ===== -->
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+
+    <style>
+        /* ===== استایل‌های اختصاصی اطلاعات عمومی ===== */
+        .info-hero {
+            background: linear-gradient(135deg, #1a1a2e, #2d1b69, #6c2eb7);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(108, 46, 183, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-hero::before {
+            content: '🌍';
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.05;
+            right: -30px;
+            bottom: -30px;
+            transform: rotate(10deg);
+        }
+
+        .info-hero h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .info-hero h2 span {
+            color: #ffd93d;
+        }
+
+        .info-hero p {
+            opacity: 0.85;
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .category-section {
+            margin-bottom: 45px;
+        }
+
+        .category-section .section-title {
+            font-size: 1.6rem;
+            color: #00ffcc;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-right: 4px solid #00ffcc;
+            padding-right: 15px;
+        }
+
+        .category-section .section-title span {
+            font-size: 1.8rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 25px 20px;
+            text-align: center;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            text-decoration: none;
+            color: #e8f5f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            border-color: #00ffcc;
+            box-shadow: 0 12px 40px rgba(0, 255, 204, 0.1);
+        }
+
+        .info-card .icon {
+            font-size: 2.8rem;
+            line-height: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .info-card:hover .icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .info-card .name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .info-card .desc {
+            font-size: 0.8rem;
+            color: #a0b4c8;
+        }
+
+        .info-card .badge {
+            font-size: 0.55rem;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            background: rgba(0, 255, 204, 0.15);
+            color: #00ffcc;
+        }
+
+        .info-card {
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .info-card:nth-child(1) { animation-delay: 0.03s; }
+        .info-card:nth-child(2) { animation-delay: 0.06s; }
+        .info-card:nth-child(3) { animation-delay: 0.09s; }
+        .info-card:nth-child(4) { animation-delay: 0.12s; }
+        .info-card:nth-child(5) { animation-delay: 0.15s; }
+        .info-card:nth-child(6) { animation-delay: 0.18s; }
+        .info-card:nth-child(7) { animation-delay: 0.21s; }
+        .info-card:nth-child(8) { animation-delay: 0.24s; }
+        .info-card:nth-child(9) { animation-delay: 0.27s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .info-hero { padding: 25px 20px; }
+            .info-hero h2 { font-size: 1.5rem; }
+            .info-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .info-card { padding: 18px 15px; }
+            .info-card .icon { font-size: 2.2rem; }
+            .category-section .section-title { font-size: 1.3rem; }
+        }
+
+        @media (max-width: 480px) {
+            .info-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .info-card { padding: 14px 10px; }
+            .info-card .icon { font-size: 1.8rem; }
+            .info-card .name { font-size: 0.85rem; }
+            .info-card .desc { font-size: 0.7rem; }
+            .info-hero h2 { font-size: 1.3rem; }
+            .info-hero p { font-size: 0.9rem; }
+            .category-section .section-title { font-size: 1.1rem; padding-right: 10px; }
+            .category-section .section-title span { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER توسط header.js ساخته می‌شود ===== -->
+
+    <main>
+        <div class="info-hero">
+            <h2>🌍 اطلاعات <span>عمومی</span></h2>
+            <p>دنیای شگفت‌انگیز حیوانات، پرندگان، ابزیان، ماشین‌ها، موتورها و هواپیماها</p>
+        </div>
+
+        <!-- ===== دسته‌بندی اول: حیوانات، پرندگان، ابزیان ===== -->
+        <section class="category-section">
+            <div class="section-title">
+                <span>🐾</span> حیوانات، پرندگان و ابزیان
+            </div>
+            <div class="info-grid">
+                <a href="../general-info_page/animals.html" class="info-card">
+                    <span class="icon">🦁</span>
+                    <span class="name">پستانداران</span>
+                    <span class="desc">شیر، ببر، فیل و ...</span>
+                    <span class="badge">جدید</span>
+                </a>
+                <a href="../general-info_page/birds.html" class="info-card">
+                    <span class="icon">🦅</span>
+                    <span class="name">پرندگان</span>
+                    <span class="desc">عقاب، طوطی، پنگوئن و ...</span>
+                </a>
+                <a href="../general-info_page/Marine-Life.html" class="info-card">
+                    <span class="icon">🐟</span>
+                    <span class="name">ابزیان</span>
+                    <span class="desc">کوسه، دلفین، سالمون و ...</span>
+                </a>
+                <a href="../general-info_page/creeper.html" class="info-card">
+                    <span class="icon">🐍</span>
+                    <span class="name">خزندگان</span>
+                    <span class="desc">مار، مارمولک، لاک‌پشت و ...</span>
+                </a>
+                <a href="../general-info_page/Amphibians.html" class="info-card">
+                    <span class="icon">🐸</span>
+                    <span class="name">دوزیستان</span>
+                    <span class="desc">قورباغه، سمندر و ...</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- ===== دسته‌بندی دوم: ماشین‌ها، موتورها، هواپیماها ===== -->
+        <section class="category-section">
+            <div class="section-title">
+                <span>🚗</span> ماشین‌ها، موتورها و هواپیماها
+            </div>
+            <div class="info-grid">
+                <a href="../general-info_page/cars.html" class="info-card">
+                    <span class="icon">🚗</span>
+                    <span class="name">خودروها</span>
+                    <span class="desc">سواری، شاسی‌بلند، اسپورت و ...</span>
+                    <span class="badge">محبوب</span>
+                </a>
+                <a href="../general-info_page/motors.html" class="info-card">
+                    <span class="icon">🏍️</span>
+                    <span class="name">موتورسیکلت‌ها</span>
+                    <span class="desc">اسپورت، کروزر، آفرود و ...</span>
+                </a>
+                <a href="../general-info_page/airplane.html" class="info-card">
+                    <span class="icon">✈️</span>
+                    <span class="name">هواپیماها</span>
+                    <span class="desc">مسافری، جنگی، خصوصی و ...</span>
+                    <span class="badge">جدید</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- ===== دسته‌بندی سوم: متفرقه ===== -->
+        <section class="category-section">
+            <div class="section-title">
+                <span>🤯</span> متفرقه
+            </div>
+            <div class="info-grid">
+                <a href="../general-info_page/facts.html" class="info-card">
+                    <span class="icon">🤯</span>
+                    <span class="name">ایا میدانید؟</span>
+                    <span class="badge">محبوب</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== FOOTER توسط footer.js ساخته می‌شود ===== -->
+
+    <!-- ===== اسکریپت‌ها ===== -->
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+</body>
+</html>

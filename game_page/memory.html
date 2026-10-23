@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🧠 حافظه</title>
+    <link rel="stylesheet" href="../assets/css/game.css">
+    <style>
+        .mem-wrapper { max-width: 600px; }
+        #memBoard { display:grid; gap:10px; padding:10px; background:var(--card-bg); border-radius:var(--radius-sm); border:2px solid var(--card-border); }
+        .mem-card { aspect-ratio:1; perspective:600px; cursor:pointer; }
+        .mem-inner { position:relative; width:100%; height:100%; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1); transform-style:preserve-3d; border-radius:var(--radius-sm); }
+        .mem-card.flipped .mem-inner { transform:rotateY(180deg); }
+        .mem-card.matched .mem-inner { transform:rotateY(180deg); }
+        .mem-card.matched .mem-front { border-color:rgba(46,204,113,0.3); box-shadow:0 0 20px rgba(46,204,113,0.15); }
+        .mem-front, .mem-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; font-size:2.5rem; border:2px solid var(--card-border); transition:all 0.3s; user-select:none; }
+        .mem-back { transform:rotateY(180deg); background:linear-gradient(145deg,rgba(155,89,182,0.15),rgba(142,68,173,0.05)); border-color:rgba(155,89,182,0.2); font-size:3rem; }
+        .mem-front { background:linear-gradient(145deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02)); }
+        .mem-card.matched .mem-back { border-color:rgba(46,204,113,0.3); box-shadow:0 0 20px rgba(46,204,113,0.15); }
+        .mem-card:hover:not(.flipped):not(.matched) .mem-front { border-color:rgba(155,89,182,0.3); box-shadow:0 0 20px rgba(155,89,182,0.1); }
+        .mem-front .icon { font-size:2.8rem; }
+        .mem-back .emoji { font-size:3.2rem; }
+        .mem-card { animation:cardAppear 0.4s ease forwards; }
+        @keyframes cardAppear { from{opacity:0;transform:scale(0.8) rotateY(90deg);} to{opacity:1;transform:scale(1) rotateY(0);} }
+        .mem-card.matched .mem-inner { animation:matchPulse 0.5s ease 0.3s; }
+        @keyframes matchPulse { 0%,100%{transform:scale(1) rotateY(180deg);} 50%{transform:scale(1.05) rotateY(180deg);} }
+        .mem-card:nth-child(1){animation-delay:0.02s;} .mem-card:nth-child(2){animation-delay:0.04s;}
+        .mem-card:nth-child(3){animation-delay:0.06s;} .mem-card:nth-child(4){animation-delay:0.08s;}
+        .mem-card:nth-child(5){animation-delay:0.10s;} .mem-card:nth-child(6){animation-delay:0.12s;}
+        .mem-card:nth-child(7){animation-delay:0.14s;} .mem-card:nth-child(8){animation-delay:0.16s;}
+        .mem-card:nth-child(9){animation-delay:0.18s;} .mem-card:nth-child(10){animation-delay:0.20s;}
+        .mem-card:nth-child(11){animation-delay:0.22s;} .mem-card:nth-child(12){animation-delay:0.24s;}
+        .mem-card:nth-child(13){animation-delay:0.26s;} .mem-card:nth-child(14){animation-delay:0.28s;}
+        .mem-card:nth-child(15){animation-delay:0.30s;} .mem-card:nth-child(16){animation-delay:0.32s;}
+        @media (max-width:500px){ .mem-front .icon{font-size:2rem;} .mem-back .emoji{font-size:2.2rem;} #memBoard{gap:6px;padding:6px;} }
+        @media (max-width:380px){ .mem-front .icon{font-size:1.6rem;} .mem-back .emoji{font-size:1.8rem;} #memBoard{gap:4px;padding:4px;} }
+    </style>
+</head>
+<body>
+<div class="game-wrapper mem-wrapper">
+    <div class="game-header">
+        <h1>🧠 حافظه</h1>
+        <div class="header-buttons"><a href="../pages/games.html" class="exit-btn">✕ خروج</a></div>
+    </div>
+    <div class="game-info">
+        <div class="info-box"><span class="label">🎯 امتیاز</span><span class="value" id="mScore">0</span></div>
+        <div class="info-box"><span class="label">🔄 تلاش‌ها</span><span class="value" id="mAttempts">0</span></div>
+        <div class="info-box"><span class="label">⏱️ زمان</span><span class="value" id="mTime">۰۰:۰۰</span></div>
+        <div class="info-box"><span class="label">🏆 بهترین</span><span class="value" id="mBest">--</span></div>
+    </div>
+    <div class="status-message" id="mStatus">🎮 کارت‌ها را برگردانید</div>
+    <div class="board-wrapper"><div id="memBoard"></div></div>
+    <div class="game-buttons">
+        <button class="btn btn-success" onclick="resetMem()">🔄 بازی جدید</button>
+        <div style="display:flex;align-items:center;gap:8px;background:var(--card-bg);padding:4px 12px;border-radius:50px;border:1px solid var(--card-border);">
+            <label style="color:var(--text-secondary);font-size:0.85rem;">📊 اندازه:</label>
+            <select id="memDiff" onchange="changeMemSize()" style="background:transparent;color:var(--text-primary);border:none;font-size:0.9rem;outline:none;font-family:var(--font);">
+                <option value="4">4×4</option><option value="6">6×6</option><option value="8" selected>8×8</option><option value="10">10×10</option>
+            </select>
+        </div>
+    </div>
+    <div class="key-hints"><span>🖱 کلیک روی کارت</span><span>R ریستارت</span></div>
+</div>
+<script>
+// ===== حافظه =====
+const board=document.getElementById('memBoard'), status=document.getElementById('mStatus');
+const sScore=document.getElementById('mScore'), sAttempts=document.getElementById('mAttempts'), sTime=document.getElementById('mTime'), sBest=document.getElementById('mBest');
+const EMOJIS=['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐸','🐵','🐔','🐧','🐦','🦄','🐴','🦋','🐞','🐝','🦀'];
+const ICONS=['⭐','🌈','🎯','🎨','🎭','🎪','🎢','🎠','🎡','🎨','🎬','🎤','🎧','🎼','🎹','🥁'];
+let cards=[], flipped=[], matched=0, total=8, score=0, attempts=0, locked=false, timer=null, seconds=0, mins=0, started=false, ended=false, size=8, best=parseInt(localStorage.getItem('memBestScore'))||0, bestTime=localStorage.getItem('memBestTime')||'--';
+if(best>0)sBest.textContent=best;else sBest.textContent='--'; if(bestTime!=='--'&&best>0)sBest.textContent=`${best} (${bestTime})`;
+
+function initMem(){ cards=[]; flipped=[]; matched=0; score=0; attempts=0; locked=false; started=false; ended=false; seconds=0; mins=0; if(timer){clearInterval(timer);timer=null;} updateMemDisplay(); status.textContent='🎮 کارت‌ها را برگردانید'; status.className='status-message'; createMemCards(); renderMem(); }
+function createMemCards(){ const totalCards=size*size; total=totalCards/2; const avail=[...ICONS,...EMOJIS]; const sel=avail.slice(0,total); let pairs=[]; for(const icon of sel){pairs.push({icon,matched:false,flipped:false});pairs.push({icon,matched:false,flipped:false});} cards=shuffleMem(pairs); cards=cards.map((c,i)=>({...c,id:i})); }
+function renderMem(){ board.innerHTML=''; board.style.gridTemplateColumns=`repeat(${size},1fr)`; cards.forEach((c,i)=>{ const el=document.createElement('div'); el.className='mem-card'; el.dataset.index=i; el.innerHTML=`<div class="mem-inner"><div class="mem-front"><span class="icon">❓</span></div><div class="mem-back"><span class="emoji">${c.icon}</span></div></div>`; el.addEventListener('click',()=>handleMemClick(i)); board.appendChild(el); }); }
+function handleMemClick(idx){ if(locked||ended)return; if(cards[idx].flipped||cards[idx].matched)return; if(flipped.length>=2)return; if(!started){started=true;startMemTimer();} flipMem(idx); flipped.push(idx); if(flipped.length===2){locked=true;attempts++;updateMemDisplay();checkMemMatch();} }
+function flipMem(idx){ cards[idx].flipped=true; board.children[idx].classList.add('flipped'); }
+function unflipMem(idx){ cards[idx].flipped=false; board.children[idx].classList.remove('flipped'); }
+function checkMemMatch(){ const [i1,i2]=flipped; const c1=cards[i1],c2=cards[i2]; if(c1.icon===c2.icon){ setTimeout(()=>{c1.matched=true;c2.matched=true;board.children[i1].classList.add('matched');board.children[i2].classList.add('matched');score+=10;matched++;updateMemDisplay();flipped=[];locked=false; if(matched===total){endMem(true);}else{status.textContent='✅ جفت پیدا شد! +۱۰ امتیاز';status.className='status-message success';} },400); }else{ setTimeout(()=>{unflipMem(i1);unflipMem(i2);flipped=[];locked=false;status.textContent='❌ جفت نبود، دوباره تلاش کنید';status.className='status-message error';},700); } }
+async function saveMem(){ try{ if(typeof NovinixAuth!=='undefined'&&NovinixAuth.isLoggedIn()){ await NovinixAuth.saveGameScore('memory',score,{time:seconds+mins*60,attempts,size:`${size}×${size}`}); } }catch(e){} }
+function endMem(win){ ended=true; if(timer){clearInterval(timer);timer=null;} if(win){ const ts=formatMem(); status.textContent=`🎉 تبریک! زمان: ${ts}`; status.className='status-message success'; saveMem(); if(score>best){best=score;localStorage.setItem('memBestScore',best);sBest.textContent=best;} const totalT=mins*60+seconds; if(bestTime==='--'||totalT<parseMemTime(bestTime)){bestTime=ts;localStorage.setItem('memBestTime',bestTime);sBest.textContent=bestTime+' 🏆';} updateMemDisplay(); } }
+function shuffleMem(arr){ for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr; }
+function startMemTimer(){ timer=setInterval(()=>{seconds++;if(seconds===60){seconds=0;mins++;}updateMemDisplay();},1000); }
+function formatMem(){ return `${String(mins).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`; }
+function parseMemTime(str){ if(str==='--')return Infinity; const p=str.split(':'); return parseInt(p[0])*60+parseInt(p[1]); }
+function updateMemDisplay(){ sScore.textContent=score; sAttempts.textContent=attempts; sTime.textContent=formatMem(); if(best>0)sBest.textContent=best; if(bestTime!=='--'&&best>0)sBest.textContent=`${best} (${bestTime})`; }
+function changeMemSize(){ size=parseInt(document.getElementById('memDiff').value); if(!started||ended){initMem();}else{if(confirm('تغییر اندازه باعث شروع مجدد می‌شود. ادامه می‌دهید؟')){initMem();}else{document.getElementById('memDiff').value=size;}} }
+function resetMem(){initMem();}
+document.addEventListener('keydown',e=>{if(e.key==='r'||e.key==='R')resetMem();});
+initMem();
+</script>
+<script src="../assets/js/seo.js"></script>
+</body>
+</html>

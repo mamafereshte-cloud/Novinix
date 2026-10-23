@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>وبلاگ نوینیکس | مقالات آموزشی و تکنولوژی</title>
+    <meta name="description" content="مجله نوینیکس: مقالات آموزشی، تکنولوژی، برنامه‌نویسی، طراحی و معرفی ابزارهای آنلاین" />
+    <link rel="canonical" href="https://novinix.ir/pages/blog.html" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <style>
+        .blog-hero {
+            text-align: center;
+            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 35px;
+        }
+        .blog-hero h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        .blog-hero p {
+            color: #a0b4c8;
+            font-size: 1.05rem;
+        }
+        .blog-hero .icon-big {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .blog-hero .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .blog-hero .stats .stat {
+            color: rgba(160, 180, 200, 0.5);
+            font-size: 0.9rem;
+        }
+        .blog-hero .stats .stat strong {
+            color: #00ffcc;
+            font-size: 1.2rem;
+        }
+
+        .blog-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .blog-search {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            gap: 10px;
+        }
+        .blog-search input {
+            flex: 1;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            color: #e8f5f0;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        .blog-search input:focus {
+            outline: none;
+            border-color: #00ffcc;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.08);
+        }
+        .blog-search input::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+        }
+        .blog-categories {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .blog-categories .cat-tag {
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 30px;
+            color: #a0b4c8;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .blog-categories .cat-tag:hover {
+            border-color: #00ffcc;
+            color: #00ffcc;
+        }
+        .blog-categories .cat-tag.active {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            border-color: #00ffcc;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 25px;
+        }
+        .blog-card {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+        .blog-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(0, 255, 204, 0.2);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+        .blog-card .card-image {
+            width: 100%;
+            height: 180px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .blog-card .card-image .no-img {
+            color: rgba(255, 255, 255, 0.1);
+        }
+        .blog-card .card-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 255, 204, 0.15);
+            color: #00ffcc;
+            padding: 3px 14px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            border: 1px solid rgba(0, 255, 204, 0.1);
+        }
+        .blog-card .card-body {
+            padding: 20px 22px 22px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .blog-card .card-body .meta {
+            display: flex;
+            gap: 12px;
+            font-size: 0.7rem;
+            color: rgba(160, 180, 200, 0.5);
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .blog-card .card-body .meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .blog-card .card-body h3 {
+            color: #e8f5f0;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            transition: color 0.3s ease;
+        }
+        .blog-card:hover .card-body h3 {
+            color: #00ffcc;
+        }
+        .blog-card .card-body .excerpt {
+            color: #a0b4c8;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            flex: 1;
+        }
+        .blog-card .card-body .tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .blog-card .card-body .tags .tag {
+            padding: 2px 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 20px;
+            font-size: 0.65rem;
+            color: rgba(160, 180, 200, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .blog-card .card-body .read-more {
+            display: inline-block;
+            margin-top: 12px;
+            color: #00ffcc;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+        }
+        .blog-card .card-body .read-more:hover {
+            transform: translateX(-5px);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(160, 180, 200, 0.5);
+            display: none;
+        }
+        .no-results .big-icon {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .loading-spinner .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #00ffcc;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            flex-wrap: wrap;
+        }
+        .pagination-container .page-btn {
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: #a0b4c8;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 0.85rem;
+            min-width: 40px;
+            text-align: center;
+        }
+        .pagination-container .page-btn:hover:not(:disabled) {
+            background: rgba(0, 255, 204, 0.1);
+            border-color: #00ffcc;
+            color: #00ffcc;
+            transform: translateY(-2px);
+        }
+        .pagination-container .page-btn.active {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            border-color: #00ffcc;
+            font-weight: 700;
+        }
+        .pagination-container .page-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .pagination-container .page-btn.arrow {
+            font-size: 1.1rem;
+            padding: 8px 18px;
+        }
+        .pagination-container .page-info {
+            color: rgba(160, 180, 200, 0.5);
+            font-size: 0.8rem;
+            padding: 0 12px;
+        }
+
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            .blog-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .blog-hero h2 {
+                font-size: 1.6rem;
+            }
+            .blog-hero .stats {
+                gap: 15px;
+            }
+            .blog-hero .stats .stat {
+                font-size: 0.8rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .blog-hero h2 {
+                font-size: 1.3rem;
+            }
+            .blog-hero .icon-big {
+                font-size: 2rem;
+            }
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            .blog-card .card-image {
+                height: 140px;
+                font-size: 3rem;
+            }
+            .pagination-container .page-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+                min-width: 34px;
+            }
+            .pagination-container .page-btn.arrow {
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <main>
+        <div class="blog-hero">
+            <span class="icon-big">📝</span>
+            <h2>مجله نوینیکس</h2>
+            <p>جدیدترین مقالات آموزشی، تکنولوژی و معرفی ابزارها</p>
+            <div class="stats">
+                <span class="stat"><strong id="totalArticles">۰</strong> مقاله</span>
+                <span class="stat"><strong id="totalViews">۰</strong> بازدید</span>
+                <span class="stat"><strong id="totalAuthors">۰</strong> نویسنده</span>
+            </div>
+        </div>
+
+        <div class="blog-controls">
+            <div class="blog-search">
+                <input type="text" id="searchBlog" placeholder="🔍 جستجوی مقالات..." />
+            </div>
+            <div class="blog-categories" id="categoryFilter">
+                <span class="cat-tag active" data-category="all">همه</span>
+                <span class="cat-tag" data-category="برنامه‌نویسی">💻 برنامه‌نویسی</span>
+                <span class="cat-tag" data-category="آموزش">📚 آموزش</span>
+                <span class="cat-tag" data-category="فناوری">🤖 فناوری</span>
+                <span class="cat-tag" data-category="ابزار">🛠️ ابزار</span>
+                <span class="cat-tag" data-category="طراحی">🎨 طراحی</span>
+                <span class="cat-tag" data-category="امنیت">🔐 امنیت</span>
+                <span class="cat-tag" data-category="مالی و بانکی">🏦 مالی و بانکی</span>
+                <span class="cat-tag" data-category="هوش مصنوعی">🧠 هوش مصنوعی</span>
+                <span class="cat-tag" data-category="کسب‌وکار">💼 کسب‌وکار</span>
+                <span class="cat-tag" data-category="سئو">📈 سئو</span>
+                <span class="cat-tag" data-category="سلامت">🧘 سلامت</span>
+            </div>
+        </div>
+
+        <div class="blog-grid" id="blogGrid">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>⏳ در حال بارگذاری مقالات...</p>
+            </div>
+        </div>
+
+        <div class="pagination-container" id="paginationContainer">
+            <button class="page-btn arrow" id="prevPage">‹</button>
+            <div id="pageNumbers"></div>
+            <button class="page-btn arrow" id="nextPage">›</button>
+            <span class="page-info" id="pageInfo"></span>
+        </div>
+
+        <div class="no-results" id="noResults">
+            <span class="big-icon">🔍</span>
+            <h3>مقاله‌ای یافت نشد</h3>
+            <p>سعی کنید با عبارت دیگری جستجو کنید</p>
+        </div>
+    </main>
+
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            // ===== دیتای کامل مقالات =====
+            const articlesData = [{
+                    id: 1,
+                    title: "۱۰ ابزار آنلاین ضروری برای برنامه‌نویسان",
+                    slug: "10-essential-online-tools-for-developers",
+                    category: "برنامه‌نویسی",
+                    excerpt: "در این مقاله با ۱۰ ابزار آنلاین کاربردی آشنا می‌شوید که کار شما را به عنوان یک برنامه‌نویس بسیار آسان‌تر می‌کنند.",
+                    author: "تیم نوینیکس",
+                    date: "۲۰۲۶-۰۸-۲۰",
+                    readTime: "۵ دقیقه",
+                    icon: "🛠️",
+                    tags: ["ابزار", "برنامه‌نویسی", "توسعه"],
+                    views: 1250
+                },
+                {
+                    id: 2,
+                    title: "بهترین ابزارهای طراحی UI/UX در ۲۰۲۶",
+                    slug: "best-ui-ux-tools-2026",
+                    category: "طراحی",
+                    excerpt: "با بهترین ابزارهای طراحی رابط کاربری و تجربه کاربری در سال ۲۰۲۶ آشنا شوید.",
+                    author: "سارا محمدی",
+                    date: "۲۰۲۶-۰۸-۱۵",
+                    readTime: "۷ دقیقه",
+                    icon: "🎨",
+                    tags: ["طراحی", "UI/UX", "ابزار"],
+                    views: 890
+                },
+                {
+                    id: 3,
+                    title: "چگونه از هک شدن حساب‌های خود جلوگیری کنیم؟",
+                    slug: "how-to-prevent-hacking",
+                    category: "امنیت",
+                    excerpt: "با رعایت چند نکته ساده اما مهم، امنیت حساب‌های خود را افزایش دهید.",
+                    author: "مهدی کریمی",
+                    date: "۲۰۲۶-۰۸-۱۲",
+                    readTime: "۶ دقیقه",
+                    icon: "🔐",
+                    tags: ["امنیت", "رمز عبور", "حفاظت"],
+                    views: 2100
+                },
+                {
+                    id: 4,
+                    title: "آینده هوش مصنوعی و تأثیر آن بر بازار کار",
+                    slug: "future-of-ai-and-jobs",
+                    category: "فناوری",
+                    excerpt: "هوش مصنوعی چگونه بازار کار را تغییر می‌دهد و چه فرصت‌هایی ایجاد می‌کند؟",
+                    author: "تیم نوینیکس",
+                    date: "۲۰۲۶-۰۸-۰۸",
+                    readTime: "۸ دقیقه",
+                    icon: "🤖",
+                    tags: ["هوش مصنوعی", "فناوری", "آینده"],
+                    views: 4500
+                },
+                {
+                    id: 5,
+                    title: "راهنمای کامل ثبت نام وام بانک رسالت",
+                    slug: "resalat-bank-loan",
+                    category: "مالی و بانکی",
+                    excerpt: "آموزش کامل ثبت نام وام بانک رسالت، مراحل ارزیابی اعتباری مرآت، صدور سفته الکترونیکی و ثبت درخواست وام",
+                    author: "تیم محتوای نوینیکس",
+                    date: "۲۰۲۶-۰۸-۲۲",
+                    readTime: "۱۵ دقیقه",
+                    icon: "🏦",
+                    tags: ["وام", "بانک رسالت", "سفته الکترونیکی", "مرآت"],
+                    views: 4500
+                },
+                {
+                    id: 6,
+                    title: "راهنمای ثبت‌نام وام بانک مهر ایران",
+                    slug: "mehr-bank-loan-guide",
+                    category: "مالی و بانکی",
+                    excerpt: "آموزش کامل و مرحله‌به‌مرحله ثبت‌نام و دریافت وام بانک مهر ایران، مدارک لازم، شرایط و نحوه صدور سفته الکترونیکی",
+                    author: "تیم محتوای نوینیکس",
+                    date: "۱۴۰۴-۰۴-۱۶",
+                    readTime: "۱۱ دقیقه",
+                    icon: "🏛️",
+                    tags: ["وام", "بانک مهر ایران", "سفته الکترونیکی", "تسهیلات"],
+                    views: 3200
+                },
+                {
+                    id: 7,
+                    title: "آشنایی با حملات XSS و CSRF و روش‌های جلوگیری",
+                    slug: "xss-csrf-attacks-guide",
+                    category: "امنیت",
+                    excerpt: "آموزش کامل حملات XSS و CSRF، نحوه عملکرد، تفاوت‌ها و روش‌های جلوگیری از این حملات امنیتی در وب",
+                    author: "تیم امنیت نوینیکس",
+                    date: "۲۰۲۶-۰۸-۲۵",
+                    readTime: "۱۰ دقیقه",
+                    icon: "🛡️",
+                    tags: ["امنیت", "XSS", "CSRF", "OWASP"],
+                    views: 1800
+                },
+                {
+                    id: 8,
+                    title: "بهترین پسورد منیجرهای رایگان در ۲۰۲۶",
+                    slug: "best-free-password-managers-2026",
+                    category: "امنیت",
+                    excerpt: "معرفی و مقایسه بهترین مدیریت‌کننده‌های رمز عبور رایگان شامل Bitwarden، Dashlane، NordPass و موارد دیگر",
+                    author: "تیم امنیت نوینیکس",
+                    date: "۲۰۲۶-۰۸-۲۸",
+                    readTime: "۸ دقیقه",
+                    icon: "🔑",
+                    tags: ["امنیت", "پسورد منیجر", "رمز عبور"],
+                    views: 2300
+                },
+                {
+                    id: 9,
+                    title: "چگونه یک وب‌سایت امن بسازیم؟ چک‌لیست کامل",
+                    slug: "secure-website-checklist",
+                    category: "امنیت",
+                    excerpt: "چک‌لیست کامل امنیت وب‌سایت: گام‌های ضروری برای محافظت از وب‌سایت در برابر حملات سایبری و نفوذ",
+                    author: "تیم امنیت نوینیکس",
+                    date: "۲۰۲۶-۰۸-۳۰",
+                    readTime: "۱۲ دقیقه",
+                    icon: "🛡️",
+                    tags: ["امنیت", "وب‌سایت", "چک‌لیست", "SSL"],
+                    views: 3100
+                },
+                {
+                    id: 10,
+                    title: "مقایسه ChatGPT، Gemini، Claude و DeepSeek",
+                    slug: "compare-chatgpt-gemini-claude-deepseek",
+                    category: "فناوری",
+                    excerpt: "مقایسه جامع بهترین مدل‌های هوش مصنوعی از نظر قابلیت‌ها، قیمت، عملکرد و کاربردها",
+                    author: "تیم فناوری نوینیکس",
+                    date: "۲۰۲۶-۰۹-۰۱",
+                    readTime: "۱۴ دقیقه",
+                    icon: "🤖",
+                    tags: ["هوش مصنوعی", "ChatGPT", "Gemini", "Claude", "DeepSeek"],
+                    views: 8500
+                },
+                {
+                    id: 11,
+                    title: "چگونه با هوش مصنوعی درآمد کسب کنیم؟ ۱۰ روش عملی",
+                    slug: "earn-money-with-ai",
+                    category: "کسب‌وکار",
+                    excerpt: "۱۰ روش عملی و کاربردی برای کسب درآمد با استفاده از هوش مصنوعی شامل تولید محتوا، طراحی، برنامه‌نویسی و مشاوره",
+                    author: "تیم کسب‌وکار نوینیکس",
+                    date: "۲۰۲۶-۰۹-۰۳",
+                    readTime: "۱۲ دقیقه",
+                    icon: "💰",
+                    tags: ["هوش مصنوعی", "کسب درآمد", "کارآفرینی"],
+                    views: 12500
+                },
+                {
+                    id: 12,
+                    title: "آموزش ساخت ربات تلگرام با هوش مصنوعی",
+                    slug: "build-telegram-bot-with-ai",
+                    category: "هوش مصنوعی",
+                    excerpt: "آموزش گام‌به‌گام ساخت ربات تلگرام با هوش مصنوعی با استفاده از Python، OpenAI API و Telebot",
+                    author: "تیم توسعه نوینیکس",
+                    date: "۲۰۲۶-۰۹-۰۵",
+                    readTime: "۱۵ دقیقه",
+                    icon: "🤖",
+                    tags: ["ربات تلگرام", "هوش مصنوعی", "Python", "OpenAI"],
+                    views: 6200
+                },
+                {
+                    id: 13,
+                    title: "بهترین ابزارهای هوش مصنوعی برای تولید محتوا",
+                    slug: "best-ai-content-tools",
+                    category: "هوش مصنوعی",
+                    excerpt: "معرفی و مقایسه بهترین ابزارهای هوش مصنوعی برای تولید محتوا شامل ChatGPT، Jasper، Copy.ai و SurferSEO",
+                    author: "تیم محتوای نوینیکس",
+                    date: "۲۰۲۶-۰۹-۰۷",
+                    readTime: "۱۰ دقیقه",
+                    icon: "✍️",
+                    tags: ["تولید محتوا", "هوش مصنوعی", "ChatGPT", "سئو"],
+                    views: 4800
+                },
+                {
+                    id: 14,
+                    title: "اصول طراحی دشبورد حرفه‌ای",
+                    slug: "dashboard-design-principles",
+                    category: "طراحی",
+                    excerpt: "آموزش کامل اصول طراحی دشبورد حرفه‌ای شامل چیدمان، بصری‌سازی داده، تعامل‌پذیری و تجربه کاربری",
+                    author: "تیم طراحی نوینیکس",
+                    date: "۲۰۲۶-۰۹-۰۹",
+                    readTime: "۹ دقیقه",
+                    icon: "📊",
+                    tags: ["طراحی", "دشبورد", "UI/UX", "داده"],
+                    views: 3200
+                },
+                {
+                    id: 15,
+                    title: "رنگ‌شناسی در طراحی رابط کاربری",
+                    slug: "color-theory-in-ui-design",
+                    category: "طراحی",
+                    excerpt: "آموزش کامل رنگ‌شناسی در طراحی UI، روانشناسی رنگ‌ها، پالت‌های رنگی و نکات کاربردی برای انتخاب رنگ مناسب",
+                    author: "تیم طراحی نوینیکس",
+                    date: "۲۰۲۶-۰۹-۱۱",
+                    readTime: "۱۰ دقیقه",
+                    icon: "🎨",
+                    tags: ["رنگ شناسی", "طراحی", "UI/UX", "پالت رنگ"],
+                    views: 2900
+                },
+                {
+                    id: 16,
+                    title: "بهترین فونت‌های فارسی برای طراحی وب",
+                    slug: "best-persian-web-fonts",
+                    category: "طراحی",
+                    excerpt: "معرفی بهترین فونت‌های فارسی برای طراحی وب شامل ایران‌سنس، وزیرمتن، شبنم و استایل‌فارسی",
+                    author: "تیم طراحی نوینیکس",
+                    date: "۲۰۲۶-۰۹-۱۳",
+                    readTime: "۸ دقیقه",
+                    icon: "🔤",
+                    tags: ["فونت فارسی", "طراحی", "تایپوگرافی", "ایران سنس"],
+                    views: 2500
+                },
+                {
+                    id: 17,
+                    title: "معرفی ۵ ابزار رایگان برای ساخت لوگو",
+                    slug: "free-logo-maker-tools",
+                    category: "ابزار",
+                    excerpt: "معرفی و مقایسه ۵ ابزار رایگان برای ساخت لوگو شامل Canva، Looka، Hatchful، LogoMaker و DesignEvo",
+                    author: "تیم نوینیکس",
+                    date: "۲۰۲۶-۰۹-۱۵",
+                    readTime: "۸ دقیقه",
+                    icon: "🎨",
+                    tags: ["لوگو", "طراحی", "ابزار", "برندسازی"],
+                    views: 3100
+                },
+                {
+                    id: 19,
+                    title: "ابزارهای رایگان برای بهینه‌سازی تصاویر",
+                    slug: "free-image-optimization-tools",
+                    category: "ابزار",
+                    excerpt: "معرفی بهترین ابزارهای رایگان برای بهینه‌سازی تصاویر شامل TinyPNG، ImageOptim، Squoosh و موارد دیگر",
+                    author: "تیم نوینیکس",
+                    date: "۲۰۲۶-۰۹-۱۹",
+                    readTime: "۷ دقیقه",
+                    icon: "🖼️",
+                    tags: ["بهینه سازی", "تصاویر", "سرعت سایت", "TinyPNG"],
+                    views: 2400
+                },
+                {
+                    id: 20,
+                    title: "آموزش سرمایه‌گذاری در بورس برای مبتدیان",
+                    slug: "stock-market-investment-guide",
+                    category: "مالی",
+                    excerpt: "آموزش کامل سرمایه‌گذاری در بورس برای مبتدیان، نحوه خرید و فروش سهام، تحلیل بازار و مدیریت ریسک",
+                    author: "تیم مالی نوینیکس",
+                    date: "۲۰۲۶-۰۹-۲۱",
+                    readTime: "۱۲ دقیقه",
+                    icon: "📈",
+                    tags: ["بورس", "سرمایه گذاری", "سهام", "آموزش"],
+                    views: 4700
+                },
+                {
+                    id: 21,
+                    title: "ارز دیجیتال چیست؟ راهنمای کامل برای تازه‌واردها",
+                    slug: "cryptocurrency-beginners-guide",
+                    category: "مالی",
+                    excerpt: "آموزش کامل ارز دیجیتال برای مبتدیان، مفاهیم بیت‌کوین، بلاکچین، کیف پول، صرافی و نحوه سرمایه‌گذاری",
+                    author: "تیم مالی نوینیکس",
+                    date: "۲۰۲۶-۰۹-۲۳",
+                    readTime: "۱۴ دقیقه",
+                    icon: "₿",
+                    tags: ["ارز دیجیتال", "بیت‌کوین", "بلاکچین", "سرمایه گذاری"],
+                    views: 6200
+                },
+                {
+                    id: 22,
+                    title: "بهترین روش‌های پس‌انداز در سال ۲۰۲۶",
+                    slug: "best-saving-methods-2026",
+                    category: "مالی",
+                    excerpt: "۱۰ روش کاربردی و اصولی برای پس‌انداز و مدیریت مالی در سال ۲۰۲۶، از بودجه‌بندی تا سرمایه‌گذاری هوشمند",
+                    author: "تیم مالی نوینیکس",
+                    date: "۲۰۲۶-۰۹-۲۵",
+                    readTime: "۱۰ دقیقه",
+                    icon: "💰",
+                    tags: ["پس‌انداز", "مدیریت مالی", "بودجه بندی", "سرمایه گذاری"],
+                    views: 3800
+                },
+                {
+                    id: 23,
+                    title: "بهترین سایت‌های آموزش برنامه‌نویسی رایگان",
+                    slug: "best-free-programming-learning-sites",
+                    category: "آموزش",
+                    excerpt: "معرفی و مقایسه بهترین سایت‌های آموزش برنامه‌نویسی رایگان شامل FreeCodeCamp، Codecademy، Coursera و موارد دیگر",
+                    author: "تیم آموزشی نوینیکس",
+                    date: "۲۰۲۶-۰۹-۲۷",
+                    readTime: "۹ دقیقه",
+                    icon: "💻",
+                    tags: ["برنامه‌نویسی", "آموزش", "رایگان", "FreeCodeCamp"],
+                    views: 5400
+                },
+                {
+                    id: 24,
+                    title: "چگونه یک برنامه‌نویس حرفه‌ای شویم؟",
+                    slug: "how-to-become-professional-developer",
+                    category: "آموزش",
+                    excerpt: "مسیر یادگیری گام‌به‌گام برای تبدیل شدن به یک برنامه‌نویس حرفه‌ای، از انتخاب زبان تا ورود به بازار کار",
+                    author: "تیم آموزشی نوینیکس",
+                    date: "۲۰۲۶-۰۹-۲۹",
+                    readTime: "۱۵ دقیقه",
+                    icon: "🚀",
+                    tags: ["برنامه‌نویسی", "مسیر یادگیری", "شغل", "توسعه وب"],
+                    views: 7800
+                },
+                {
+                    id: 25,
+                    title: "یادگیری زبان انگلیسی برای برنامه‌نویسان",
+                    slug: "learn-english-for-programmers",
+                    category: "آموزش",
+                    excerpt: "راهنمای کامل یادگیری زبان انگلیسی برای برنامه‌نویسان، منابع تخصصی، اصطلاحات رایج و روش‌های مؤثر",
+                    author: "تیم آموزشی نوینیکس",
+                    date: "۲۰۲۶-۱۰-۰۱",
+                    readTime: "۱۰ دقیقه",
+                    icon: "🔤",
+                    tags: ["زبان انگلیسی", "برنامه‌نویسی", "یادگیری", "آموزش"],
+                    views: 4200
+                },
+                {
+                    id: 26,
+                    title: "آموزش سئو (SEO) برای مبتدیان",
+                    slug: "seo-beginners-guide",
+                    category: "سئو",
+                    excerpt: "آموزش کامل سئو برای مبتدیان، اصول بهینه‌سازی موتور جستجو، کلمات کلیدی، لینک‌سازی و افزایش بازدید سایت",
+                    author: "تیم سئو نوینیکس",
+                    date: "۲۰۲۶-۱۰-۰۳",
+                    readTime: "۱۴ دقیقه",
+                    icon: "📈",
+                    tags: ["سئو", "SEO", "گوگل", "بهینه سازی"],
+                    views: 6500
+                },
+                {
+                    id: 27,
+                    title: "چگونه یک وبلاگ موفق راه‌اندازی کنیم؟",
+                    slug: "how-to-start-a-successful-blog",
+                    category: "سئو",
+                    excerpt: "آموزش کامل راه‌اندازی یک وبلاگ موفق، از انتخاب موضوع تا تولید محتوا و درآمدزایی",
+                    author: "تیم سئو نوینیکس",
+                    date: "۲۰۲۶-۱۰-۰۵",
+                    readTime: "۱۲ دقیقه",
+                    icon: "✍️",
+                    tags: ["وبلاگ", "وبلاگ نویسی", "تولید محتوا", "سئو"],
+                    views: 5100
+                },
+                {
+                    id: 28,
+                    title: "بهترین ابزارهای تحلیل کلمات کلیدی رایگان",
+                    slug: "best-free-keyword-tools",
+                    category: "سئو",
+                    excerpt: "معرفی و مقایسه بهترین ابزارهای تحلیل کلمات کلیدی رایگان شامل Google Keyword Planner، Ubersuggest و AnswerThePublic",
+                    author: "تیم سئو نوینیکس",
+                    date: "۲۰۲۶-۱۰-۰۷",
+                    readTime: "۸ دقیقه",
+                    icon: "🔍",
+                    tags: ["سئو", "کلمات کلیدی", "ابزار", "تحلیل"],
+                    views: 3900
+                },
+                {
+                    id: 29,
+                    title: "چگونه از خستگی چشم در مقابل صفحه‌نمایش جلوگیری کنیم؟",
+                    slug: "prevent-eye-strain-guide",
+                    category: "سلامت",
+                    excerpt: "راهنمای کامل جلوگیری از خستگی چشم در مقابل صفحه‌نمایش، نکات ارگونومی، تمرینات چشم و تنظیمات بهینه",
+                    author: "تیم سلامت نوینیکس",
+                    date: "۲۰۲۶-۱۰-۰۹",
+                    readTime: "۸ دقیقه",
+                    icon: "👁️",
+                    tags: ["سلامت", "چشم", "خستگی چشم", "صفحه نمایش"],
+                    views: 3400
+                },
+                {
+                    id: 30,
+                    title: "بهترین اپلیکیشن‌های مدیتیشن و آرامش",
+                    slug: "best-meditation-apps",
+                    category: "سلامت",
+                    excerpt: "معرفی و مقایسه بهترین اپلیکیشن‌های مدیتیشن و آرامش شامل Headspace، Calm، Insight Timer و موارد دیگر",
+                    author: "تیم سلامت نوینیکس",
+                    date: "۲۰۲۶-۱۰-۱۱",
+                    readTime: "۸ دقیقه",
+                    icon: "🧘",
+                    tags: ["مدیتیشن", "آرامش", "سلامت روان", "Headspace"],
+                    views: 2900
+                },
+                {
+                    id: 31,
+                    title: "ارگونومی محیط کار: چگونه درست بنشینیم؟",
+                    slug: "workplace-ergonomics-guide",
+                    category: "سلامت",
+                    excerpt: "راهنمای کامل ارگونومی محیط کار، نحوه صحیح نشستن، تنظیم میز و صندلی و جلوگیری از دردهای اسکلتی-عضلانی",
+                    author: "تیم سلامت نوینیکس",
+                    date: "۲۰۲۶-۱۰-۱۳",
+                    readTime: "۹ دقیقه",
+                    icon: "🪑",
+                    tags: ["ارگونومی", "سلامت", "محیط کار", "کمر درد"],
+                    views: 2600
+                },
+                {
+                    id: 32,
+                    title: "۱۰ ایده کسب‌وکار آنلاین در ۲۰۲۶",
+                    slug: "online-business-ideas-2026",
+                    category: "کسب‌وکار",
+                    excerpt: "۱۰ ایده کسب‌وکار آنلاین پردرآمد در سال ۲۰۲۶ شامل فروشگاه اینترنتی، خدمات فریلنسری، تولید محتوا و موارد دیگر",
+                    author: "تیم کسب‌وکار نوینیکس",
+                    date: "۲۰۲۶-۱۰-۱۵",
+                    readTime: "۱۲ دقیقه",
+                    icon: "💼",
+                    tags: ["کسب و کار", "آنلاین", "درآمدزایی", "استارتاپ"],
+                    views: 5800
+                },
+                {
+                    id: 33,
+                    title: "چگونه یک فریلنسر موفق شویم؟",
+                    slug: "how-to-become-successful-freelancer",
+                    category: "کسب‌وکار",
+                    excerpt: "راهنمای کامل تبدیل شدن به یک فریلنسر موفق، از ساخت پورتفولیو تا پیدا کردن مشتری و مدیریت مالی",
+                    author: "تیم کسب‌وکار نوینیکس",
+                    date: "۲۰۲۶-۱۰-۱۷",
+                    readTime: "۱۳ دقیقه",
+                    icon: "💻",
+                    tags: ["فریلنسینگ", "کسب و کار", "درآمدزایی", "کارآفرینی"],
+                    views: 4600
+                }
+            ];
+
+            // ===== متغیرهای صفحه‌بندی =====
+            const ITEMS_PER_PAGE = 6;
+            let currentPage = 1;
+            let currentCategory = 'all';
+            let currentSearch = '';
+            let filteredArticles = [...articlesData];
+
+            // ===== ذخیره در localStorage =====
+            localStorage.setItem('novinix_blog_articles', JSON.stringify(articlesData));
+
+            // ===== رندر مقالات =====
+            function renderArticles() {
+                const grid = document.getElementById('blogGrid');
+                const noResults = document.getElementById('noResults');
+                const start = (currentPage - 1) * ITEMS_PER_PAGE;
+                const end = start + ITEMS_PER_PAGE;
+                const pageItems = filteredArticles.slice(start, end);
+
+                if (filteredArticles.length === 0) {
+                    grid.innerHTML = '';
+                    noResults.style.display = 'block';
+                    document.getElementById('paginationContainer').style.display = 'none';
+                    return;
+                }
+
+                noResults.style.display = 'none';
+                document.getElementById('paginationContainer').style.display = 'flex';
+
+                if (pageItems.length === 0 && filteredArticles.length > 0) {
+                    currentPage = 1;
+                    renderArticles();
+                    return;
+                }
+
+                let html = '';
+                pageItems.forEach(article => {
+                    const tagsHtml = article.tags.slice(0, 3).map(tag =>
+                        `<span class="tag">#${tag}</span>`
+                    ).join('');
+
+                    const articleLink = `../blog/${article.slug}.html`;
+
+                    html += `
+                        <a href="${articleLink}" class="blog-card">
+                            <div class="card-image">
+                                <span class="no-img">${article.icon || '📄'}</span>
+                                <span class="card-badge">${article.category}</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="meta">
+                                    <span>👤 ${article.author}</span>
+                                    <span>📅 ${article.date}</span>
+                                    <span>⏱️ ${article.readTime}</span>
+                                    <span>👁️ ${article.views.toLocaleString('fa-IR')}</span>
+                                </div>
+                                <h3>${article.title}</h3>
+                                <p class="excerpt">${article.excerpt}</p>
+                                <div class="tags">${tagsHtml}</div>
+                                <span class="read-more">ادامه مطلب ←</span>
+                            </div>
+                        </a>
+                    `;
+                });
+
+                grid.innerHTML = html;
+                renderPagination();
+            }
+
+            // ===== رندر دکمه‌های صفحه‌بندی =====
+            function renderPagination() {
+                const totalPages = Math.ceil(filteredArticles.length / ITEMS_PER_PAGE);
+                const pageNumbers = document.getElementById('pageNumbers');
+                const prevBtn = document.getElementById('prevPage');
+                const nextBtn = document.getElementById('nextPage');
+                const pageInfo = document.getElementById('pageInfo');
+
+                if (totalPages <= 1) {
+                    pageNumbers.innerHTML = '';
+                    prevBtn.style.display = 'none';
+                    nextBtn.style.display = 'none';
+                    pageInfo.textContent = '';
+                    return;
+                }
+
+                prevBtn.style.display = 'inline-block';
+                nextBtn.style.display = 'inline-block';
+                prevBtn.disabled = (currentPage === 1);
+                nextBtn.disabled = (currentPage === totalPages);
+                pageInfo.textContent = `صفحه ${currentPage} از ${totalPages}`;
+
+                let html = '';
+                const maxVisible = 5;
+                let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+                let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+                if (endPage - startPage < maxVisible - 1) {
+                    startPage = Math.max(1, endPage - maxVisible + 1);
+                }
+
+                if (startPage > 1) {
+                    html += `<button class="page-btn" data-page="1">۱</button>`;
+                    if (startPage > 2) {
+                        html += `<span class="page-btn" style="border:none;background:none;cursor:default;">…</span>`;
+                    }
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    const activeClass = (i === currentPage) ? ' active' : '';
+                    html += `<button class="page-btn${activeClass}" data-page="${i}">${i}</button>`;
+                }
+
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) {
+                        html += `<span class="page-btn" style="border:none;background:none;cursor:default;">…</span>`;
+                    }
+                    html += `<button class="page-btn" data-page="${totalPages}">${totalPages}</button>`;
+                }
+
+                pageNumbers.innerHTML = html;
+
+                // ===== رویدادهای کلیک دکمه‌ها =====
+                document.querySelectorAll('.page-btn[data-page]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const page = parseInt(this.dataset.page);
+                        goToPage(page);
+                    });
+                });
+            }
+
+            // ===== رفتن به صفحه مشخص =====
+            function goToPage(page) {
+                const totalPages = Math.ceil(filteredArticles.length / ITEMS_PER_PAGE);
+                if (page < 1 || page > totalPages) return;
+                currentPage = page;
+                renderArticles();
+                document.getElementById('blogGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            // ===== فیلتر و جستجو =====
+            function handleSearchAndFilter() {
+                const searchInput = document.getElementById('searchBlog');
+                currentSearch = searchInput.value.toLowerCase().trim();
+
+                let filtered = articlesData;
+
+                if (currentCategory !== 'all') {
+                    filtered = filtered.filter(a => a.category === currentCategory);
+                }
+
+                if (currentSearch) {
+                    filtered = filtered.filter(a =>
+                        a.title.toLowerCase().includes(currentSearch) ||
+                        a.excerpt.toLowerCase().includes(currentSearch) ||
+                        a.tags.some(tag => tag.toLowerCase().includes(currentSearch)) ||
+                        a.author.toLowerCase().includes(currentSearch)
+                    );
+                }
+
+                filteredArticles = filtered;
+                currentPage = 1;
+                renderArticles();
+            }
+
+            // ===== فیلتر دسته‌بندی =====
+            function filterCategory(category, element) {
+                document.querySelectorAll('.cat-tag').forEach(tag => tag.classList.remove('active'));
+                if (element) element.classList.add('active');
+                currentCategory = category;
+                handleSearchAndFilter();
+            }
+
+            // ===== آمار =====
+            function updateStats() {
+                document.getElementById('totalArticles').textContent = articlesData.length;
+                const totalViews = articlesData.reduce((sum, a) => sum + a.views, 0);
+                document.getElementById('totalViews').textContent = totalViews.toLocaleString('fa-IR');
+                const authors = [...new Set(articlesData.map(a => a.author))];
+                document.getElementById('totalAuthors').textContent = authors.length;
+            }
+
+            // ===== رویدادها =====
+            document.addEventListener('DOMContentLoaded', function() {
+                filteredArticles = [...articlesData];
+                renderArticles();
+                updateStats();
+
+                // جستجو
+                document.getElementById('searchBlog').addEventListener('input', handleSearchAndFilter);
+
+                // کلیک روی دسته‌بندی‌ها
+                document.querySelectorAll('.cat-tag').forEach(tag => {
+                    tag.addEventListener('click', function() {
+                        const category = this.dataset.category;
+                        filterCategory(category, this);
+                    });
+                });
+
+                // دکمه‌های قبلی و بعدی
+                document.getElementById('prevPage').addEventListener('click', function() {
+                    if (currentPage > 1) goToPage(currentPage - 1);
+                });
+
+                document.getElementById('nextPage').addEventListener('click', function() {
+                    const totalPages = Math.ceil(filteredArticles.length / ITEMS_PER_PAGE);
+                    if (currentPage < totalPages) goToPage(currentPage + 1);
+                });
+            });
+
+            // ===== در معرض دید global =====
+            window.goToPage = goToPage;
+            window.filterCategory = filterCategory;
+            window.handleSearchAndFilter = handleSearchAndFilter;
+            window.currentPage = currentPage;
+
+            console.log('📝 Blog loaded!');
+        })();
+    </script>
+</body>
+</html>

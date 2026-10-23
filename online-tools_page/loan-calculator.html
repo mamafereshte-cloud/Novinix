@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ماشین‌حساب وام | نوینیکس</title>
+    <meta name="description" content="محاسبه اقساط وام با نمایش جدول بازپرداخت ماهانه، سود کل و مبلغ پرداختی." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/loan-calculator" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .calc-wrapper h2 {
+            color: #00ffcc;
+            font-size: 1.6rem;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .calc-wrapper .subtitle {
+            text-align: center;
+            color: #a0b4c8;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: #a0b4c8;
+            margin-bottom: 4px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            color: #e8f5f0;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #00ffcc;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.08);
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .btn-calc {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            margin-top: 5px;
+        }
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 255, 204, 0.25);
+        }
+
+        .results {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            display: none;
+        }
+        .results.visible {
+            display: block;
+        }
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .result-item {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 14px 12px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .result-item .value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00ffcc;
+        }
+        .result-item .label {
+            font-size: 0.7rem;
+            color: rgba(160, 180, 200, 0.5);
+            margin-top: 2px;
+        }
+
+        .amortization-table {
+            margin-top: 15px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .amortization-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .amortization-table th {
+            text-align: right;
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            color: rgba(160, 180, 200, 0.5);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            background: #24243e;
+        }
+        .amortization-table td {
+            padding: 6px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: #a0b4c8;
+        }
+        .amortization-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .table-title {
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(160, 180, 200, 0.4);
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .result-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 480px) {
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <main>
+        <div class="tool-wrapper calc-wrapper">
+            <h2>💰 ماشین‌حساب وام</h2>
+            <p class="subtitle">محاسبه اقساط ماهیانه، سود کل و برنامه بازپرداخت</p>
+
+            <form id="loanForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>💰 مبلغ وام (تومان)</label>
+                        <input type="number" id="loanAmount" placeholder="مثلاً ۱۰۰,۰۰۰,۰۰۰" required min="1000" />
+                    </div>
+                    <div class="form-group">
+                        <label>📅 مدت بازپرداخت (ماه)</label>
+                        <input type="number" id="loanMonths" placeholder="مثلاً ۱۲" required min="1" max="360" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>📊 نرخ سود سالانه (%)</label>
+                    <input type="number" id="loanRate" placeholder="مثلاً ۱۸" required min="0" max="100" step="0.1" />
+                </div>
+                <button type="submit" class="btn-calc">🧮 محاسبه</button>
+            </form>
+
+            <div class="results" id="results">
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="value" id="monthlyPayment">۰</div>
+                        <div class="label">📆 قسط ماهیانه</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="value" id="totalPayment">۰</div>
+                        <div class="label">💰 کل پرداختی</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="value" id="totalInterest">۰</div>
+                        <div class="label">📈 سود کل</div>
+                    </div>
+                </div>
+
+                <div class="table-title">📋 جدول اقساط (ماه به ماه)</div>
+                <div class="amortization-table" id="amortizationTable"></div>
+            </div>
+        </div>
+    </main>
+
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+    <script src="../assets/js/user-panel.js"></script>
+
+    <script>
+        document.getElementById('loanForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const amount = parseFloat(document.getElementById('loanAmount').value);
+            const months = parseInt(document.getElementById('loanMonths').value);
+            const rate = parseFloat(document.getElementById('loanRate').value);
+
+            if (!amount || amount < 1000) {
+                alert('لطفاً مبلغ وام را وارد کنید (حداقل ۱۰۰۰ تومان).');
+                return;
+            }
+            if (!months || months < 1) {
+                alert('لطفاً مدت بازپرداخت را وارد کنید.');
+                return;
+            }
+            if (rate === undefined || rate < 0) {
+                alert('لطفاً نرخ سود را وارد کنید.');
+                return;
+            }
+
+            const monthlyRate = (rate / 100) / 12;
+            let monthlyPayment;
+            if (monthlyRate === 0) {
+                monthlyPayment = amount / months;
+            } else {
+                monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate,
+                    months) - 1);
+            }
+
+            const totalPayment = monthlyPayment * months;
+            const totalInterest = totalPayment - amount;
+
+            document.getElementById('monthlyPayment').textContent = monthlyPayment.toLocaleString('fa-IR') + ' تومان';
+            document.getElementById('totalPayment').textContent = totalPayment.toLocaleString('fa-IR') + ' تومان';
+            document.getElementById('totalInterest').textContent = totalInterest.toLocaleString('fa-IR') + ' تومان';
+
+            let tableHtml = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>باقیمانده</th>
+                            <th>قسط</th>
+                            <th>سود</th>
+                            <th>اصل وام</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            let remaining = amount;
+            for (let i = 1; i <= months; i++) {
+                const interest = remaining * monthlyRate;
+                const principal = monthlyPayment - interest;
+                remaining -= principal;
+
+                if (i === months) {
+                    const lastInterest = remaining * monthlyRate;
+                    const lastPrincipal = remaining;
+                    tableHtml += `
+                        <tr>
+                            <td>${i}</td>
+                            <td>۰</td>
+                            <td>${monthlyPayment.toLocaleString('fa-IR')}</td>
+                            <td>${lastInterest.toLocaleString('fa-IR')}</td>
+                            <td>${lastPrincipal.toLocaleString('fa-IR')}</td>
+                        </tr>
+                    `;
+                    break;
+                }
+
+                tableHtml += `
+                    <tr>
+                        <td>${i}</td>
+                        <td>${Math.max(0, remaining).toLocaleString('fa-IR')}</td>
+                        <td>${monthlyPayment.toLocaleString('fa-IR')}</td>
+                        <td>${interest.toLocaleString('fa-IR')}</td>
+                        <td>${principal.toLocaleString('fa-IR')}</td>
+                    </tr>
+                `;
+            }
+
+            tableHtml += `</tbody></table>`;
+            document.getElementById('amortizationTable').innerHTML = tableHtml;
+            document.getElementById('results').classList.add('visible');
+
+            if (typeof UserPanel !== 'undefined') {
+                UserPanel.addHistory({
+                    icon: '💰',
+                    title: `محاسبه وام ${amount.toLocaleString('fa-IR')} تومان - ${months} ماه`,
+                    link: '/online-tools_page/loan-calculator.html'
+                });
+            }
+        });
+    </script>
+</body>
+</html>

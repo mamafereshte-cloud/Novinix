@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ویرایشگر مارک‌داون آنلاین | ابزار حرفه‌ای نوشتن و پیش‌نمایش Novinix</title>
+    <meta name="description" content="ویرایشگر حرفه‌ای Markdown با پیش‌نمایش زنده." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/markdown-editor" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <script src="marked.min.js"></script>
+    <style>
+        .md-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            min-height: 500px;
+        }
+        .tool-textarea {
+            min-height: 450px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+        .md-preview {
+            flex: 1;
+            min-height: 450px;
+            padding: 16px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            overflow-y: auto;
+            line-height: 1.8;
+            direction: ltr;
+            text-align: left;
+            color: #e8f5f0;
+        }
+        .md-preview h1,
+        .md-preview h2,
+        .md-preview h3 {
+            color: #e8f5f0;
+            margin: 12px 0 8px;
+        }
+        .md-preview h1 {
+            font-size: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 8px;
+        }
+        .md-preview h2 {
+            font-size: 1.6rem;
+        }
+        .md-preview h3 {
+            font-size: 1.3rem;
+        }
+        .md-preview p {
+            margin: 6px 0;
+            color: #a0b4c8;
+        }
+        .md-preview a {
+            color: #00ffcc;
+            text-decoration: none;
+        }
+        .md-preview a:hover {
+            text-decoration: underline;
+        }
+        .md-preview ul,
+        .md-preview ol {
+            padding-right: 24px;
+            margin: 6px 0;
+        }
+        .md-preview li {
+            margin: 3px 0;
+        }
+        .md-preview blockquote {
+            border-right: 4px solid #00ffcc;
+            padding: 8px 16px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+            color: #a0b4c8;
+        }
+        .md-preview code {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+            color: #fbbf24;
+        }
+        .md-preview pre {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 14px 18px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .md-preview pre code {
+            background: transparent;
+            padding: 0;
+            color: #e8f5f0;
+            font-size: 0.85rem;
+        }
+        .md-preview table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .md-preview table th,
+        .md-preview table td {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 8px 14px;
+            text-align: right;
+        }
+        .md-preview table th {
+            background: rgba(255, 255, 255, 0.04);
+            font-weight: 600;
+        }
+        .md-preview img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        .md-preview hr {
+            border: none;
+            border-top: 2px solid rgba(255, 255, 255, 0.06);
+            margin: 16px 0;
+        }
+        .md-toolbar .tb-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: #a0b4c8;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .md-toolbar .tb-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #e8f5f0;
+        }
+        .md-toolbar .tb-btn:active {
+            transform: scale(0.94);
+        }
+        .md-toolbar .tb-divider {
+            width: 1px;
+            background: rgba(255, 255, 255, 0.06);
+            margin: 4px 4px;
+        }
+        .tool-actions .act-btn-copy {
+            background: rgba(255, 255, 255, 0.06);
+            color: #a0b4c8;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .tool-actions .act-btn-copy:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #00ffcc;
+        }
+        .tool-actions .act-btn-copy.copied {
+            background: rgba(0, 255, 204, 0.12);
+            color: #00ffcc;
+        }
+        @media (max-width: 900px) {
+            .md-layout {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .tool-textarea {
+                min-height: 250px;
+            }
+            .md-preview {
+                min-height: 250px;
+            }
+            .md-toolbar {
+                padding: 8px 10px;
+                gap: 4px;
+            }
+            .md-toolbar .tb-btn {
+                font-size: 0.75rem;
+                padding: 4px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">✍️</span>
+                <h2>ویرایشگر مارک‌داون</h2>
+                <span class="badge">پیش‌نمایش زنده</span>
+            </div>
+
+            <div class="md-toolbar toolbar">
+                <button class="tb-btn" data-action="bold"><strong>B</strong></button>
+                <button class="tb-btn" data-action="italic"><em>I</em></button>
+                <button class="tb-btn" data-action="heading">H</button>
+                <button class="tb-btn" data-action="link">🔗</button>
+                <button class="tb-btn" data-action="code">&lt;/&gt;</button>
+                <button class="tb-btn" data-action="quote">💬</button>
+                <button class="tb-btn" data-action="list">📋</button>
+                <span class="tb-divider"></span>
+                <button class="tb-btn" data-action="sample">📄 نمونه</button>
+            </div>
+
+            <div class="md-layout">
+                <div>
+                    <div class="panel-header"><span>📝 ویرایشگر</span></div>
+                    <textarea class="tool-textarea" id="mdInput" placeholder="متن Markdown خود را اینجا بنویسید..."># ✍️ به ویرایشگر مارک‌داون خوش آمدید
+
+این یک **نمونه** متن است. می‌توانید از سینتکس Markdown استفاده کنید:
+
+## 📌 ویژگی‌ها
+
+- **پررنگ** و *کج*
+- [لینک](https://novinix.ir)
+- `کد درون‌خطی`
+- لیست‌های مرتب و نامرتب
+- جداول
+
+### 💻 بلوک کد
+
+```javascript
+function hello() {
+    console.log('سلام دنیا!');
+}
+```</textarea>
+                </div>
+                <div>
+                    <div class="panel-header"><span>👁️ پیش‌نمایش</span></div>
+                    <div class="md-preview" id="mdPreview"></div>
+                </div>
+            </div>
+
+            <div class="tool-actions">
+                <button class="act-btn act-btn-copy" id="copyMdBtn">📋 کپی</button>
+                <button class="act-btn act-btn-download" id="downloadMdBtn">📥 دانلود</button>
+                <button class="act-btn act-btn-clear" id="clearMdBtn">🗑️ پاک کردن</button>
+            </div>
+        </div>
+    </main>
+
+    
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            const input = document.getElementById('mdInput');
+            const preview = document.getElementById('mdPreview');
+
+            function renderMarkdown() {
+                const text = input.value;
+                if (!text) {
+                    preview.innerHTML = '<span style="color:rgba(160,180,200,0.3);">متن را در ویرایشگر بنویسید...</span>';
+                    return;
+                }
+                try {
+                    preview.innerHTML = marked.parse(text);
+                } catch (e) {
+                    preview.innerHTML = `<span style="color:#f87171;">❌ خطا: ${e.message}</span>`;
+                }
+            }
+
+            document.querySelectorAll('.md-toolbar .tb-btn[data-action]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const action = this.dataset.action;
+                    const textarea = input;
+                    const start = textarea.selectionStart;
+                    const end = textarea.selectionEnd;
+                    const selected = textarea.value.substring(start, end);
+                    let replacement = '';
+
+                    switch (action) {
+                        case 'bold':
+                            replacement = `**${selected || 'متن پررنگ'}**`;
+                            break;
+                        case 'italic':
+                            replacement = `*${selected || 'متن کج'}*`;
+                            break;
+                        case 'heading':
+                            replacement = `\n## ${selected || 'عنوان'}\n`;
+                            break;
+                        case 'link':
+                            replacement = `[${selected || 'متن لینک'}](https://example.com)`;
+                            break;
+                        case 'code':
+                            replacement = `\`${selected || 'کد'}\``;
+                            break;
+                        case 'quote':
+                            replacement = `\n> ${selected || 'نقل قول'}\n`;
+                            break;
+                        case 'list':
+                            replacement = `\n- ${selected || 'مورد لیست'}\n`;
+                            break;
+                        case 'sample': {
+                            textarea.value = `# نمونه متن مارک‌داون
+
+## عنوان سطح ۲
+
+این یک **متن نمونه** است که شامل *کج* و \`کد درون‌خطی\` می‌باشد.
+
+### لیست موارد:
+- مورد اول
+- مورد دوم
+- مورد سوم
+
+\`\`\`javascript
+console.log('سلام دنیا!');
+\`\`\`
+
+> این یک نقل قول است.
+
+[لینک به نوینیکس](https://novinix.ir)`;
+                            renderMarkdown();
+                            return;
+                        }
+                        default:
+                            return;
+                    }
+
+                    textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
+                    const newPos = start + replacement.length;
+                    textarea.setSelectionRange(newPos, newPos);
+                    textarea.focus();
+                    renderMarkdown();
+                });
+            });
+
+            input.addEventListener('input', renderMarkdown);
+
+            document.getElementById('copyMdBtn').addEventListener('click', function() {
+                const text = input.value;
+                if (!text) return;
+                navigator.clipboard.writeText(text).then(() => {
+                    const orig = this.textContent;
+                    this.textContent = '✅ کپی شد!';
+                    this.classList.add('copied');
+                    setTimeout(() => { this.textContent = orig;
+                        this.classList.remove('copied'); }, 1500);
+                });
+            });
+
+            document.getElementById('downloadMdBtn').addEventListener('click', function() {
+                const text = input.value;
+                if (!text) return;
+                const blob = new Blob([text], { type: 'text/markdown' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'document.md';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+
+            document.getElementById('clearMdBtn').addEventListener('click', function() {
+                input.value = '';
+                renderMarkdown();
+            });
+
+            renderMarkdown();
+            console.log('✍️ Markdown Editor loaded!');
+        })();
+    </script>
+</body>
+</html>

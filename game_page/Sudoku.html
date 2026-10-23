@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🔢 سودوکو</title>
+    <link rel="stylesheet" href="../assets/css/game.css">
+    <style>
+        .sudoku-wrapper { max-width: 520px; }
+        #board { display:grid; grid-template-columns:repeat(9,1fr); gap:1px; max-width:450px; width:100%; aspect-ratio:1; background:#2d3436; padding:3px; border-radius:8px; margin:0 auto; border:3px solid #4a3520; }
+        .cell { background:#f0d5a8; aspect-ratio:1; display:flex; justify-content:center; align-items:center; font-size:1.4rem; font-weight:700; color:#2d3436; cursor:pointer; border:none; transition:all 0.15s; }
+        .cell.given { background:#d4a373; color:#1a1a2e; }
+        .cell.user { color:#0984e3; }
+        .cell.selected { background:#74b9ff; box-shadow:inset 0 0 0 2px #0984e3; }
+        .cell.highlight { background:#dfe6e9; }
+        .cell.error { background:#ff6b6b; color:#fff; }
+        .cell.hint { background:#55efc4; color:#00b894; }
+        .cell:nth-child(3n){ border-right:3px solid #2d3436; }
+        .cell:nth-child(9n){ border-right:none; }
+        .cell:nth-child(n+19):nth-child(-n+27){ border-bottom:3px solid #2d3436; }
+        .cell:nth-child(n+46):nth-child(-n+54){ border-bottom:3px solid #2d3436; }
+        .num-pad { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; max-width:320px; margin:12px auto; }
+        .num-pad .btn { padding:10px; font-size:1.2rem; justify-content:center; background:var(--card-bg); border:1px solid var(--card-border); color:var(--text-primary); }
+        .num-pad .btn:hover { background:rgba(255,255,255,0.1); transform:scale(1.04); }
+        .num-pad .btn-erase { background:rgba(231,76,60,0.2); border-color:rgba(231,76,60,0.3); color:#ff6b6b; }
+        .num-pad .btn-erase:hover { background:rgba(231,76,60,0.3); }
+        @media (max-width:500px){ .cell{font-size:1rem;} .num-pad .btn{padding:8px;font-size:1rem;} }
+        @media (max-width:380px){ .cell{font-size:0.8rem;} }
+    </style>
+</head>
+<body>
+<div class="game-wrapper sudoku-wrapper">
+    <div class="game-header">
+        <h1>🔢 سودوکو</h1>
+        <div class="header-buttons"><a href="../pages/games.html" class="exit-btn">✕ خروج</a></div>
+    </div>
+    <div class="game-info">
+        <div class="info-box"><span class="label">⏱️ زمان</span><span class="value" id="timer">۰۰:۰۰</span></div>
+        <div class="info-box"><span class="label">❌ خطا</span><span class="value" id="errors">0</span></div>
+        <div class="info-box"><span class="label">💡 راهنما</span><span class="value" id="hints">3</span></div>
+    </div>
+    <div class="status-message" id="statusMessage">🎮 بازی جدید شروع شد!</div>
+    <div class="board-wrapper"><div id="boardContainer"><div id="board"></div></div></div>
+    <div class="num-pad">
+        <button class="btn" data-num="1">1</button><button class="btn" data-num="2">2</button>
+        <button class="btn" data-num="3">3</button><button class="btn" data-num="4">4</button>
+        <button class="btn" data-num="5">5</button><button class="btn" data-num="6">6</button>
+        <button class="btn" data-num="7">7</button><button class="btn" data-num="8">8</button>
+        <button class="btn" data-num="9">9</button><button class="btn btn-erase" data-num="0">⌫</button>
+    </div>
+    <div class="game-buttons">
+        <button class="btn btn-success" id="newBtn">🔄 بازی جدید</button>
+        <button class="btn btn-warning" id="hintBtn">💡 راهنما</button>
+        <button class="btn btn-purple" id="checkBtn">✅ بررسی</button>
+        <button class="btn btn-danger" id="exitBtn">🚪 خروج</button>
+    </div>
+    <div class="key-hints"><span>۱-۹ عدد</span><span>⌫ پاک کردن</span><span>H راهنما</span></div>
+</div>
+<script>
+// ===== سودوکو =====
+const puzzles=[[[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]],[[0,0,4,3,0,0,2,0,9],[0,0,5,0,0,9,0,0,1],[0,7,0,0,6,0,0,4,3],[0,0,6,0,0,2,0,8,7],[1,9,0,0,0,7,4,0,0],[0,5,0,1,0,0,9,0,0],[3,6,0,0,9,0,0,1,0],[5,0,0,6,0,0,3,0,0],[9,0,1,0,0,3,7,0,0]]];
+let board=[], given=[], selected=null, errors=0, hints=3, seconds=0, complete=false, timerInt=null;
+const boardEl=document.getElementById('board'), statusMsg=document.getElementById('statusMessage');
+const timerEl=document.getElementById('timer'), errorsEl=document.getElementById('errors'), hintsEl=document.getElementById('hints');
+
+function createBoard(){ boardEl.innerHTML=''; for(let i=0;i<81;i++){ const cell=document.createElement('div'); cell.className='cell'; cell.dataset.index=i; cell.addEventListener('click',()=>selectCell(i)); boardEl.appendChild(cell); } }
+function selectCell(idx){ if(complete)return; const r=Math.floor(idx/9), c=idx%9; if(given[r][c])return; selected={row:r,col:c,index:idx}; updateBoard(); }
+function updateBoard(){ const cells=document.querySelectorAll('.cell'); cells.forEach((cell,idx)=>{ const r=Math.floor(idx/9), c=idx%9, v=board[r][c]; cell.className='cell'; if(given[r][c])cell.classList.add('given'); else if(v!==0)cell.classList.add('user'); cell.textContent=v!==0?v:''; if(selected&&selected.index===idx)cell.classList.add('selected'); if(selected&&v!==0){ const sv=board[selected.row][selected.col]; if(sv===v&&idx!==selected.index)cell.classList.add('highlight'); } if(selected){ const sr=selected.row, sc=selected.col; if(r===sr||c===sc||(Math.floor(r/3)===Math.floor(sr/3)&&Math.floor(c/3)===Math.floor(sc/3))){ if(idx!==selected.index)cell.classList.add('highlight'); } } }); errorsEl.textContent=errors; hintsEl.textContent=hints; }
+function loadPuzzle(idx){ const p=puzzles[idx%puzzles.length]; board=p.map(r=>[...r]); given=p.map(r=>r.map(v=>v!==0)); selected=null; errors=0; complete=false; seconds=0; clearInterval(timerInt); timerInt=setInterval(()=>{seconds++;const m=String(Math.floor(seconds/60)).padStart(2,'0'),s=String(seconds%60).padStart(2,'0');timerEl.textContent=`${m}:${s}`;},1000); statusMsg.textContent='🎮 بازی جدید شروع شد!'; statusMsg.className='status-message'; updateBoard(); }
+function inputNum(num){ if(complete||!selected)return; const {row,col}=selected; if(given[row][col])return; if(num===0){board[row][col]=0;updateBoard();return;} if(!isValid(row,col,num)){ errors++; statusMsg.textContent='❌ عدد اشتباه!'; statusMsg.className='status-message error'; const cell=document.querySelector(`.cell[data-index="${selected.index}"]`); cell.classList.add('error'); setTimeout(()=>cell.classList.remove('error'),500); updateBoard(); if(errors>=5){ statusMsg.textContent='💀 ۵ بار اشتباه کردی! بازی تمام شد!'; statusMsg.className='status-message error'; complete=true; clearInterval(timerInt); } return; } board[row][col]=num; updateBoard(); statusMsg.textContent='✅ درست!'; statusMsg.className='status-message success'; if(checkWin()){ complete=true; clearInterval(timerInt); statusMsg.textContent='🎉 تبریک! سودوکو رو حل کردی! 🎉'; statusMsg.className='status-message success'; saveScore(); } }
+function isValid(r,c,num){ for(let i=0;i<9;i++){ if(i!==c&&board[r][i]===num)return false; if(i!==r&&board[i][c]===num)return false; } const br=Math.floor(r/3)*3, bc=Math.floor(c/3)*3; for(let i=br;i<br+3;i++)for(let j=bc;j<bc+3;j++){ if(i===r&&j===c)continue; if(board[i][j]===num)return false; } return true; }
+function checkWin(){ for(let r=0;r<9;r++)for(let c=0;c<9;c++){ if(board[r][c]===0)return false; if(!isValid(r,c,board[r][c]))return false; }return true; }
+function useHint(){ if(complete||hints<=0)return; for(let r=0;r<9;r++)for(let c=0;c<9;c++){ if(board[r][c]===0&&!given[r][c]){ for(let n=1;n<=9;n++){ if(isValid(r,c,n)){ board[r][c]=n; hints--; updateBoard(); statusMsg.textContent=`💡 راهنما: خانه (${r+1}, ${c+1}) = ${n}`; statusMsg.className='status-message warning'; const idx=r*9+c; const cell=document.querySelector(`.cell[data-index="${idx}"]`); cell.classList.add('hint'); setTimeout(()=>cell.classList.remove('hint'),1000); return; } } } } }
+function checkSolution(){ if(complete)return; const wrong=[]; for(let r=0;r<9;r++)for(let c=0;c<9;c++){ if(board[r][c]!==0&&!given[r][c]&&!isValid(r,c,board[r][c]))wrong.push(r*9+c); } if(wrong.length===0){ if(checkWin()){ complete=true; clearInterval(timerInt); statusMsg.textContent='🎉 عالی! همه چیز درسته! 🎉'; statusMsg.className='status-message success'; saveScore(); }else{ statusMsg.textContent='✅ تا الان درسته! ادامه بده!'; statusMsg.className='status-message success'; } }else{ statusMsg.textContent=`❌ ${wrong.length} عدد اشتباه پیدا شد!`; statusMsg.className='status-message error'; wrong.forEach(idx=>{ const cell=document.querySelector(`.cell[data-index="${idx}"]`); cell.classList.add('error'); setTimeout(()=>cell.classList.remove('error'),1500); }); } }
+async function saveScore(){ try{ if(typeof NovinixAuth!=='undefined'&&NovinixAuth.isLoggedIn()){ const score=Math.max(0,Math.floor(1000/(seconds+1))*3); await NovinixAuth.saveGameScore('sudoku',score,{time:seconds,errors}); } }catch(e){} }
+function newGame(){ loadPuzzle(Math.floor(Math.random()*puzzles.length)); }
+function exitGame(){ window.location.href='../pages/games.html'; }
+document.querySelectorAll('.num-pad .btn').forEach(b=>{ b.addEventListener('click',()=>inputNum(parseInt(b.dataset.num))); });
+document.getElementById('newBtn').addEventListener('click',newGame);
+document.getElementById('hintBtn').addEventListener('click',useHint);
+document.getElementById('checkBtn').addEventListener('click',checkSolution);
+document.getElementById('exitBtn').addEventListener('click',exitGame);
+document.addEventListener('keydown',e=>{ if(e.key>='1'&&e.key<='9')inputNum(parseInt(e.key)); else if(e.key==='Backspace'||e.key==='Delete')inputNum(0); else if(e.key==='h'||e.key==='H')useHint(); });
+createBoard(); newGame();
+</script>
+<script src="../assets/js/seo.js"></script>
+</body>
+</html>

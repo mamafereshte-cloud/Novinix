@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+    
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مدیریت پیشنهادات | پنل ادمین</title>
+    <link rel="icon" href="../../assets/images/logo.ico">
+
+    <!-- ===== CSS فایل‌های جداگانه ===== -->
+    <link rel="stylesheet" href="../../assets/css/main.css" />
+    <link rel="stylesheet" href="../../assets/css/responsive.css" />
+
+    <style>
+        /* ===== استایل‌های اختصاصی پنل ادمین ===== */
+        .admin-wrapper {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 24px;
+            padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .admin-wrapper h2 {
+            color: #00ffcc;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-wrapper .subtitle {
+            color: #a0b4c8;
+            margin-bottom: 25px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00ffcc;
+            display: block;
+        }
+
+        .stat-card .label {
+            font-size: 0.8rem;
+            color: rgba(160, 180, 200, 0.5);
+        }
+
+        .stat-card.pending .number { color: #fbbf24; }
+        .stat-card.approved .number { color: #34d399; }
+        .stat-card.rejected .number { color: #f87171; }
+
+        .admin-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .admin-controls .filter-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .admin-controls .filter-btn {
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 30px;
+            color: #a0b4c8;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .admin-controls .filter-btn:hover {
+            border-color: #00ffcc;
+            color: #00ffcc;
+        }
+
+        .admin-controls .filter-btn.active {
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            border-color: #00ffcc;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .admin-table th {
+            text-align: right;
+            padding: 12px 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.06);
+            color: rgba(160, 180, 200, 0.5);
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .admin-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            vertical-align: middle;
+        }
+
+        .admin-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .admin-table .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-table .user-cell .avatar { font-size: 1.5rem; }
+        .admin-table .user-cell .username { font-weight: 600; color: #e8f5f0; }
+
+        .admin-table .status-badge {
+            display: inline-block;
+            padding: 3px 14px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .status-badge.pending { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+        .status-badge.approved { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+        .status-badge.rejected { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+
+        .admin-table .action-btns {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .admin-table .action-btn {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .action-btn.approve { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+        .action-btn.approve:hover { background: rgba(52, 211, 153, 0.25); }
+        .action-btn.reject { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+        .action-btn.reject:hover { background: rgba(248, 113, 113, 0.25); }
+        .action-btn.delete { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .action-btn.delete:hover { background: rgba(239, 68, 68, 0.2); }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loading-spinner .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #00ffcc;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .access-denied {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .access-denied .icon { font-size: 5rem; display: block; margin-bottom: 15px; }
+        .access-denied h2 { color: #f87171; margin-bottom: 10px; }
+        .access-denied p { color: #a0b4c8; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .admin-wrapper { padding: 20px 15px; }
+            .admin-table { font-size: 0.75rem; }
+            .admin-table th, .admin-table td { padding: 8px 10px; }
+            .stats-grid { grid-template-columns: 1fr 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== HEADER توسط header.js ساخته می‌شود ===== -->
+
+    <main>
+        <div class="admin-wrapper" id="adminContent">
+            <!-- ===== بارگذاری ===== -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner"></div>
+                <p>⏳ در حال بارگذاری...</p>
+            </div>
+
+            <!-- ===== محتوای اصلی ===== -->
+            <div id="mainContent" style="display:none;">
+                <h2>👑 مدیریت پیشنهادات</h2>
+                <p class="subtitle">پیشنهادات کاربران را بررسی، تایید یا رد کنید</p>
+
+                <div class="stats-grid" id="statsGrid"></div>
+
+                <div class="admin-controls">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-status="all" onclick="loadSuggestions('all', this)">📋 همه</button>
+                        <button class="filter-btn" data-status="pending" onclick="loadSuggestions('pending', this)">⏳ در انتظار</button>
+                        <button class="filter-btn" data-status="approved" onclick="loadSuggestions('approved', this)">✅ تایید شده</button>
+                        <button class="filter-btn" data-status="rejected" onclick="loadSuggestions('rejected', this)">❌ رد شده</button>
+                    </div>
+                    <button class="filter-btn" onclick="loadSuggestions('all', document.querySelector('.filter-btn[data-status=\'all\']'))" style="background:rgba(255,255,255,0.04);">🔄 به‌روزرسانی</button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>کاربر</th>
+                                <th>نام ابزار</th>
+                                <th>دسته‌بندی</th>
+                                <th>وضعیت</th>
+                                <th>تاریخ</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="suggestionsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===== FOOTER توسط footer.js ساخته می‌شود ===== -->
+
+    <!-- ===== اسکریپت‌ها ===== -->
+    <script src="../../auth/auth.js"></script>
+    <script src="../../assets/js/header.js"></script>
+    <script src="../../assets/js/footer.js"></script>
+    <script src="../../assets/js/seo.js"></script>
+
+    <script>
+        // ===== بررسی دسترسی ادمین =====
+        function checkAdminAccess() {
+            const user = JSON.parse(localStorage.getItem('novinix_current_user') || 'null');
+            if (!user || user.username !== 'admin') {
+                document.getElementById('adminContent').innerHTML = `
+                    <div class="access-denied">
+                        <span class="icon">🚫</span>
+                        <h2>دسترسی غیرمجاز</h2>
+                        <p>این بخش فقط برای مدیران سایت قابل دسترسی است.</p>
+                        <a href="../../main.html" style="display:inline-block;margin-top:20px;padding:12px 35px;background:linear-gradient(135deg,#00ffcc,#00b4db);color:#0f0c29;border-radius:30px;text-decoration:none;font-weight:700;">🏠 بازگشت به خانه</a>
+                    </div>
+                `;
+                return false;
+            }
+            return true;
+        }
+
+        // ===== بارگذاری پیشنهادات =====
+        async function loadSuggestions(status = 'all', button = null) {
+            const user = JSON.parse(localStorage.getItem('novinix_current_user') || 'null');
+            if (!user || user.username !== 'admin') return;
+
+            if (button) {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            }
+
+            const tbody = document.getElementById('suggestionsTableBody');
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:30px;">⏳ در حال بارگذاری...</td></tr>`;
+
+            try {
+                const url = `/Novinix/api/suggestions.php?username=admin${status !== 'all' ? '&status=' + status : ''}`;
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (result.success) {
+                    renderStats(result.data.stats);
+                    renderSuggestions(result.data.suggestions);
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:30px;color:#f87171;">❌ ${result.message}</td></tr>`;
+                }
+            } catch (error) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:30px;color:#f87171;">❌ خطا در بارگذاری داده‌ها</td></tr>`;
+            }
+        }
+
+        // ===== رندر آمار =====
+        function renderStats(stats) {
+            const grid = document.getElementById('statsGrid');
+            grid.innerHTML = `
+                <div class="stat-card">
+                    <span class="number">${stats.total || 0}</span>
+                    <span class="label">📋 کل پیشنهادات</span>
+                </div>
+                <div class="stat-card pending">
+                    <span class="number">${stats.pending || 0}</span>
+                    <span class="label">⏳ در انتظار بررسی</span>
+                </div>
+                <div class="stat-card approved">
+                    <span class="number">${stats.approved || 0}</span>
+                    <span class="label">✅ تایید شده</span>
+                </div>
+                <div class="stat-card rejected">
+                    <span class="number">${stats.rejected || 0}</span>
+                    <span class="label">❌ رد شده</span>
+                </div>
+            `;
+        }
+
+        // ===== رندر جدول =====
+        function renderSuggestions(suggestions) {
+            const tbody = document.getElementById('suggestionsTableBody');
+
+            if (!suggestions || suggestions.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align:center;padding:40px;color:rgba(160,180,200,0.4);">
+                            <span style="font-size:3rem;display:block;margin-bottom:10px;">📭</span>
+                            هیچ پیشنهادی یافت نشد
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = suggestions.map((item, index) => {
+                const statusMap = {
+                    'pending': '<span class="status-badge pending">⏳ در انتظار</span>',
+                    'approved': '<span class="status-badge approved">✅ تایید</span>',
+                    'rejected': '<span class="status-badge rejected">❌ رد</span>'
+                };
+
+                return `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>
+                            <div class="user-cell">
+                                <span class="avatar">${item.avatar || '👤'}</span>
+                                <span class="username">${item.username}</span>
+                            </div>
+                        </td>
+                        <td><strong>${item.tool_name}</strong></td>
+                        <td style="font-size:0.8rem;color:rgba(160,180,200,0.5);">${item.category}</td>
+                        <td>${statusMap[item.status] || item.status}</td>
+                        <td style="font-size:0.75rem;color:rgba(160,180,200,0.4);">${new Date(item.created_at).toLocaleDateString('fa-IR')}</td>
+                        <td>
+                            <div class="action-btns">
+                                ${item.status === 'pending' ? `
+                                    <button class="action-btn approve" onclick="updateStatus(${item.id}, 'approved')">✅ تایید</button>
+                                    <button class="action-btn reject" onclick="updateStatus(${item.id}, 'rejected')">❌ رد</button>
+                                ` : `
+                                    <button class="action-btn approve" onclick="updateStatus(${item.id}, 'pending')">↩️ برگرداندن</button>
+                                `}
+                                <button class="action-btn delete" onclick="deleteSuggestion(${item.id})">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // ===== به‌روزرسانی وضعیت =====
+        async function updateStatus(id, status) {
+            if (!confirm(`آیا از تغییر وضعیت این پیشنهاد مطمئن هستید؟`)) return;
+
+            try {
+                const response = await fetch('/Novinix/api/suggestions.php', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: 'admin',
+                        id: id,
+                        status: status
+                    })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('✅ وضعیت با موفقیت تغییر کرد.');
+                    loadSuggestions(document.querySelector('.filter-btn.active')?.dataset?.status || 'all');
+                } else {
+                    alert('❌ ' + result.message);
+                }
+            } catch (error) {
+                alert('❌ خطا در ارتباط با سرور.');
+            }
+        }
+
+        // ===== حذف پیشنهاد =====
+        async function deleteSuggestion(id) {
+            if (!confirm('⚠️ آیا از حذف این پیشنهاد مطمئن هستید؟ این عملیات قابل بازگشت نیست!')) return;
+
+            try {
+                const response = await fetch('/Novinix/api/suggestions.php', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: 'admin',
+                        id: id
+                    })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('🗑️ پیشنهاد با موفقیت حذف شد.');
+                    loadSuggestions(document.querySelector('.filter-btn.active')?.dataset?.status || 'all');
+                } else {
+                    alert('❌ ' + result.message);
+                }
+            } catch (error) {
+                alert('❌ خطا در ارتباط با سرور.');
+            }
+        }
+
+        // ===== بارگذاری اولیه =====
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkAdminAccess()) {
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                loadSuggestions('all', document.querySelector('.filter-btn[data-status="all"]'));
+            }
+        });
+    </script>
+</body>
+</html>

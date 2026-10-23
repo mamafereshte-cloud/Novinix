@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🐍 مار و پله</title>
+    <link rel="stylesheet" href="../assets/css/game.css">
+    <style>
+        .sl-wrapper { max-width: 650px; }
+        #board { display: grid; grid-template-columns: repeat(10,1fr); gap: 3px; width:100%; aspect-ratio:1; background: linear-gradient(135deg,#2d1b3d,#1a0a2e); padding:6px; border-radius:var(--radius-sm); }
+        .cell { background: linear-gradient(145deg,#f5e6d3,#e8d5c4); border-radius:4px; display:flex; justify-content:center; align-items:center; font-size:0.55rem; font-weight:700; color:#4a3520; position:relative; aspect-ratio:1; cursor:default; transition:all 0.2s; }
+        .cell:hover { transform:scale(1.04); z-index:2; }
+        .cell.snake { background:linear-gradient(135deg,#ff6b6b,#c0392b); color:#fff; }
+        .cell.ladder { background:linear-gradient(135deg,#4ecdc4,#1abc9c); color:#fff; }
+        .cell.win-cell { background:linear-gradient(135deg,#f0c040,#f39c12); color:#fff; animation:winPulse 1.5s ease-in-out infinite; }
+        @keyframes winPulse { 0%,100%{box-shadow:0 0 15px rgba(240,192,64,0.3);} 50%{box-shadow:0 0 40px rgba(240,192,64,0.8);} }
+        .cell .player { position:absolute; width:12px; height:12px; border-radius:50%; border:2px solid rgba(255,255,255,0.9); box-shadow:0 2px 10px rgba(0,0,0,0.4); transition:all 0.3s; z-index:3; }
+        .cell .player.p1 { background:radial-gradient(circle at 30% 30%,#ff6b81,#c0392b); bottom:2px; right:2px; }
+        .cell .player.p2 { background:radial-gradient(circle at 30% 30%,#7bed9f,#27ae60); top:2px; left:2px; }
+        .cell .player.both { background:radial-gradient(circle at 30% 30%,#ff6b81 40%,#7bed9f 60%); width:18px; height:18px; top:50%; left:50%; transform:translate(-50%,-50%); }
+        .cell .player.both::after { content:'⚔️'; position:absolute; font-size:7px; top:50%; left:50%; transform:translate(-50%,-50%); }
+        .players-panel { display:flex; justify-content:space-between; gap:12px; margin-bottom:12px; }
+        .player-card { flex:1; display:flex; align-items:center; gap:8px; padding:8px 12px; border-radius:var(--radius-sm); background:var(--card-bg); border:1px solid var(--card-border); }
+        .player-card.active { border-color:#f1c40f; box-shadow:0 0 20px rgba(241,196,15,0.15); }
+        .player-card .avatar { width:40px; height:40px; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:1.2rem; flex-shrink:0; }
+        .player-card .avatar.p1 { background:linear-gradient(135deg,#ff4757,#ff6b81); }
+        .player-card .avatar.p2 { background:linear-gradient(135deg,#2ed573,#7bed9f); }
+        .player-card .info { flex:1; }
+        .player-card .info .name { font-weight:700; font-size:0.9rem; }
+        .player-card .info .pos { font-size:0.8rem; color:var(--text-secondary); }
+        .player-card .badge { padding:2px 12px; border-radius:20px; font-size:0.6rem; font-weight:700; opacity:0; transition:all 0.3s; background:#f1c40f; color:#1a1a2e; }
+        .player-card .badge.show { opacity:1; }
+        .dice-section { display:flex; justify-content:center; align-items:center; gap:16px; margin:12px 0; }
+        .dice { width:60px; height:60px; background:linear-gradient(145deg,#fff,#e0e0e0); border-radius:12px; display:flex; justify-content:center; align-items:center; font-size:2.2rem; font-weight:700; box-shadow:0 4px 15px rgba(0,0,0,0.3); transition:all 0.2s; }
+        .dice.rolling { animation:diceRoll 0.6s ease; }
+        @keyframes diceRoll { 0%{transform:rotate(0) scale(1);} 50%{transform:rotate(180deg) scale(1.2);} 100%{transform:rotate(360deg) scale(1);} }
+        .dice-value { font-size:1.8rem; font-weight:700; color:#f1c40f; min-width:40px; text-align:center; }
+        @media (max-width:500px){ .cell{font-size:0.4rem;} .cell .player{width:10px;height:10px;} .cell .player.both{width:14px;height:14px;} .players-panel{flex-direction:column;gap:6px;} .dice{width:50px;height:50px;font-size:1.8rem;} }
+    </style>
+</head>
+<body>
+<div class="game-wrapper sl-wrapper">
+    <div class="game-header">
+        <h1>🐍 مار و پله 🪜</h1>
+        <div class="header-buttons"><a href="../pages/games.html" class="exit-btn">✕ خروج</a></div>
+    </div>
+    <div class="players-panel">
+        <div class="player-card" id="p1Card"><div class="avatar p1">👑</div><div class="info"><div class="name p1-name" style="color:#ff6b81;">بازیکن ۱</div><div class="pos">📍 <span id="p1Pos">0</span></div></div><div class="badge" id="p1Badge">نوبت</div></div>
+        <div class="player-card" id="p2Card"><div class="avatar p2">⭐</div><div class="info"><div class="name p2-name" style="color:#7bed9f;">بازیکن ۲</div><div class="pos">📍 <span id="p2Pos">0</span></div></div><div class="badge" id="p2Badge">نوبت</div></div>
+    </div>
+    <div class="status-message" id="statusMessage">🎮 بازی شروع شد! نوبت: بازیکن ۱</div>
+    <div class="board-wrapper"><div id="boardContainer"><div id="board"></div></div></div>
+    <div class="dice-section">
+        <div class="dice" id="dice">🎲</div>
+        <div class="dice-value" id="diceVal">?</div>
+    </div>
+    <div class="game-buttons">
+        <button class="btn btn-warning" id="rollBtn">🎲 تاس بینداز</button>
+        <button class="btn btn-success" id="newBtn">🔄 بازی جدید</button>
+        <button class="btn btn-danger" id="exitBtn">🚪 خروج</button>
+    </div>
+    <div class="key-hints"><span>🎲 کلیک = تاس</span><span>🔄 R = ریستارت</span></div>
+</div>
+<script>
+// ===== مار و پله =====
+const snakes={16:6,47:26,49:11,56:53,62:19,64:60,87:24,93:73,95:75,98:78};
+const ladders={1:38,4:14,9:31,21:42,28:84,36:44,51:67,71:91,80:100};
+let players={1:{pos:0,name:'بازیکن ۱',color:'p1'},2:{pos:0,name:'بازیکن ۲',color:'p2'}};
+let current=1, gameOver=false, diceVal=0, rolling=false, moveTimeout=null;
+const boardEl=document.getElementById('board'), statusMsg=document.getElementById('statusMessage');
+const dice=document.getElementById('dice'), diceValEl=document.getElementById('diceVal');
+
+function createBoard(){ boardEl.innerHTML=''; for(let i=100;i>=1;i--){ const cell=document.createElement('div'); cell.className='cell'; cell.dataset.index=i; let txt=i; if(snakes[i]){cell.classList.add('snake'); txt=`🐍${i}`;}else if(ladders[i]){cell.classList.add('ladder'); txt=`🪜${i}`;}else if(i===100){cell.classList.add('win-cell'); txt='🏆';} cell.textContent=txt; boardEl.appendChild(cell); } updateBoard(); }
+function updateBoard(){ document.querySelectorAll('.cell').forEach(cell=>{ const idx=parseInt(cell.dataset.index); cell.querySelectorAll('.player').forEach(el=>el.remove()); const p1=players[1].pos, p2=players[2].pos; if(p1===idx&&p2===idx&&idx!==0){ const m=document.createElement('div'); m.className='player both'; cell.appendChild(m); }else{ if(p1===idx&&idx!==0){const m=document.createElement('div');m.className='player p1';cell.appendChild(m);} if(p2===idx&&idx!==0){const m=document.createElement('div');m.className='player p2';cell.appendChild(m);} } }); document.getElementById('p1Pos').textContent=players[1].pos; document.getElementById('p2Pos').textContent=players[2].pos; document.getElementById('p1Card').classList.toggle('active',current===1&&!gameOver); document.getElementById('p2Card').classList.toggle('active',current===2&&!gameOver); document.getElementById('p1Badge').classList.toggle('show',current===1&&!gameOver); document.getElementById('p2Badge').classList.toggle('show',current===2&&!gameOver); if(diceVal>0)diceValEl.textContent=diceVal; }
+function rollDice(){ if(gameOver||rolling)return; rolling=true; document.getElementById('rollBtn').disabled=true; dice.classList.remove('rolling'); let count=0; const iv=setInterval(()=>{ diceVal=Math.floor(Math.random()*6)+1; dice.textContent=['⚀','⚁','⚂','⚃','⚄','⚅'][diceVal-1]; diceValEl.textContent=diceVal; count++; if(count>10){ clearInterval(iv); dice.classList.add('rolling'); setTimeout(()=>{dice.classList.remove('rolling'); makeMove();},500); } },60); }
+function makeMove(){ const p=players[current]; let np=p.pos+diceVal; if(np>100){ statusMsg.textContent=`${p.name} باید دقیقاً ${100-p.pos} بیاورد!`; rolling=false; document.getElementById('rollBtn').disabled=false; updateBoard(); return; } if(np===100){ p.pos=np; updateBoard(); gameOver=true; statusMsg.textContent=`🎉 ${p.name} برنده شد! 🎉`; statusMsg.className='status-message success'; document.getElementById('rollBtn').disabled=true; rolling=false; saveScore(current); return; } let msg=`${p.name} به ${np} رفت`; let sp=false; if(snakes[np]){ msg=`🐍 ${p.name} به مار خورد! رفت به ${snakes[np]}`; np=snakes[np]; sp=true; }else if(ladders[np]){ msg=`🪜 ${p.name} به نردبان رسید! رفت به ${ladders[np]}`; np=ladders[np]; sp=true; } p.pos=np; updateBoard(); statusMsg.textContent=msg; statusMsg.className='status-message'; if(sp){ clearTimeout(moveTimeout); moveTimeout=setTimeout(()=>{ if(np===100){ gameOver=true; statusMsg.textContent=`🎉 ${p.name} برنده شد! 🎉`; statusMsg.className='status-message success'; document.getElementById('rollBtn').disabled=true; rolling=false; saveScore(current); return; } current=current===1?2:1; statusMsg.textContent=`${msg} | نوبت: ${players[current].name}`; updateBoard(); rolling=false; document.getElementById('rollBtn').disabled=false; },500); }else{ current=current===1?2:1; statusMsg.textContent=`${msg} | نوبت: ${players[current].name}`; rolling=false; document.getElementById('rollBtn').disabled=false; updateBoard(); } }
+async function saveScore(winner){ try{ if(typeof NovinixAuth!=='undefined'&&NovinixAuth.isLoggedIn()){ await NovinixAuth.saveGameScore('snake-ladders',100,{winner:winner===1?'player1':'player2'}); } }catch(e){} }
+function newGame(){ clearTimeout(moveTimeout); players[1].pos=0; players[2].pos=0; current=1; gameOver=false; rolling=false; document.getElementById('rollBtn').disabled=false; diceVal=0; dice.textContent='🎲'; diceValEl.textContent='?'; statusMsg.textContent='🎮 بازی جدید شروع شد! نوبت: بازیکن ۱'; statusMsg.className='status-message'; updateBoard(); }
+function exitGame(){ if(confirm('آیا مطمئن هستید؟'))window.location.href='../pages/games.html'; }
+document.getElementById('rollBtn').addEventListener('click',rollDice);
+document.getElementById('newBtn').addEventListener('click',newGame);
+document.getElementById('exitBtn').addEventListener('click',exitGame);
+document.addEventListener('keydown',e=>{ if(e.key==='r'||e.key==='R')newGame(); if(e.key===' '||e.key==='Space'){e.preventDefault();rollDice();} });
+createBoard(); updateBoard();
+</script>
+<script src="../assets/js/seo.js"></script>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پروفایل کاربری | نوینیکس</title>
+    <meta name="description" content="مشاهده و مدیریت پروفایل کاربری نوینیکس" />
+    <link rel="canonical" href="https://novinix.ir/auth/profile.html" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <style>
+        .profile-wrapper {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 35px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .profile-header .avatar {
+            font-size: 4rem;
+            background: rgba(0, 255, 204, 0.08);
+            padding: 15px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 255, 204, 0.2);
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .profile-header .avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .profile-header .info h2 { color: #00ffcc; font-size: 1.6rem; }
+        .profile-header .info p { color: #a0b4c8; font-size: 0.9rem; margin: 2px 0; }
+        .profile-header .info .badge {
+            display: inline-block;
+            background: rgba(251, 191, 36, 0.15);
+            color: #fbbf24;
+            padding: 3px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 6px;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+        .profile-bio {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            min-height: 50px;
+        }
+        .profile-bio .bio-label { font-size: 0.75rem; color: rgba(160, 180, 200, 0.5); margin-bottom: 4px; }
+        .profile-bio .bio-text { color: #e8f5f0; font-size: 0.95rem; line-height: 1.6; }
+        .profile-bio .no-bio { color: rgba(160, 180, 200, 0.4); font-style: italic; }
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .stat-card { text-align: center; }
+        .stat-card .stat-number { display: block; font-size: 1.8rem; font-weight: 700; color: #00ffcc; }
+        .stat-card .stat-label { font-size: 0.8rem; color: #a0b4c8; }
+        .game-scores { margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.06); }
+        .game-scores h3 { color: #e8f5f0; margin-bottom: 12px; font-size: 1.1rem; }
+        .game-scores .no-scores { color: #a0b4c8; text-align: center; padding: 20px; }
+        .game-scores .no-scores a { color: #00ffcc; text-decoration: none; }
+        .game-score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .game-score-item:last-child { border-bottom: none; }
+        .game-score-item .game-name { font-weight: 500; color: #e8f5f0; }
+        .game-score-item .game-score { font-weight: 600; color: #00ffcc; }
+        .game-score-item .game-date { font-size: 0.7rem; color: rgba(160, 180, 200, 0.5); }
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .profile-actions .pa-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .profile-actions .pa-btn:hover { transform: translateY(-2px); }
+        .pa-btn-games { background: linear-gradient(135deg, #6c2eb7, #8e44ad); color: white; }
+        .pa-btn-games:hover { box-shadow: 0 4px 16px rgba(108, 46, 183, 0.3); }
+        .pa-btn-leaderboard { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #1a1a2e; }
+        .pa-btn-leaderboard:hover { box-shadow: 0 4px 16px rgba(241, 196, 15, 0.3); }
+        .pa-btn-home { background: rgba(255, 255, 255, 0.06); color: #a0b4c8; border: 1px solid rgba(255, 255, 255, 0.08); }
+        .pa-btn-home:hover { background: rgba(255, 255, 255, 0.1); color: #00ffcc; }
+        .pa-btn-edit { background: rgba(0, 255, 204, 0.1); color: #00ffcc; border: 1px solid rgba(0, 255, 204, 0.15); }
+        .pa-btn-edit:hover { background: rgba(0, 255, 204, 0.2); }
+        .pa-btn-logout { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.15); }
+        .pa-btn-logout:hover { background: rgba(239, 68, 68, 0.25); }
+        .loading-spinner { text-align: center; padding: 40px 20px; }
+        .loading-spinner .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #00ffcc;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .error-box { background: rgba(239, 68, 68, 0.12); color: #f87171; padding: 15px 20px; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.2); margin-bottom: 20px; text-align: center; }
+        @media (max-width: 768px) {
+            .profile-header { flex-direction: column; text-align: center; gap: 15px; }
+            .profile-stats { grid-template-columns: 1fr 1fr; }
+            .profile-actions { justify-content: center; }
+        }
+        @media (max-width: 480px) {
+            .profile-wrapper { padding: 20px 15px; }
+            .profile-stats { grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; }
+            .stat-card .stat-number { font-size: 1.3rem; }
+            .game-score-item { flex-wrap: wrap; gap: 4px; }
+            .game-score-item .game-date { width: 100%; text-align: right; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader"></header>
+
+    <main>
+        <div class="profile-wrapper">
+            <div id="profileContent">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>⏳ در حال بارگذاری...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer id="mainFooter"></footer>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            const profileContent = document.getElementById('profileContent');
+
+            if (typeof NovinixAuth === 'undefined') {
+                profileContent.innerHTML = `<div class="error-box">❌ خطا: سیستم احراز هویت بارگذاری نشد.</div>`;
+                return;
+            }
+
+            if (!NovinixAuth.isLoggedIn()) {
+                localStorage.setItem('novinix_redirect_after_login', window.location.pathname);
+                window.location.href = 'login.html';
+                return;
+            }
+
+            async function loadProfile() {
+                try {
+                    const user = await NovinixAuth.getCurrentUser();
+                    if (!user) { window.location.href = 'login.html'; return; }
+
+                    const rankData = await NovinixAuth.getUserRank(user.username);
+                    const rank = rankData?.user_rank || '—';
+
+                    function formatDate(dateStr) {
+                        try { const date = new Date(dateStr); return date.toLocaleDateString('fa-IR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }); } catch(e) { return dateStr || '—'; }
+                    }
+
+                    function getRankBadge(r) {
+                        if (r === 1) return '🥇';
+                        if (r === 2) return '🥈';
+                        if (r === 3) return '🥉';
+                        return `#${r}`;
+                    }
+
+                    const scoresData = await NovinixAuth.getUserScores(user.username);
+                    const gameScores = scoresData.success ? scoresData.data.scores : [];
+                    const bestScores = scoresData.success ? scoresData.data.best_scores : [];
+
+                    const gameNames = {
+                        'snake': '🐍 مار', 'tetris': '🧱 تتریس', 'flappy-bird': '🐦 فلپی برد',
+                        'tic-tac-toe': '❌ دوز', 'memory': '🧠 حافظه', 'whack-mole': '🔨 موش‌کوب',
+                        'pong': '🏓 پینگ پنگ', '2048': '🔢 ۲۰۴۸',
+                        'fruit-ninja': '🍉 برش میوه', 'catch-eggs': '🥚 تخم‌مرغ', 'puzzles': '🧩 معماها'
+                    };
+
+                    let scoresHtml = '';
+                    if (gameScores.length === 0) {
+                        scoresHtml = `<div class="no-scores">🎮 هنوز امتیازی ثبت نشده است. <a href="../pages/games.html">برو بازی کن!</a></div>`;
+                    } else {
+                        const bestMap = {};
+                        bestScores.forEach(b => { bestMap[b.game_id] = b.best_score; });
+                        const uniqueGames = [...new Set(gameScores.map(s => s.game_id))];
+                        uniqueGames.forEach(gameId => {
+                            const gameName = gameNames[gameId] || gameId;
+                            const best = bestMap[gameId] || 0;
+                            const last = gameScores.filter(s => s.game_id === gameId)[0];
+                            scoresHtml += `
+                                <div class="game-score-item">
+                                    <span class="game-name">${gameName}</span>
+                                    <span class="game-score">⭐ ${best}</span>
+                                    <span class="game-date">${last ? formatDate(last.played_at) : ''}</span>
+                                </div>
+                            `;
+                        });
+                    }
+
+                    const avatarHtml = user.profile_image
+                        ? `<img src="${user.profile_image}" alt="${user.username}" />`
+                        : (user.avatar || '👤');
+
+                    const bioHtml = user.bio
+                        ? `<div class="bio-text">${user.bio}</div>`
+                        : `<div class="no-bio">هیچ بیوگرافی ثبت نشده است. ✏️ ویرایش کنید</div>`;
+
+                    profileContent.innerHTML = `
+                        <div class="profile-header">
+                            <div class="avatar">${avatarHtml}</div>
+                            <div class="info">
+                                <h2>${user.username}</h2>
+                                <p>📧 ${user.email || 'ایمیلی ثبت نشده'}</p>
+                                <p>📅 عضو از ${formatDate(user.created_at)}</p>
+                                <p>🔐 آخرین ورود: ${formatDate(user.last_login)}</p>
+                                <span class="badge">🏆 رتبه ${getRankBadge(rank)}</span>
+                            </div>
+                        </div>
+                        <div class="profile-bio"><div class="bio-label">📝 بیوگرافی</div>${bioHtml}</div>
+                        <div class="profile-stats">
+                            <div class="stat-card"><span class="stat-number">${user.total_score || 0}</span><span class="stat-label">⭐ امتیاز کل</span></div>
+                            <div class="stat-card"><span class="stat-number">${user.games_played || 0}</span><span class="stat-label">🎮 بازی‌ها</span></div>
+                            <div class="stat-card"><span class="stat-number">${user.games_won || 0}</span><span class="stat-label">🏆 برنده</span></div>
+                            <div class="stat-card"><span class="stat-number">${rank}</span><span class="stat-label">📊 رتبه</span></div>
+                        </div>
+                        <div class="game-scores">
+                            <h3>🎮 امتیازات بازی‌ها</h3>
+                            <div id="gameScoresList">${scoresHtml}</div>
+                        </div>
+                        <div class="profile-actions">
+                            <a href="profile-edit.html" class="pa-btn pa-btn-edit">✏️ ویرایش پروفایل</a>
+                            <a href="../pages/games.html" class="pa-btn pa-btn-games">🎮 بازی‌ها</a>
+                            <a href="leaderboard.html" class="pa-btn pa-btn-leaderboard">🏆 رتبه‌بندی</a>
+                            <a href="../main.html" class="pa-btn pa-btn-home">🏠 خانه</a>
+                            <button class="pa-btn pa-btn-logout" id="logoutBtn">🚪 خروج</button>
+                        </div>
+                    `;
+
+                    document.getElementById('logoutBtn').addEventListener('click', async function() {
+                        if (confirm('آیا مطمئن هستید که می‌خواهید خارج شوید؟')) {
+                            await NovinixAuth.logout();
+                            window.location.href = '../main.html';
+                        }
+                    });
+
+                } catch (error) {
+                    profileContent.innerHTML = `<div class="error-box">❌ خطا در بارگذاری پروفایل: ${error.message || 'خطای ناشناخته'}</div>`;
+                }
+            }
+
+            loadProfile();
+        })();
+    </script>
+</body>
+</html>

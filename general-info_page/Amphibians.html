@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>دوزیستان | نوینیکس</title>
+    <meta name="description" content="معرفی و اطلاعات کامل انواع دوزیستان شامل قورباغه‌ها، سمندرها، تریتون‌ها و سفیدماریان" />
+    <link rel="canonical" href="https://novinix.ir/pages/general-info/amphibians.html" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <style>
+        .amphibians-hero {
+            background: linear-gradient(135deg, #2d1b69, #4a2c7a, #6c2eb7);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(108, 46, 183, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .amphibians-hero::before { content: '🐸'; position: absolute; font-size: 10rem; opacity: 0.05; right: -30px; bottom: -30px; transform: rotate(10deg); }
+        .amphibians-hero h2 { font-size: 2rem; margin-bottom: 10px; position: relative; z-index: 1; }
+        .amphibians-hero h2 span { color: #55efc4; }
+        .amphibians-hero p { opacity: 0.85; font-size: 1.05rem; position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+        .category-filter { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
+        .cat-tag { background: rgba(255, 255, 255, 0.05); padding: 8px 20px; border-radius: 30px; font-size: 0.85rem; color: #a0b4c8; cursor: pointer; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.06); font-weight: 500; user-select: none; }
+        .cat-tag:hover { border-color: #00ffcc; transform: translateY(-2px); color: #00ffcc; }
+        .cat-tag.active { background: linear-gradient(135deg, #00ffcc, #00b4db); color: #0f0c29; border-color: #00ffcc; }
+        .amphibian-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 10px; }
+        .amphibian-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 18px; padding: 20px; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+        .amphibian-card:hover { transform: translateY(-5px); border-color: #00ffcc; box-shadow: 0 12px 40px rgba(0, 255, 204, 0.1); }
+        .amphibian-card .amphibian-image { width: 100%; height: 200px; border-radius: 12px; overflow: hidden; margin-bottom: 15px; background: rgba(255, 255, 255, 0.03); display: flex; align-items: center; justify-content: center; position: relative; }
+        .amphibian-card .amphibian-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .amphibian-card:hover .amphibian-image img { transform: scale(1.05); }
+        .amphibian-card .amphibian-image .emoji-placeholder { font-size: 4rem; opacity: 0.3; }
+        .amphibian-card .amphibian-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .amphibian-card .amphibian-name { font-size: 1.2rem; font-weight: 700; color: #e8f5f0; }
+        .amphibian-card .amphibian-name-en { font-size: 0.9rem; font-weight: 400; color: #a0b4c8; display: block; }
+        .amphibian-card .category-badge { font-size: 0.6rem; padding: 3px 12px; border-radius: 20px; font-weight: 700; white-space: nowrap; margin-top: 2px; }
+        .category-badge.frog { background: rgba(85, 239, 196, 0.2); color: #55efc4; }
+        .category-badge.treefrog { background: rgba(129, 199, 132, 0.2); color: #81c784; }
+        .category-badge.salamander { background: rgba(255, 183, 77, 0.2); color: #ffb74d; }
+        .category-badge.newt { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+        .category-badge.caecilian { background: rgba(162, 155, 254, 0.2); color: #a29bfe; }
+        .amphibian-card .amphibian-description { font-size: 0.85rem; color: #a0b4c8; line-height: 1.6; flex-grow: 1; }
+        .amphibian-card .amphibian-description p { margin-bottom: 6px; }
+        .amphibian-card .amphibian-description p:last-child { margin-bottom: 0; }
+        .amphibian-card { opacity: 0; animation: fadeInUp 0.5s ease forwards; }
+        .amphibian-card:nth-child(1) { animation-delay: 0.03s; }
+        .amphibian-card:nth-child(2) { animation-delay: 0.06s; }
+        .amphibian-card:nth-child(3) { animation-delay: 0.09s; }
+        .amphibian-card:nth-child(4) { animation-delay: 0.12s; }
+        .amphibian-card:nth-child(5) { animation-delay: 0.15s; }
+        .amphibian-card:nth-child(6) { animation-delay: 0.18s; }
+        .amphibian-card:nth-child(7) { animation-delay: 0.21s; }
+        .amphibian-card:nth-child(8) { animation-delay: 0.24s; }
+        .amphibian-card:nth-child(9) { animation-delay: 0.27s; }
+        .amphibian-card:nth-child(10) { animation-delay: 0.30s; }
+        .amphibian-card:nth-child(11) { animation-delay: 0.33s; }
+        .amphibian-card:nth-child(12) { animation-delay: 0.36s; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .no-results { text-align: center; padding: 50px 20px; color: #a0b4c8; display: none; }
+        .no-results .big-icon { font-size: 4rem; display: block; margin-bottom: 15px; }
+        .no-results h3 { color: #e8f5f0; margin-bottom: 5px; }
+        @media (max-width: 768px) {
+            .amphibians-hero { padding: 25px 20px; }
+            .amphibians-hero h2 { font-size: 1.5rem; }
+            .amphibian-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .amphibian-card .amphibian-image { height: 150px; }
+            .cat-tag { font-size: 0.75rem; padding: 6px 14px; }
+        }
+        @media (max-width: 480px) {
+            .amphibian-grid { grid-template-columns: 1fr; }
+            .amphibian-card .amphibian-image { height: 180px; }
+            .amphibian-card .amphibian-name { font-size: 1rem; }
+            .amphibians-hero h2 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader"></header>
+
+    <main>
+        <div class="amphibians-hero">
+            <h2>🐸 دوزیستان <span>جهان</span></h2>
+            <p>دنیای شگفت‌انگیز دوزیستان، پل میان آب و خشکی</p>
+        </div>
+
+        <div class="category-filter">
+            <span class="cat-tag active" data-cat="all">همه</span>
+            <span class="cat-tag" data-cat="frog">🐸 قورباغه‌ها</span>
+            <span class="cat-tag" data-cat="treefrog">🌳 قورباغه‌های درختی</span>
+            <span class="cat-tag" data-cat="salamander">🦎 سمندرها</span>
+            <span class="cat-tag" data-cat="newt">🦎 تریتون‌ها</span>
+            <span class="cat-tag" data-cat="caecilian">🐍 سفیدماریان</span>
+        </div>
+
+        <div class="amphibian-grid" id="amphibianGrid"></div>
+
+        <div class="no-results" id="noResults">
+            <span class="big-icon">🔍</span>
+            <h3>نتیجه‌ای یافت نشد</h3>
+            <p>در دسته‌بندی انتخاب شده دوزیستی وجود ندارد</p>
+        </div>
+    </main>
+
+    <footer id="mainFooter"></footer>
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        const amphibiansData = [
+            { id: 'common_frog', nameFa: 'قورباغه معمولی', nameEn: 'Common Frog', category: 'frog', image: 'common_frog.jpg', emoji: '🐸', description: ['قورباغه معمولی دوزیستی با پوست صاف و مرطوب و پاهای عقب قدرتمند است.', 'قورباغه معمولی یکی از رایج‌ترین دوزیستان در جهان است.'] },
+            { id: 'bullfrog', nameFa: 'قورباغه گاو نر', nameEn: 'Bullfrog', category: 'frog', image: 'bullfrog.jpg', emoji: '🐸', description: ['قورباغه گاو نر بزرگ‌ترین قورباغه آمریکای شمالی با صدای بلند و قدرتمند است.', 'صدای این قورباغه شبیه غرش گاو نر است و به همین نام معروف است.'] },
+            { id: 'poison_dart_frog', nameFa: 'قورباغه زهرآگین', nameEn: 'Poison Dart Frog', category: 'frog', image: 'poison_dart_frog.jpg', emoji: '🐸', description: ['قورباغه زهرآگین با رنگ‌های درخشان و سم کشنده در جنگل‌های آمازون زندگی می‌کند.', 'سم این قورباغه توسط بومیان برای شکار استفاده می‌شود.'] },
+            { id: 'tree_frog', nameFa: 'قورباغه درختی', nameEn: 'Tree Frog', category: 'treefrog', image: 'tree_frog.jpg', emoji: '🌳', description: ['قورباغه درختی با انگشتان چسبناک و رنگ سبز برای زندگی در درختان سازگار شده است.', 'قورباغه‌های درختی در سراسر جهان در مناطق گرمسیری یافت می‌شوند.'] },
+            { id: 'red_eyed_tree_frog', nameFa: 'قورباغه درختی چشم‌قرمز', nameEn: 'Red-Eyed Tree Frog', category: 'treefrog', image: 'red_eyed_tree_frog.jpg', emoji: '🌳', description: ['قورباغه درختی چشم‌قرمز با چشمان قرمز درخشان و رنگ سبز در آمریکای مرکزی است.', 'چشمان قرمز این قورباغه برای ترساندن شکارچیان استفاده می‌شود.'] },
+            { id: 'fire_salamander', nameFa: 'سمندر آتشین', nameEn: 'Fire Salamander', category: 'salamander', image: 'fire_salamander.jpg', emoji: '🦎', description: ['سمندر آتشین با رنگ سیاه و لکه‌های زرد در جنگل‌های اروپا زندگی می‌کند.', 'این سمندر به دلیل رنگ آتشین و افسانه‌های مرتبط با آتش، به این نام معروف است.'] },
+            { id: 'tiger_salamander', nameFa: 'سمندر ببری', nameEn: 'Tiger Salamander', category: 'salamander', image: 'tiger_salamander.jpg', emoji: '🦎', description: ['سمندر ببری با پوست سیاه و نوارهای زرد در آمریکای شمالی زندگی می‌کند.', 'سمندر ببری می‌تواند تا ۲۰ سال عمر کند و یکی از بزرگ‌ترین سمندرهای آمریکاست.'] },
+            { id: 'axolotl', nameFa: 'آکسولوتل', nameEn: 'Axolotl', category: 'salamander', image: 'axolotl.jpg', emoji: '🦎', description: ['آکسولوتل سمندری با آبشش‌های خارجی و قابلیت بازسازی کامل اندام‌ها در مکزیک است.', 'آکسولوتل در تحقیقات علمی و پزشکی اهمیت زیادی دارد.'] },
+            { id: 'common_newt', nameFa: 'تریتون معمولی', nameEn: 'Common Newt', category: 'newt', image: 'common_newt.jpg', emoji: '🦎', description: ['تریتون معمولی دوزیستی کوچک با پوست خشن و تاج در فصل جفت‌گیری است.', 'تریتون معمولی در بهار به آب بازمی‌گردد و تخم‌ریزی می‌کند.'] },
+            { id: 'crested_newt', nameFa: 'تریتون تاج‌دار', nameEn: 'Crested Newt', category: 'newt', image: 'crested_newt.jpg', emoji: '🦎', description: ['تریتون تاج‌دار با تاج دندانه‌دار روی پشت و رنگ تیره در اروپا است.', 'تریتون تاج‌دار در خطر انقراض است و محافظت می‌شود.'] }
+        ];
+
+        function renderAmphibians(data, filterCategory = 'all') {
+            const grid = document.getElementById('amphibianGrid');
+            const noResults = document.getElementById('noResults');
+            let html = '';
+            let count = 0;
+
+            data.forEach(item => {
+                if (filterCategory !== 'all' && item.category !== filterCategory) return;
+                count++;
+                const imagePath = `amphibians_ph/${item.image}`;
+                const catLabels = { frog: '🐸 قورباغه‌ها', treefrog: '🌳 قورباغه‌های درختی', salamander: '🦎 سمندرها', newt: '🦎 تریتون‌ها', caecilian: '🐍 سفیدماریان' };
+                const catClasses = { frog: 'frog', treefrog: 'treefrog', salamander: 'salamander', newt: 'newt', caecilian: 'caecilian' };
+
+                html += `
+                    <div class="amphibian-card" data-category="${item.category}">
+                        <div class="amphibian-image">
+                            <img src="${imagePath}" alt="${item.nameFa}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                            <span class="emoji-placeholder" style="display:none;">${item.emoji || '🐸'}</span>
+                        </div>
+                        <div class="amphibian-header">
+                            <div>
+                                <div class="amphibian-name">${item.nameFa}</div>
+                                <span class="amphibian-name-en">${item.nameEn}</span>
+                            </div>
+                            <span class="category-badge ${catClasses[item.category]}">${catLabels[item.category]}</span>
+                        </div>
+                        <div class="amphibian-description">${item.description.map(p => `<p>${p}</p>`).join('')}</div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+            if (count === 0) noResults.style.display = 'block';
+            else noResults.style.display = 'none';
+
+            const cards = grid.querySelectorAll('.amphibian-card');
+            cards.forEach((card, index) => {
+                card.style.animation = 'none';
+                card.offsetHeight;
+                card.style.animation = `fadeInUp 0.5s ease forwards`;
+                card.style.animationDelay = `${(index % 12) * 0.03 + 0.03}s`;
+            });
+        }
+
+        document.querySelectorAll('.cat-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                document.querySelectorAll('.cat-tag').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                renderAmphibians(amphibiansData, this.dataset.cat);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderAmphibians(amphibiansData, 'all');
+        });
+    </script>
+</body>
+</html>

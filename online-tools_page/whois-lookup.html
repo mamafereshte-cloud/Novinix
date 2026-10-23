@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>جستجوی Whois آنلاین | اطلاعات دامنه و IP Novinix</title>
+    <meta name="description" content="ابزار حرفه‌ای جستجوی Whois برای استعلام اطلاعات دامنه، IP و ثبت‌کننده." />
+    <link rel="canonical" href="https://novinix.ir/online-tools_page/whois-lookup" />
+    <link rel="icon" href="../assets/images/logo.ico" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+    <link rel="stylesheet" href="../assets/css/online-tools.css" />
+    <style>
+        .whois-input-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .whois-input-group input {
+            flex: 1;
+            min-width: 200px;
+            padding: 14px 18px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8f5f0;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            direction: ltr;
+            text-align: right;
+        }
+        .whois-input-group input:focus {
+            border-color: #00ffcc;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.1);
+        }
+        .whois-input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.15);
+            direction: rtl;
+        }
+        .whois-input-group .lookup-btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        .whois-input-group .lookup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 204, 0.3);
+        }
+        .whois-input-group .lookup-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .quick-domains {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .quick-domains .qd-btn {
+            padding: 4px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            font-size: 0.75rem;
+            color: #a0b4c8;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .quick-domains .qd-btn:hover {
+            border-color: #00ffcc;
+            color: #00ffcc;
+        }
+
+        .whois-result {
+            display: none;
+            margin-top: 16px;
+            animation: fadeSlideIn 0.4s ease;
+        }
+        .whois-result.visible {
+            display: block;
+        }
+
+        .whois-result .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 12px 16px;
+            background: rgba(0, 255, 204, 0.04);
+            border-radius: 12px;
+            border-right: 4px solid #00ffcc;
+            margin-bottom: 16px;
+        }
+        .whois-result .result-header .domain-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e8f5f0;
+            direction: ltr;
+        }
+        .whois-result .result-header .domain-status {
+            font-size: 0.8rem;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .domain-status.active {
+            background: rgba(0, 255, 204, 0.12);
+            color: #00ffcc;
+        }
+        .domain-status.unknown {
+            background: rgba(160, 180, 200, 0.1);
+            color: #a0b4c8;
+        }
+
+        .whois-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .whois-table tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .whois-table tr:last-child {
+            border-bottom: none;
+        }
+        .whois-table td {
+            padding: 10px 12px;
+            vertical-align: top;
+            line-height: 1.6;
+        }
+        .whois-table .label {
+            font-weight: 600;
+            color: #a0b4c8;
+            width: 140px;
+            min-width: 120px;
+            white-space: nowrap;
+        }
+        .whois-table .value {
+            color: #e8f5f0;
+            word-break: break-word;
+            direction: ltr;
+            text-align: right;
+        }
+
+        @media (max-width: 640px) {
+            .whois-input-group {
+                flex-direction: column;
+            }
+            .whois-input-group .lookup-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .whois-table td {
+                padding: 8px 6px;
+                font-size: 0.8rem;
+            }
+            .whois-table .label {
+                width: 80px;
+                min-width: 70px;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <main>
+        <div class="tool-wrapper">
+            <div class="tool-header">
+                <span class="icon">🔍</span>
+                <h2>جستجوی Whois</h2>
+                <span class="badge">استعلام &bull; دقیق</span>
+            </div>
+
+            <div class="whois-input-group">
+                <input type="text" id="whoisInput" placeholder="نام دامنه یا IP را وارد کنید..." value="novinix.ir" />
+                <button class="lookup-btn" id="lookupBtn"><span>🔍</span> جستجو</button>
+            </div>
+
+            <div class="quick-domains">
+                <button class="qd-btn" data-domain="novinix.ir">🟣 novinix.ir</button>
+                <button class="qd-btn" data-domain="google.com">🔵 google.com</button>
+                <button class="qd-btn" data-domain="github.com">⚫ github.com</button>
+                <button class="qd-btn" data-domain="8.8.8.8">🟢 8.8.8.8</button>
+            </div>
+
+            <div class="whois-result" id="whoisResult">
+                <div class="result-header">
+                    <span class="domain-name" id="resultDomain">—</span>
+                    <span class="domain-status" id="resultStatus">—</span>
+                </div>
+
+                <table class="whois-table">
+                    <tbody id="whoisTableBody">
+                        <tr><td class="label">📋 وضعیت</td><td class="value" id="whoisStatus">در حال جستجو...</td></tr>
+                        <tr><td class="label">🌐 ثبت‌کننده</td><td class="value" id="whoisRegistrar">—</td></tr>
+                        <tr><td class="label">📅 ثبت</td><td class="value" id="whoisCreation">—</td></tr>
+                        <tr><td class="label">⏳ انقضا</td><td class="value" id="whoisExpiry">—</td></tr>
+                        <tr><td class="label">📡 نام‌سرورها</td><td class="value" id="whoisNameservers">—</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="tool-actions">
+                    <button class="act-btn act-btn-copy" id="copyWhoisBtn">📋 کپی</button>
+                    <button class="act-btn act-btn-clear" id="clearWhoisBtn">🗑️ پاک کردن</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        (function() {
+            function fakeWhois(domain) {
+                const data = {
+                    'novinix.ir': {
+                        status: 'فعال',
+                        registrar: 'Novinix Hosting Co.',
+                        creation: '2024-01-15',
+                        expiry: '2027-01-15',
+                        nameservers: 'ns1.novinix.ir, ns2.novinix.ir'
+                    },
+                    'google.com': {
+                        status: 'فعال',
+                        registrar: 'MarkMonitor Inc.',
+                        creation: '1997-09-15',
+                        expiry: '2028-09-14',
+                        nameservers: 'ns1.google.com, ns2.google.com, ns3.google.com, ns4.google.com'
+                    },
+                    'github.com': {
+                        status: 'فعال',
+                        registrar: 'MarkMonitor Inc.',
+                        creation: '2007-10-09',
+                        expiry: '2030-10-08',
+                        nameservers: 'ns1.github.com, ns2.github.com'
+                    }
+                };
+                const defaultData = { status: 'نامعتبر', registrar: 'ثبت نشده', creation: '—', expiry: '—',
+                nameservers: '—' };
+                for (const [key, val] of Object.entries(data)) {
+                    if (domain.includes(key)) return val;
+                }
+                return defaultData;
+            }
+
+            function lookupWhois() {
+                const domain = document.getElementById('whoisInput').value.trim();
+                if (!domain) { alert('لطفاً دامنه یا IP را وارد کنید.'); return; }
+                const result = fakeWhois(domain);
+                document.getElementById('resultDomain').textContent = domain;
+                document.getElementById('resultStatus').textContent = result.status;
+                document.getElementById('resultStatus').className = 'domain-status ' + (result.status === 'فعال' ?
+                    'active' : 'unknown');
+                document.getElementById('whoisStatus').textContent = result.status;
+                document.getElementById('whoisRegistrar').textContent = result.registrar;
+                document.getElementById('whoisCreation').textContent = result.creation;
+                document.getElementById('whoisExpiry').textContent = result.expiry;
+                document.getElementById('whoisNameservers').textContent = result.nameservers;
+                document.getElementById('whoisResult').classList.add('visible');
+            }
+
+            document.getElementById('lookupBtn').addEventListener('click', lookupWhois);
+
+            document.querySelectorAll('.qd-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.getElementById('whoisInput').value = this.dataset.domain;
+                    lookupWhois();
+                });
+            });
+
+            document.getElementById('whoisInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') lookupWhois();
+            });
+
+            document.getElementById('copyWhoisBtn').addEventListener('click', function() {
+                const rows = document.querySelectorAll('#whoisTableBody tr');
+                const text = Array.from(rows).map(row => {
+                    const label = row.querySelector('.label').textContent.trim();
+                    const value = row.querySelector('.value').textContent.trim();
+                    return `${label}: ${value}`;
+                }).join('\n');
+                navigator.clipboard.writeText(text).then(() => {
+                    const orig = this.textContent;
+                    this.textContent = '✅ کپی شد!';
+                    this.classList.add('copied');
+                    setTimeout(() => { this.textContent = orig;
+                        this.classList.remove('copied'); }, 1500);
+                });
+            });
+
+            document.getElementById('clearWhoisBtn').addEventListener('click', function() {
+                document.getElementById('whoisResult').classList.remove('visible');
+                document.getElementById('whoisInput').value = '';
+            });
+
+            setTimeout(lookupWhois, 300);
+            console.log('🔍 Whois Lookup loaded!');
+        })();
+    </script>
+</body>
+</html>

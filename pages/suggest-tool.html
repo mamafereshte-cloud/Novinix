@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پیشنهاد ابزار جدید | نوینیکس</title>
+    <link rel="icon" href="../assets/images/logo.ico">
+
+    <!-- ===== CSS فایل‌های جداگانه ===== -->
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/responsive.css" />
+
+    <style>
+        /* ===== استایل‌های اختصاصی پیشنهاد ابزار ===== */
+        .suggest-wrapper {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 24px;
+            padding: 40px 35px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .suggest-wrapper h2 {
+            color: #00ffcc;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .suggest-wrapper .subtitle {
+            text-align: center;
+            color: #a0b4c8;
+            margin-bottom: 25px;
+        }
+
+        .login-required {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .login-required .icon {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .login-required h3 {
+            color: #e8f5f0;
+            margin-bottom: 8px;
+        }
+
+        .login-required p {
+            color: #a0b4c8;
+            margin-bottom: 20px;
+        }
+
+        .login-required .btn-login-req {
+            display: inline-block;
+            padding: 12px 35px;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .login-required .btn-login-req:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 255, 204, 0.25);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: #a0b4c8;
+            margin-bottom: 5px;
+        }
+
+        .form-group label .required {
+            color: #f87171;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            color: #e8f5f0;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00ffcc;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.08);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group select option {
+            background: #0f0c29;
+        }
+
+        .form-group .hint {
+            font-size: 0.75rem;
+            color: rgba(160, 180, 200, 0.4);
+            margin-top: 4px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #00ffcc, #00b4db);
+            color: #0f0c29;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 255, 204, 0.25);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-msg {
+            display: none;
+            background: rgba(0, 255, 204, 0.1);
+            border: 1px solid #00ffcc;
+            padding: 16px 20px;
+            border-radius: 12px;
+            color: #00ffcc;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .success-msg .icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .error-msg {
+            display: none;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #f87171;
+            padding: 16px 20px;
+            border-radius: 12px;
+            color: #f87171;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .suggest-wrapper { padding: 25px 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER توسط header.js ساخته می‌شود ===== -->
+
+    <main>
+        <div class="suggest-wrapper">
+            <h2>💡 پیشنهاد ابزار جدید</h2>
+            <p class="subtitle">اگر ابزاری به ذهنتان می‌رسد که می‌تواند به دیگران کمک کند، آن را به ما پیشنهاد دهید.</p>
+
+            <!-- ===== بخش نیاز به ورود ===== -->
+            <div class="login-required" id="loginRequired" style="display:none;">
+                <span class="icon">🔐</span>
+                <h3>برای پیشنهاد ابزار وارد شوید</h3>
+                <p>برای ثبت پیشنهاد، لطفاً وارد حساب کاربری خود شوید.</p>
+                <a href="../auth/login.html" class="btn-login-req">🚪 ورود به حساب</a>
+            </div>
+
+            <!-- ===== فرم پیشنهاد ===== -->
+            <div id="suggestFormContainer">
+                <div class="success-msg" id="successMsg">
+                    <span class="icon">✅</span>
+                    <strong>پیشنهاد شما با موفقیت ثبت شد!</strong>
+                    <p style="font-size:0.9rem;margin-top:4px;">از مشارکت شما سپاسگزاریم 🙏</p>
+                </div>
+
+                <div class="error-msg" id="errorMsg">
+                    <span class="icon">❌</span>
+                    <strong id="errorText">خطا در ثبت پیشنهاد</strong>
+                </div>
+
+                <form id="suggestForm" onsubmit="submitSuggestion(event)">
+                    <div class="form-group">
+                        <label>نام ابزار <span class="required">*</span></label>
+                        <input type="text" id="toolName" placeholder="مثال: ویرایشگر تصویر آنلاین" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>دسته‌بندی <span class="required">*</span></label>
+                        <select id="toolCategory" required>
+                            <option value="">انتخاب کنید...</option>
+                            <option value="برنامه‌نویسی">💻 برنامه‌نویسی</option>
+                            <option value="طراحی">🎨 طراحی</option>
+                            <option value="امنیت">🔐 امنیت</option>
+                            <option value="آموزش">📚 آموزش</option>
+                            <option value="ماشین‌حساب">🧮 ماشین‌حساب</option>
+                            <option value="تبدیل">🔄 تبدیل</option>
+                            <option value="متن">📝 متن</option>
+                            <option value="شبکه">🌐 شبکه</option>
+                            <option value="سایر">📌 سایر</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>توضیحات <span class="required">*</span></label>
+                        <textarea id="toolDesc" placeholder="ابزار چه کاری انجام می‌دهد؟ چه مشکلی را حل می‌کند؟" required></textarea>
+                        <div class="hint" id="charCount">۰/۵۰۰ کاراکتر</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>لینک نمونه (اختیاری)</label>
+                        <input type="url" id="toolLink" placeholder="https://example.com/tool" />
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="submitBtn">🚀 ارسال پیشنهاد</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===== FOOTER توسط footer.js ساخته می‌شود ===== -->
+
+    <!-- ===== اسکریپت‌ها ===== -->
+    <script src="../auth/auth.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
+    <script src="../assets/js/seo.js"></script>
+
+    <script>
+        function checkLoginStatus() {
+            const user = JSON.parse(localStorage.getItem('novinix_current_user') || 'null');
+            const loginRequired = document.getElementById('loginRequired');
+            const formContainer = document.getElementById('suggestFormContainer');
+
+            if (!user) {
+                loginRequired.style.display = 'block';
+                formContainer.style.display = 'none';
+            } else {
+                loginRequired.style.display = 'none';
+                formContainer.style.display = 'block';
+            }
+            return user;
+        }
+
+        document.getElementById('toolDesc').addEventListener('input', function() {
+            const count = this.value.length;
+            const counter = document.getElementById('charCount');
+            counter.textContent = `${count}/۵۰۰ کاراکتر`;
+            counter.style.color = count > 450 ? '#f87171' : 'rgba(160, 180, 200, 0.4)';
+            if (count > 500) {
+                this.value = this.value.substring(0, 500);
+                counter.textContent = '۵۰۰/۵۰۰ کاراکتر';
+            }
+        });
+
+        async function submitSuggestion(e) {
+            e.preventDefault();
+
+            const user = JSON.parse(localStorage.getItem('novinix_current_user') || 'null');
+            if (!user) {
+                alert('لطفاً ابتدا وارد شوید.');
+                return;
+            }
+
+            const name = document.getElementById('toolName').value.trim();
+            const category = document.getElementById('toolCategory').value;
+            const description = document.getElementById('toolDesc').value.trim();
+            const link = document.getElementById('toolLink').value.trim();
+
+            if (!name || !category || !description) {
+                showError('لطفاً تمام فیلدهای الزامی را پر کنید.');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const successMsg = document.getElementById('successMsg');
+            const errorMsg = document.getElementById('errorMsg');
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ در حال ارسال...';
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+
+            try {
+                const response = await fetch('/Novinix/api/suggestions.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: user.username,
+                        tool_name: name,
+                        category: category,
+                        description: description,
+                        link: link
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    successMsg.style.display = 'block';
+                    document.getElementById('suggestForm').reset();
+                    document.getElementById('charCount').textContent = '۰/۵۰۰ کاراکتر';
+
+                    setTimeout(() => {
+                        successMsg.style.display = 'none';
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = '🚀 ارسال پیشنهاد';
+                    }, 5000);
+                } else {
+                    showError(result.message || 'خطا در ثبت پیشنهاد');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '🚀 ارسال پیشنهاد';
+                }
+            } catch (error) {
+                showError('خطا در ارتباط با سرور. لطفاً مجدداً تلاش کنید.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🚀 ارسال پیشنهاد';
+            }
+        }
+
+        function showError(message) {
+            const errorMsg = document.getElementById('errorMsg');
+            document.getElementById('errorText').textContent = message;
+            errorMsg.style.display = 'block';
+            setTimeout(() => {
+                errorMsg.style.display = 'none';
+            }, 5000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+
+            document.addEventListener('authStatusChanged', function() {
+                checkLoginStatus();
+            });
+        });
+    </script>
+</body>
+</html>

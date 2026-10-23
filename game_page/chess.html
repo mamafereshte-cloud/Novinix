@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>♟ شطرنج</title>
+    <link rel="stylesheet" href="../assets/css/game.css">
+    <style>
+        .chess-wrapper { max-width: 580px; }
+        #chessBoard { display:grid; grid-template-columns:repeat(8,1fr); gap:2px; background:#b58863; border-radius:12px; padding:6px; border:6px solid #6b4f3a; box-shadow:0 20px 35px rgba(0,0,0,0.8); aspect-ratio:1; }
+        .sq { display:flex; justify-content:center; align-items:center; font-size:2.4rem; cursor:pointer; border-radius:4px; aspect-ratio:1; transition:all 0.1s; user-select:none; background:#f0d9b5; text-shadow:0 2px 6px rgba(0,0,0,0.2); }
+        .sq.dark { background:#b58863; }
+        .sq.selected { background:#7fc97f !important; box-shadow:inset 0 0 0 3px #2b6e2b,0 0 15px rgba(127,201,127,0.4); }
+        .sq.valid { background:#b8d4b0 !important; box-shadow:inset 0 0 0 2px #4a7c4a; }
+        .sq.last-move { background:#d9b36a !important; box-shadow:inset 0 0 0 2px #a77d3a; }
+        .sq.in-check { background:#ff6b6b !important; box-shadow:inset 0 0 0 3px #c0392b,0 0 20px rgba(255,0,0,0.3); }
+        .sq:active { transform:scale(0.95); }
+        .chess-header { display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center; margin-bottom:10px; }
+        .chess-header .btn { padding:6px 16px; font-size:0.85rem; }
+        .turn-indicator { background:var(--card-bg); padding:6px 20px; border-radius:50px; border:1px solid var(--card-border); font-weight:600; font-size:0.9rem; }
+        @media (max-width:500px){ .sq{font-size:1.8rem;} .chess-header .btn{font-size:0.75rem;padding:4px 12px;} }
+        @media (max-width:380px){ .sq{font-size:1.4rem;} }
+    </style>
+</head>
+<body>
+<div class="game-wrapper chess-wrapper">
+    <div class="game-header">
+        <h1>♟ شطرنج</h1>
+        <div class="header-buttons"><a href="../pages/games.html" class="exit-btn">✕ خروج</a></div>
+    </div>
+    <div class="chess-header">
+        <button class="btn btn-success" id="newChess">🔄 بازی جدید</button>
+        <button class="btn btn-purple" id="aiChess">🤖 هوش مصنوعی</button>
+        <button class="btn btn-cyan" id="twoChess">👥 دو نفره</button>
+        <span class="turn-indicator" id="turnChess">نوبت: سفید</span>
+    </div>
+    <div class="status-message" id="chessStatus"></div>
+    <div class="board-wrapper"><div id="chessBoard"></div></div>
+    <div id="chessInfo" style="text-align:center;margin-top:8px;color:var(--text-secondary);font-size:0.85rem;"></div>
+    <div class="key-hints"><span>🖱 کلیک = انتخاب</span><span>R = ریستارت</span></div>
+</div>
+<script>
+// ===== شطرنج =====
+const EMPTY=0, PAWN=1, KNIGHT=2, BISHOP=3, ROOK=4, QUEEN=5, KING=6, WHITE=8, BLACK=16;
+const UNICODE={[PAWN|WHITE]:'♙',[KNIGHT|WHITE]:'♘',[BISHOP|WHITE]:'♗',[ROOK|WHITE]:'♖',[QUEEN|WHITE]:'♕',[KING|WHITE]:'♔',[PAWN|BLACK]:'♟',[KNIGHT|BLACK]:'♞',[BISHOP|BLACK]:'♝',[ROOK|BLACK]:'♜',[QUEEN|BLACK]:'♛',[KING|BLACK]:'♚'};
+let board=[], turn=WHITE, selected=null, valid=[], gameOver=false, lastMove=null, mode='ai', thinking=false, hist=[];
+const boardEl=document.getElementById('chessBoard'), statusMsg=document.getElementById('chessStatus'), turnEl=document.getElementById('turnChess'), infoEl=document.getElementById('chessInfo');
+
+function initBoard(){ const back=[ROOK,KNIGHT,BISHOP,QUEEN,KING,BISHOP,KNIGHT,ROOK]; board=Array(8).fill().map(()=>Array(8).fill(EMPTY)); for(let c=0;c<8;c++){board[0][c]=back[c]|BLACK;board[1][c]=PAWN|BLACK;board[6][c]=PAWN|WHITE;board[7][c]=back[c]|WHITE;} turn=WHITE; selected=null; valid=[]; gameOver=false; lastMove=null; thinking=false; hist=[]; renderChess(); }
+function colorOf(p){return p&(WHITE|BLACK);}
+function typeOf(p){return p&7;}
+function isWhite(p){return colorOf(p)===WHITE;}
+function isBlack(p){return colorOf(p)===BLACK;}
+function inBounds(r,c){return r>=0&&r<8&&c>=0&&c<8;}
+function cloneBoard(b){return b.map(r=>[...r]);}
+function findKing(b,color){for(let r=0;r<8;r++)for(let c=0;c<8;c++){const p=b[r][c];if(p&&typeOf(p)===KING&&colorOf(p)===color)return{row:r,col:c};}return null;}
+function getPseudoMoves(b,row,col){const p=b[row][col];if(!p)return[];const color=colorOf(p), type=typeOf(p), enemy=color===WHITE?BLACK:WHITE; const moves=[]; const add=(r,c)=>{if(inBounds(r,c)){const t=b[r][c];if(!t||colorOf(t)===enemy)moves.push({row:r,col:c});}}; const slide=(dr,dc)=>{for(let i=1;i<8;i++){const r=row+dr*i,c=col+dc*i;if(!inBounds(r,c))break;const t=b[r][c];if(t){if(colorOf(t)===enemy)moves.push({row:r,col:c});break;}moves.push({row:r,col:c});}}; switch(type){ case PAWN:{const dir=color===WHITE?-1:1;const start=color===WHITE?6:1;if(inBounds(row+dir,col)&&!b[row+dir][col]){moves.push({row:row+dir,col});if(row===start&&!b[row+2*dir][col])moves.push({row:row+2*dir,col});}for(const dc of[-1,1]){const r=row+dir,c=col+dc;if(inBounds(r,c)&&b[r][c]&&colorOf(b[r][c])===enemy)moves.push({row:r,col:c});}break;} case KNIGHT:{const off=[[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];for(const [dr,dc] of off)add(row+dr,col+dc);break;} case BISHOP:slide(1,1);slide(1,-1);slide(-1,1);slide(-1,-1);break; case ROOK:slide(1,0);slide(-1,0);slide(0,1);slide(0,-1);break; case QUEEN:slide(1,0);slide(-1,0);slide(0,1);slide(0,-1);slide(1,1);slide(1,-1);slide(-1,1);slide(-1,-1);break; case KING:for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++)if(dr!==0||dc!==0)add(row+dr,col+dc);break;} return moves; }
+function isInCheck(b,color){const king=findKing(b,color);if(!king)return true;const enemy=color===WHITE?BLACK:WHITE;for(let r=0;r<8;r++)for(let c=0;c<8;c++){const p=b[r][c];if(p&&colorOf(p)===enemy){const moves=getPseudoMoves(b,r,c);for(const m of moves){if(m.row===king.row&&m.col===king.col)return true;}}}return false;}
+function getLegalMoves(b,row,col){const p=b[row][col];if(!p)return[];const color=colorOf(p);const pseudo=getPseudoMoves(b,row,col);const legal=[];for(const m of pseudo){const test=cloneBoard(b);const mp=test[row][col];test[m.row][m.col]=mp;test[row][col]=EMPTY;if(typeOf(mp)===PAWN&&(m.row===0||m.row===7))test[m.row][m.col]=QUEEN|color;if(!isInCheck(test,color))legal.push(m);}return legal;}
+function getAllMoves(b,color){const moves=[];for(let r=0;r<8;r++)for(let c=0;c<8;c++){const p=b[r][c];if(p&&colorOf(p)===color){const m=getLegalMoves(b,r,c);for(const move of m)moves.push({fromRow:r,fromCol:c,toRow:move.row,toCol:move.col});}}return moves;}
+function evaluate(b){const vals={[PAWN]:100,[KNIGHT]:320,[BISHOP]:330,[ROOK]:500,[QUEEN]:900,[KING]:20000}; let score=0; for(let r=0;r<8;r++)for(let c=0;c<8;c++){const p=b[r][c];if(!p)continue;const val=vals[typeOf(p)]||0;if(isWhite(p))score+=val;else score-=val;} return score; }
+function orderMoves(b,moves,color){return moves.sort((a,b)=>{const ap=b[a.toRow][a.toCol], bp=b[b.toRow][b.toCol]; let as=0,bs=0; if(ap){const vt=typeOf(ap), at=typeOf(b[a.fromRow][a.fromCol]); as=(vt===QUEEN?900:vt===ROOK?500:vt===BISHOP?330:vt===KNIGHT?320:100)*10-at;} if(bp){const vt=typeOf(bp), at=typeOf(b[b.fromRow][b.fromCol]); bs=(vt===QUEEN?900:vt===ROOK?500:vt===BISHOP?330:vt===KNIGHT?320:100)*10-at;} return bs-as; }); }
+function minimax(b,depth,alpha,beta,isMax,color){if(depth===0)return{score:evaluate(b)};const moves=getAllMoves(b,color);if(moves.length===0){if(isInCheck(b,color))return{score:isMax?-99999+(3-depth):99999-(3-depth)};return{score:0};} const ordered=orderMoves(b,moves,color); let best=ordered[0]; if(isMax){let maxE=-Infinity;for(const m of ordered){const test=cloneBoard(b);const p=test[m.fromRow][m.fromCol];test[m.toRow][m.toCol]=p;test[m.fromRow][m.fromCol]=EMPTY;if(typeOf(p)===PAWN&&(m.toRow===0||m.toRow===7))test[m.toRow][m.toCol]=QUEEN|color;const res=minimax(test,depth-1,alpha,beta,false,color===WHITE?BLACK:WHITE);if(res.score>maxE){maxE=res.score;best=m;}alpha=Math.max(alpha,maxE);if(beta<=alpha)break;}return{score:maxE,move:best};}else{let minE=Infinity;for(const m of ordered){const test=cloneBoard(b);const p=test[m.fromRow][m.fromCol];test[m.toRow][m.toCol]=p;test[m.fromRow][m.fromCol]=EMPTY;if(typeOf(p)===PAWN&&(m.toRow===0||m.toRow===7))test[m.toRow][m.toCol]=QUEEN|color;const res=minimax(test,depth-1,alpha,beta,true,color===WHITE?BLACK:WHITE);if(res.score<minE){minE=res.score;best=m;}beta=Math.min(beta,minE);if(beta<=alpha)break;}return{score:minE,move:best};} }
+function getAIMove(b,color){const moves=getAllMoves(b,color);if(moves.length===0)return null;const res=minimax(b,4,-Infinity,Infinity,true,color);return res.move||moves[0];}
+function makeMove(b,fr,fc,tr,tc){const p=b[fr][fc];b[tr][tc]=p;b[fr][fc]=EMPTY;if(typeOf(p)===PAWN&&(tr===0||tr===7))b[tr][tc]=QUEEN|colorOf(p);return b;}
+function checkOver(b,color){const moves=getAllMoves(b,color);if(moves.length===0){if(isInCheck(b,color))return color===WHITE?'BLACK_WINS':'WHITE_WINS';return'DRAW';}return null;}
+function renderChess(){boardEl.innerHTML=''; const king=findKing(board,turn); const inCheck=king&&isInCheck(board,turn); for(let r=0;r<8;r++)for(let c=0;c<8;c++){const sq=document.createElement('div');sq.className='sq'+((r+c)%2===1?' dark':'');sq.dataset.row=r;sq.dataset.col=c;const p=board[r][c];sq.textContent=p?UNICODE[p]||'':''; if(lastMove){if((lastMove.fromRow===r&&lastMove.fromCol===c)||(lastMove.toRow===r&&lastMove.toCol===c))sq.classList.add('last-move');} if(selected&&selected.row===r&&selected.col===c)sq.classList.add('selected'); if(valid.some(m=>m.row===r&&m.col===c))sq.classList.add('valid'); if(inCheck&&king.row===r&&king.col===c)sq.classList.add('in-check'); sq.addEventListener('click',()=>handleChess(parseInt(sq.dataset.row),parseInt(sq.dataset.col))); boardEl.appendChild(sq); } turnEl.textContent=`نوبت: ${turn===WHITE?'سفید':'سیاه'}`; if(gameOver){statusMsg.textContent=gameOver==='WHITE_WINS'?'🏆 سفید برنده شد':gameOver==='BLACK_WINS'?'🏆 سیاه برنده شد':'⚖️ مساوی';statusMsg.className='status-message success';}else{statusMsg.textContent='';statusMsg.className='status-message';} }
+function handleChess(row,col){if(gameOver||thinking)return;if(mode==='ai'&&turn===BLACK)return;const p=board[row][col];if(selected){const isTarget=valid.some(m=>m.row===row&&m.col===col);if(isTarget){const fr=selected.row,fc=selected.col;lastMove={fromRow:fr,fromCol:fc,toRow:row,toCol:col};board=makeMove(board,fr,fc,row,col);selected=null;valid=[];turn=turn===WHITE?BLACK:WHITE;const over=checkOver(board,turn);if(over){gameOver=over;renderChess();return;}renderChess();if(mode==='ai'&&turn===BLACK&&!gameOver){thinking=true;infoEl.textContent='🤔 AI در حال تفکر...';setTimeout(()=>{const aiMove=getAIMove(board,BLACK);if(aiMove){lastMove={fromRow:aiMove.fromRow,fromCol:aiMove.fromCol,toRow:aiMove.toRow,toCol:aiMove.toCol};board=makeMove(board,aiMove.fromRow,aiMove.fromCol,aiMove.toRow,aiMove.toCol);turn=WHITE;const over2=checkOver(board,turn);if(over2)gameOver=over2;infoEl.textContent='⚡ AI حرکت کرد';}thinking=false;renderChess();},100);}return;}if(p&&colorOf(p)===turn){selected={row,col};valid=getLegalMoves(board,row,col);renderChess();return;}else{selected=null;valid=[];renderChess();return;}} if(p&&colorOf(p)===turn){selected={row,col};valid=getLegalMoves(board,row,col);renderChess();} }
+function newChess(){initBoard();selected=null;valid=[];gameOver=false;lastMove=null;thinking=false;infoEl.textContent='';renderChess();if(mode==='ai'&&turn===BLACK){thinking=true;infoEl.textContent='🤔 AI در حال تفکر...';setTimeout(()=>{const aiMove=getAIMove(board,BLACK);if(aiMove){lastMove={fromRow:aiMove.fromRow,fromCol:aiMove.fromCol,toRow:aiMove.toRow,toCol:aiMove.toCol};board=makeMove(board,aiMove.fromRow,aiMove.fromCol,aiMove.toRow,aiMove.toCol);turn=WHITE;}thinking=false;infoEl.textContent='⚡ AI آماده است';renderChess();},100);} }
+function setMode(m){mode=m;infoEl.textContent=mode==='ai'?'🤖 حالت AI':'👥 حالت دو نفره';newChess();}
+document.getElementById('newChess').addEventListener('click',newChess);
+document.getElementById('aiChess').addEventListener('click',()=>setMode('ai'));
+document.getElementById('twoChess').addEventListener('click',()=>setMode('twoPlayer'));
+document.addEventListener('keydown',e=>{if(e.key==='r'||e.key==='R')newChess();});
+initBoard(); infoEl.textContent='⚡ AI آماده است (عمق ۴)';
+</script>
+<script src="../assets/js/seo.js"></script>
+</body>
+</html>
